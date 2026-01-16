@@ -34,7 +34,14 @@ const limiter = rateLimit({
 })
 
 app.use(limiter);
-app.use("/auth", proxy(`http://${ENV.AUTH_SERVICE_HOST}:${ENV.AUTH_SERVICE_PORT}`))
+app.use("/auth", proxy(`http://${ENV.AUTH_SERVICE_HOST}:${ENV.AUTH_SERVICE_PORT}`, {
+    proxyReqBodyDecorator: function(bodyContent, srcReq) {
+        return JSON.stringify(srcReq.body);
+    },
+    proxyReqPathResolver: function(req) {
+        return req.url;
+    }
+}))
 
 app.get('/health', (req, res) => {
     res.send({ 'message': 'API Gateway is running' });

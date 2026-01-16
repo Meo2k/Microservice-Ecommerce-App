@@ -1,18 +1,16 @@
 import { prisma } from "@org/database"
-const registerService = async (username: string, email: string, password: string) => {
-    try {
-        const user = await prisma.user.create({
-            data: {
-                username,
-                email,
-                password,
-            }
-        })
-        return user;
-    } catch (e) {
-        console.log("Error : ", e)
-        throw e;
-    }
+import { RegisterSchemaType } from "./auth.validator";
+const registerService = async (body: RegisterSchemaType) => {
+   
+    const user = await prisma.user.create({
+        data: {
+            username: body.username,
+            email: body.email,
+            password: body.password,
+        }
+    })
+    return user;
+    
 }
 
 export {
