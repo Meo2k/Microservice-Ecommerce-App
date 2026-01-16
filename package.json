@@ -25,7 +25,8 @@
   "workspaces": [
     "packages/*",
     "apps/*",
-    "libs/shared"
+    "libs/shared",
+    "libs/database"
   ],
   "dependencies": {
     "express": "^4.21.2"

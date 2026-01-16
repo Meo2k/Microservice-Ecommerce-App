@@ -1,13 +1,15 @@
 import express from 'express';
+import { ENV } from '@org/shared';
+import router from './routes';
 
-const host = process.env.HOST ?? 'localhost';
-const port = process.env.PORT ? Number(process.env.PORT) : 6001;
+const host = ENV.AUTH_SERVICE_HOST;
+const port: any = ENV.AUTH_SERVICE_PORT;
 
 const app = express();
+app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send({ 'message': 'Hello API Auth Service'});
-});
+
+router(app)
 
 app.listen(port, host, () => {
     console.log(`Auth Service is running on http://${host}:${port}`);
