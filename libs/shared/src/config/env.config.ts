@@ -1,6 +1,8 @@
 import { getEnv } from '../utils/get-env.js';
 
 export const ENV = {
+    NODE_ENV: getEnv("NX_NODE_ENV", "development"),
+
     API_GATEWAY_HOST: getEnv("NX_API_GATEWAY_HOST", "localhost"),
     API_GATEWAY_PORT: getEnv("NX_API_GATEWAY_PORT", "9000"),
     API_GATEWAY_CLIENT_URL: getEnv("NX_API_GATEWAY_CLIENT_URL", "*"),
