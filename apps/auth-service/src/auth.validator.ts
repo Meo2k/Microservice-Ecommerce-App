@@ -15,7 +15,7 @@ const passwordSchema = z
     .max(255, "Password must be at most 255 characters long");
 
 export const registerSchema = z.object({
-    username: z.string().trim().min(1, "Username is required").max(255, "Username must be at most 255 characters long"),
+    username: z.string().trim().max(255, "Username must be at most 255 characters long").optional(),
     email: emailSchema,
     password: passwordSchema,
 })

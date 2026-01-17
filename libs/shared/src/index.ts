@@ -5,3 +5,5 @@ export * from './middlewares/error-handler.middleware.js';
 export * from './utils/app-error.js';
 export * from './config/http.config.js';
 export * from './validator/string.js';
+export * from './config/permissions.config.js';
+export * from './utils/hash-password.js';
