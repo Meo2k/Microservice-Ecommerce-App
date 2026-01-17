@@ -1,3 +1,7 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+dotenv.config({ path: 'libs/database/.env' });
+import 'reflect-metadata';
 import express from 'express';
 import { ENV, errorHandler } from '@org/shared';
 import router from './routes';

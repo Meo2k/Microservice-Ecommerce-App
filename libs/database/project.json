@@ -1,0 +1,28 @@
+{
+    "name": "@org/database",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/database/src",
+    "projectType": "library",
+    "targets": {
+        "build": {
+            "executor": "@nx/js:tsc",
+            "outputs": [
+                "{options.outputPath}"
+            ],
+            "options": {
+                "outputPath": "dist/libs/database",
+                "tsConfig": "libs/database/tsconfig.lib.json",
+                "packageJson": "libs/database/package.json",
+                "main": "libs/database/src/index.ts",
+                "assets": [
+                    "libs/database/*.md",
+                    {
+                        "input": "libs/database/generated",
+                        "glob": "**/*",
+                        "output": "generated"
+                    }
+                ]
+            }
+        }
+    }
+}

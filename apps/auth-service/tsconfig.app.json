@@ -6,7 +6,10 @@
       "node"
     ],
     "rootDir": "../../",
-    "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo"
+    "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
+    "allowJs": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": [
     "src/**/*.ts",
@@ -16,7 +19,7 @@
   "exclude": [],
   "references": [
     {
-      "path": "../../libs/shared/tsconfig.lib.json",
+      "path": "../../libs/shared/tsconfig.lib.json"
     },
     {
       "path": "../../libs/database/tsconfig.lib.json"
