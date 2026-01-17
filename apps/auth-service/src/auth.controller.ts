@@ -4,9 +4,10 @@ import { registerSchema } from "./auth.validator";
 
 const registerController = async(req: Request, res: Response)=>{
     const body = registerSchema.parse(req.body);
-    const result = await registerService(body);
-    return res.status(200).json({
-        ...result
+    const response = await registerService(body);
+    return res.status(response.status).json({
+        ...response, 
+        status: undefined
     })
 }
 
