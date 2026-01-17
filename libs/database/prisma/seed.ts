@@ -1,7 +1,7 @@
 import 'dotenv/config';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../src/generated/client';
 import { PermissionsConfig } from '../../shared/src/config/permissions.config';
-import { hashPassword } from '../../shared/src/utils/hash-password';
+import { hashPassword } from '../../shared/src/utils/password.util';
 
 const prisma = new PrismaClient();
 
@@ -114,3 +114,5 @@ main()
         await prisma.$disconnect();
         process.exit(1);
     });
+
+

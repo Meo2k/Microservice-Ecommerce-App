@@ -1,16 +1,20 @@
-import { registerService } from "./auth.service";
+import { loginService, registerService } from "./auth.service";
 import { Request, Response } from "express";
-import { registerSchema } from "./auth.validator";
+import { loginSchema, registerSchema } from "./auth.validator";
 
 const registerController = async(req: Request, res: Response)=>{
     const body = registerSchema.parse(req.body);
-    const response = await registerService(body);
-    return res.status(response.status).json({
-        ...response, 
-        status: undefined
-    })
+    const {status, ...response} = await registerService(body);
+    return res.status(status).json(response)
+}
+
+const loginController = async(req: Request, res: Response)=>{
+    const body = loginSchema.parse(req.body);
+    const {status, ...response} = await loginService(body);
+    return res.status(status).json(response)
 }
 
 export {
-    registerController
+    registerController,
+    loginController
 }

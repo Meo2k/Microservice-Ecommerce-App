@@ -1,19 +1,10 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../generated/client';
 import { hashPassword } from '@org/shared';
 
 const prismaClientSingleton = () => {
     return new PrismaClient({
         datasourceUrl: process.env['NX_DATABASE_URL'],
     }).$extends({
-        result: {
-            user: {
-                password: {
-                    compute() {
-                        return undefined // undefined for password field 
-                    },
-                },
-            }
-        }, 
         query: {
             user: {
                 async create({ args, query }) {
@@ -43,4 +34,4 @@ export const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
 
 if (process.env['NODE_ENV'] !== 'production') globalForPrisma.prisma = prisma;
 
-export * from '@prisma/client';
+export * from '../generated/client';
