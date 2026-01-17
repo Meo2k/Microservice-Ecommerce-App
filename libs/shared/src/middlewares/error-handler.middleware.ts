@@ -4,30 +4,28 @@ import { AppError, ErrorCodes } from "../utils/app-error.js";
 import { ENV } from "../config/env.config.js";
 import { ZodError } from "zod";
 
-export const errorHandler:ErrorRequestHandler = (err, req, res, next)=>{
+export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     console.log(`Error occurred: ${req.path}`, err)
 
-    if (err instanceof AppError){
+
+    if (err instanceof AppError) {
         return res.status(err.statusCode).json({
-            message: err.message, 
+            message: err.message,
             errorCode: err.errorCode
         })
     }
 
-    if (err instanceof ZodError) {
-        console.log("Validation error occurred: ", err); 
-        const firstMessage = err.issues[0]?.message || "Validation error";
-        
+    if (err instanceof ZodError || err.name === "ZodError") {
         return res.status(HTTP_STATUS.BAD_REQUEST).json({
-            message: firstMessage,
-            error: ENV.NODE_ENV === "development" ? err.flatten() : undefined,
+            message: err.errors[0]?.message || "Validation error",
+            error: ENV.NODE_ENV === "development" ? err.errors : undefined,
             errorCode: ErrorCodes.ERR_BAD_REQUEST
-        });
+        })
     }
-    
+
     return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-        message: "Internal Server Error", 
-        errorCode: ErrorCodes.ERR_INTERNAL_SERVER, 
+        message: "Internal Server Error",
+        errorCode: ErrorCodes.ERR_INTERNAL_SERVER,
         error: ENV.NODE_ENV === "development" ? err?.message || "Somthing went wrong" : "Somthing went wrong"
 
     })
