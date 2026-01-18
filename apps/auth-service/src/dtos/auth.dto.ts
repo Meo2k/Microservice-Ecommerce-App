@@ -21,3 +21,4 @@ export class UserResponseDto {
 export const toUserResponseDto = (user: UserSchemaType): UserResponseDto => {
     return plainToInstance(UserResponseDto, user);
 }
+

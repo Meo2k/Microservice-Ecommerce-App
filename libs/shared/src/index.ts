@@ -8,4 +8,5 @@ export * from './validator/string.js';
 export * from './config/permissions.config.js';
 export * from './utils/password.util.js';
 export * from './config/response-message.config.js';
+export * from './utils/jwt.util.js';
 
