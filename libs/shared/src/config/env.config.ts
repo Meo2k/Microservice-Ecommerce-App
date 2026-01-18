@@ -3,6 +3,12 @@ import { getEnv } from '../utils/get-env.js';
 export const ENV = {
     NODE_ENV: getEnv("NX_NODE_ENV", "development"),
 
+    ACCESS_TOKEN_KEY: getEnv("NX_ACCESS_TOKEN_KEY", "access_token_key"),
+    ACCESS_TOKEN_EXPIRED: getEnv("NX_ACCESS_TOKEN_EXPIRED", "1h"),
+    REFRESH_TOKEN_KEY: getEnv("NX_REFRESH_TOKEN_KEY", "refresh_token_key"),
+    REFRESH_TOKEN_EXPIRED: getEnv("NX_REFRESH_TOKEN_EXPIRED", "7d"),
+    SLIDING_EXPIRATION: getEnv("NX_SLIDING_EXPIRATION", "1h"),
+
     ADMIN_EMAIL: getEnv("NX_ADMIN_EMAIL", "admin@org.com"),
     ADMIN_PASSWORD: getEnv("NX_ADMIN_PASSWORD", "admin"),
 

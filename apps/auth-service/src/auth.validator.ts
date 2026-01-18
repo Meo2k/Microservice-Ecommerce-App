@@ -1,5 +1,7 @@
 import {z} from "zod"
 import {stringMsg} from "@org/shared";
+import { User } from "@org/database";
+
 
 const emailSchema = z
     .string(stringMsg("Email"))
@@ -24,6 +26,10 @@ export const loginSchema = z.object({
     email: emailSchema,
     password: passwordSchema,
 })
+
+export type GetMeSchemaType = {
+    user: User
+}
 
 export type RegisterSchemaType = z.infer<typeof registerSchema>
 export type LoginSchemaType = z.infer<typeof loginSchema>
