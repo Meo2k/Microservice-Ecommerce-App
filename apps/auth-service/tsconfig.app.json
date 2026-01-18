@@ -14,15 +14,19 @@
   "include": [
     "src/**/*.ts",
     "../../libs/shared/src/**/*.ts",
-    "../../libs/database/src/**/*.ts"
+    "../../libs/database/src/**/*.ts",
+    "../../libs/redis/src/**/*.ts"
   ],
   "exclude": [],
   "references": [
     {
-      "path": "../../libs/shared/tsconfig.lib.json"
+      "path": "../../libs/database/tsconfig.lib.json"
     },
     {
-      "path": "../../libs/database/tsconfig.lib.json"
+      "path": "../../libs/redis/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/shared/tsconfig.lib.json"
     }
   ]
 }

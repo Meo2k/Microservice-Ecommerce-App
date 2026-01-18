@@ -16,6 +16,7 @@
     "noImplicitOverride": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": true,
     "target": "es2022",
@@ -24,7 +25,10 @@
     ],
     "paths": {
       "@org/database": [
-        "libs/database/src/index.ts"
+        "libs/database/src/index.ts", 
+      ],
+      "@org/redis": [
+        "libs/redis/src/index.ts"
       ],
       "@org/shared": [
         "libs/shared/src/index.ts"

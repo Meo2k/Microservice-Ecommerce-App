@@ -5,12 +5,14 @@ import { JwtTokenService } from "./repositories/jwt-token.repository";
 import { AuthService } from "./auth.service";
 import ms from "ms";
 import { ENV } from "@org/shared";
+import { EmailService } from "@org/redis";
 
 const authRepo = new PrismaAuthRepository();
 const tokenService = new JwtTokenService();
+const emailService = new EmailService();
 
 
-const authService = new AuthService(authRepo, tokenService);
+const authService = new AuthService(authRepo, tokenService, emailService);
 
 /**
  * @description Register a new user, send email to verify

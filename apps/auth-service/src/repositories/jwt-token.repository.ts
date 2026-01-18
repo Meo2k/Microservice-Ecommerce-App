@@ -4,4 +4,7 @@ import { TokenProvider } from "@org/shared";
 export class JwtTokenService implements ITokenService {
     signAccess(payload: object) { return TokenProvider.signAccessToken(payload); }
     signRefresh(payload: object) { return TokenProvider.signRefreshToken(payload); }
+
+    verifyAccess(token: string) { return TokenProvider.verifyAccessToken(token); }
+    verifyRefresh(token: string) { return TokenProvider.verifyRefreshToken(token); }
 }

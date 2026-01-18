@@ -4,6 +4,7 @@ import { AUTH_MESSAGE, comparePassword, ConflictError, HTTP_STATUS, NotFoundErro
 import { toUserResponseDto } from "./dtos/auth.dto";
 import { IAuthRepository } from "./interfaces/auth.interface";
 import { ITokenService } from "./interfaces/jwt-token.interface";
+import { IEmailService } from "@org/redis";
 
 
 
@@ -12,7 +13,8 @@ import { ITokenService } from "./interfaces/jwt-token.interface";
 export class AuthService {
     constructor(
         private authRepo: IAuthRepository,
-        private tokenService: ITokenService
+        private tokenService: ITokenService, 
+        private emailService: IEmailService
     ) {}
 
     async register(body: RegisterSchemaType) {
@@ -23,6 +25,9 @@ export class AuthService {
             throw new ConflictError(AUTH_MESSAGE.REGISTER.CONFLICT)
         }
 
+        await this.emailService.checkOtpRestrictions(email)
+        await this.emailService.sendOtpToEmail(email, "otp.template")
+
         await this.authRepo.createUser({
             data: {
                 username,
@@ -30,6 +35,8 @@ export class AuthService {
                 password,
             }
         })
+
+        
 
         return {
             status: HTTP_STATUS.CREATED,
@@ -52,6 +59,10 @@ export class AuthService {
         if (!isPasswordValid) {
             throw new UnauthorizedError(AUTH_MESSAGE.LOGIN.UNAUTHORIZED)
         }
+
+        // only test send email 
+        await this.emailService.checkOtpRestrictions(email)
+        await this.emailService.sendOtpToEmail(email, "otp.template")
 
         const accessToken = this.tokenService.signAccess({ id: user.id })
         const refreshToken = this.tokenService.signRefresh({ id: user.id })
