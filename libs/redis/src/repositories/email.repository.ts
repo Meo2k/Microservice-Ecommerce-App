@@ -1,44 +1,13 @@
-import { Redis } from '@upstash/redis'
+
 import { ENV , generateOTP, OTP_MESSAGE, sendEmail, ValidationError} from "@org/shared"
 import { IEmailService } from '../interfaces/email.interface'
+import { redis } from "../redis"
 
-const redis = new Redis({
-  url: ENV.REDIS_URL,
-  token: ENV.REDIS_TOKEN,
-})
+
 
 export class EmailService implements IEmailService {
     constructor() {}
 
-    async checkOtpRestrictions(email: string) {
-        if (await redis.get(`otp_locked:${email}`)) {
-            throw new ValidationError(OTP_MESSAGE.LOCKED)
-        }
-    }
-
-    async handleFailedAttempts(email: string) {
-        await this.checkOtpRestrictions(email)
-
-        const attemptsKey = `otp_attempts:${email}`
-        const lockKey = `otp_locked:${email}`
-        const maxAttempts = Number(ENV.OTP_MAX_ATTEMPTS)
-
-        const currentAttempts = await redis.incr(attemptsKey)
-
-        if (currentAttempts === 1) {
-            await redis.expire(attemptsKey, Number(ENV.OTP_EXPIRED))
-        }
-
-        if (currentAttempts > maxAttempts) {
-            await redis.set(lockKey, "true", {ex: Number(ENV.OTP_LOCKTIME)})
-            await redis.del(attemptsKey)
-            throw new ValidationError(OTP_MESSAGE.LOCKED)
-        }
-
-        const remainingAttempts = maxAttempts - currentAttempts
-        throw new ValidationError(OTP_MESSAGE.INVALID, {remainingAttempts})
-    }
-    
     async sendOtpToEmail(to: string, templateName: string ) {
         const otp = generateOTP()
         const otpExpired = Number(ENV.OTP_EXPIRED)
@@ -58,5 +27,6 @@ export class EmailService implements IEmailService {
 
 
     }
+
 }
 

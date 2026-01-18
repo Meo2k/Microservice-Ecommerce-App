@@ -34,6 +34,10 @@ model User {
   id         Int     @id @default(autoincrement())
   avatar_url String?
   email      String  @unique
+  
+  is_verified  Boolean @default(false)
+  is_locked    Boolean @default(false)
+
   password   String
   username   String? @db.VarChar(50)
   bio        String? @db.VarChar(150)

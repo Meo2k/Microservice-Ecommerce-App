@@ -27,9 +27,20 @@ export const loginSchema = z.object({
     password: passwordSchema,
 })
 
-export type GetMeSchemaType = {
+export const verifyOtpSchema = z.object({
+    email: emailSchema,
+    otp: z.string().trim().min(6, "OTP must be at least 6 characters long").max(6, "OTP must be at most 6 characters long"),
+})
+
+export const resendOtpSchema = z.object({
+    email: emailSchema,
+})
+
+export interface GetMeSchemaType extends Request {
     user: User
 }
 
 export type RegisterSchemaType = z.infer<typeof registerSchema>
 export type LoginSchemaType = z.infer<typeof loginSchema>
+export type VerifyOtpSchemaType = z.infer<typeof verifyOtpSchema>
+export type ResendOtpSchemaType = z.infer<typeof resendOtpSchema>
