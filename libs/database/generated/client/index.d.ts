@@ -3573,6 +3573,8 @@ export namespace Prisma {
     id: number | null
     avatar_url: string | null
     email: string | null
+    is_verified: boolean | null
+    is_locked: boolean | null
     password: string | null
     username: string | null
     bio: string | null
@@ -3584,6 +3586,8 @@ export namespace Prisma {
     id: number | null
     avatar_url: string | null
     email: string | null
+    is_verified: boolean | null
+    is_locked: boolean | null
     password: string | null
     username: string | null
     bio: string | null
@@ -3595,6 +3599,8 @@ export namespace Prisma {
     id: number
     avatar_url: number
     email: number
+    is_verified: number
+    is_locked: number
     password: number
     username: number
     bio: number
@@ -3616,6 +3622,8 @@ export namespace Prisma {
     id?: true
     avatar_url?: true
     email?: true
+    is_verified?: true
+    is_locked?: true
     password?: true
     username?: true
     bio?: true
@@ -3627,6 +3635,8 @@ export namespace Prisma {
     id?: true
     avatar_url?: true
     email?: true
+    is_verified?: true
+    is_locked?: true
     password?: true
     username?: true
     bio?: true
@@ -3638,6 +3648,8 @@ export namespace Prisma {
     id?: true
     avatar_url?: true
     email?: true
+    is_verified?: true
+    is_locked?: true
     password?: true
     username?: true
     bio?: true
@@ -3736,6 +3748,8 @@ export namespace Prisma {
     id: number
     avatar_url: string | null
     email: string
+    is_verified: boolean
+    is_locked: boolean
     password: string
     username: string | null
     bio: string | null
@@ -3766,6 +3780,8 @@ export namespace Prisma {
     id?: boolean
     avatar_url?: boolean
     email?: boolean
+    is_verified?: boolean
+    is_locked?: boolean
     password?: boolean
     username?: boolean
     bio?: boolean
@@ -3779,6 +3795,8 @@ export namespace Prisma {
     id?: boolean
     avatar_url?: boolean
     email?: boolean
+    is_verified?: boolean
+    is_locked?: boolean
     password?: boolean
     username?: boolean
     bio?: boolean
@@ -3790,6 +3808,8 @@ export namespace Prisma {
     id?: boolean
     avatar_url?: boolean
     email?: boolean
+    is_verified?: boolean
+    is_locked?: boolean
     password?: boolean
     username?: boolean
     bio?: boolean
@@ -3801,6 +3821,8 @@ export namespace Prisma {
     id?: boolean
     avatar_url?: boolean
     email?: boolean
+    is_verified?: boolean
+    is_locked?: boolean
     password?: boolean
     username?: boolean
     bio?: boolean
@@ -3808,7 +3830,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "avatar_url" | "email" | "password" | "username" | "bio" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "avatar_url" | "email" | "is_verified" | "is_locked" | "password" | "username" | "bio" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     userRole?: boolean | User$userRoleArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -3825,6 +3847,8 @@ export namespace Prisma {
       id: number
       avatar_url: string | null
       email: string
+      is_verified: boolean
+      is_locked: boolean
       password: string
       username: string | null
       bio: string | null
@@ -4257,6 +4281,8 @@ export namespace Prisma {
     readonly id: FieldRef<"User", 'Int'>
     readonly avatar_url: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
+    readonly is_verified: FieldRef<"User", 'Boolean'>
+    readonly is_locked: FieldRef<"User", 'Boolean'>
     readonly password: FieldRef<"User", 'String'>
     readonly username: FieldRef<"User", 'String'>
     readonly bio: FieldRef<"User", 'String'>
@@ -6947,6 +6973,8 @@ export namespace Prisma {
     id: 'id',
     avatar_url: 'avatar_url',
     email: 'email',
+    is_verified: 'is_verified',
+    is_locked: 'is_locked',
     password: 'password',
     username: 'username',
     bio: 'bio',
@@ -7047,6 +7075,13 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -7186,6 +7221,8 @@ export namespace Prisma {
     id?: IntFilter<"User"> | number
     avatar_url?: StringNullableFilter<"User"> | string | null
     email?: StringFilter<"User"> | string
+    is_verified?: BoolFilter<"User"> | boolean
+    is_locked?: BoolFilter<"User"> | boolean
     password?: StringFilter<"User"> | string
     username?: StringNullableFilter<"User"> | string | null
     bio?: StringNullableFilter<"User"> | string | null
@@ -7198,6 +7235,8 @@ export namespace Prisma {
     id?: SortOrder
     avatar_url?: SortOrderInput | SortOrder
     email?: SortOrder
+    is_verified?: SortOrder
+    is_locked?: SortOrder
     password?: SortOrder
     username?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
@@ -7213,6 +7252,8 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     avatar_url?: StringNullableFilter<"User"> | string | null
+    is_verified?: BoolFilter<"User"> | boolean
+    is_locked?: BoolFilter<"User"> | boolean
     password?: StringFilter<"User"> | string
     username?: StringNullableFilter<"User"> | string | null
     bio?: StringNullableFilter<"User"> | string | null
@@ -7225,6 +7266,8 @@ export namespace Prisma {
     id?: SortOrder
     avatar_url?: SortOrderInput | SortOrder
     email?: SortOrder
+    is_verified?: SortOrder
+    is_locked?: SortOrder
     password?: SortOrder
     username?: SortOrderInput | SortOrder
     bio?: SortOrderInput | SortOrder
@@ -7244,6 +7287,8 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"User"> | number
     avatar_url?: StringNullableWithAggregatesFilter<"User"> | string | null
     email?: StringWithAggregatesFilter<"User"> | string
+    is_verified?: BoolWithAggregatesFilter<"User"> | boolean
+    is_locked?: BoolWithAggregatesFilter<"User"> | boolean
     password?: StringWithAggregatesFilter<"User"> | string
     username?: StringNullableWithAggregatesFilter<"User"> | string | null
     bio?: StringNullableWithAggregatesFilter<"User"> | string | null
@@ -7485,6 +7530,8 @@ export namespace Prisma {
   export type UserCreateInput = {
     avatar_url?: string | null
     email: string
+    is_verified?: boolean
+    is_locked?: boolean
     password: string
     username?: string | null
     bio?: string | null
@@ -7497,6 +7544,8 @@ export namespace Prisma {
     id?: number
     avatar_url?: string | null
     email: string
+    is_verified?: boolean
+    is_locked?: boolean
     password: string
     username?: string | null
     bio?: string | null
@@ -7508,6 +7557,8 @@ export namespace Prisma {
   export type UserUpdateInput = {
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_locked?: BoolFieldUpdateOperationsInput | boolean
     password?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7520,6 +7571,8 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_locked?: BoolFieldUpdateOperationsInput | boolean
     password?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7532,6 +7585,8 @@ export namespace Prisma {
     id?: number
     avatar_url?: string | null
     email: string
+    is_verified?: boolean
+    is_locked?: boolean
     password: string
     username?: string | null
     bio?: string | null
@@ -7542,6 +7597,8 @@ export namespace Prisma {
   export type UserUpdateManyMutationInput = {
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_locked?: BoolFieldUpdateOperationsInput | boolean
     password?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7553,6 +7610,8 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_locked?: BoolFieldUpdateOperationsInput | boolean
     password?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7843,6 +7902,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -7852,6 +7916,8 @@ export namespace Prisma {
     id?: SortOrder
     avatar_url?: SortOrder
     email?: SortOrder
+    is_verified?: SortOrder
+    is_locked?: SortOrder
     password?: SortOrder
     username?: SortOrder
     bio?: SortOrder
@@ -7867,6 +7933,8 @@ export namespace Prisma {
     id?: SortOrder
     avatar_url?: SortOrder
     email?: SortOrder
+    is_verified?: SortOrder
+    is_locked?: SortOrder
     password?: SortOrder
     username?: SortOrder
     bio?: SortOrder
@@ -7878,6 +7946,8 @@ export namespace Prisma {
     id?: SortOrder
     avatar_url?: SortOrder
     email?: SortOrder
+    is_verified?: SortOrder
+    is_locked?: SortOrder
     password?: SortOrder
     username?: SortOrder
     bio?: SortOrder
@@ -7905,6 +7975,14 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type UserScalarRelationFilter = {
@@ -8154,6 +8232,10 @@ export namespace Prisma {
     set?: string | null
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type UserRoleUpdateManyWithoutUserNestedInput = {
     create?: XOR<UserRoleCreateWithoutUserInput, UserRoleUncheckedCreateWithoutUserInput> | UserRoleCreateWithoutUserInput[] | UserRoleUncheckedCreateWithoutUserInput[]
     connectOrCreate?: UserRoleCreateOrConnectWithoutUserInput | UserRoleCreateOrConnectWithoutUserInput[]
@@ -8346,6 +8428,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -8372,6 +8459,14 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type RolePermissionCreateWithoutPermissionInput = {
@@ -8555,6 +8650,8 @@ export namespace Prisma {
   export type UserCreateWithoutUserRoleInput = {
     avatar_url?: string | null
     email: string
+    is_verified?: boolean
+    is_locked?: boolean
     password: string
     username?: string | null
     bio?: string | null
@@ -8566,6 +8663,8 @@ export namespace Prisma {
     id?: number
     avatar_url?: string | null
     email: string
+    is_verified?: boolean
+    is_locked?: boolean
     password: string
     username?: string | null
     bio?: string | null
@@ -8612,6 +8711,8 @@ export namespace Prisma {
   export type UserUpdateWithoutUserRoleInput = {
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_locked?: BoolFieldUpdateOperationsInput | boolean
     password?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8623,6 +8724,8 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     avatar_url?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
+    is_verified?: BoolFieldUpdateOperationsInput | boolean
+    is_locked?: BoolFieldUpdateOperationsInput | boolean
     password?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
     bio?: NullableStringFieldUpdateOperationsInput | string | null

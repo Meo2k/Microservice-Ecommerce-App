@@ -3,6 +3,11 @@ import { getEnv } from '../utils/get-env.js';
 export const ENV = {
     NODE_ENV: getEnv("NX_NODE_ENV", "development"),
 
+    EMAIL_HOST: getEnv("NX_EMAIL_HOST", "smtp.ethereal.email"),
+    EMAIL_USER: getEnv("NX_EMAIL_USER", "user@gmail.com"),
+    EMAIL_PASS: getEnv("NX_EMAIL_PASS", "password"),
+    EMAIL_FROM: getEnv("NX_EMAIL_FROM", "user@gmail.com"),
+
     ACCESS_TOKEN_KEY: getEnv("NX_ACCESS_TOKEN_KEY", "access_token_key"),
     ACCESS_TOKEN_EXPIRED: getEnv("NX_ACCESS_TOKEN_EXPIRED", "1h"),
     REFRESH_TOKEN_KEY: getEnv("NX_REFRESH_TOKEN_KEY", "refresh_token_key"),
@@ -11,6 +16,15 @@ export const ENV = {
 
     ADMIN_EMAIL: getEnv("NX_ADMIN_EMAIL", "admin@org.com"),
     ADMIN_PASSWORD: getEnv("NX_ADMIN_PASSWORD", "admin"),
+
+    OTP_EXPIRED: getEnv("NX_OTP_EXPIRED", "600"),
+    OTP_COOLDOWN: getEnv("NX_OTP_COOLDOWN", "60"),
+    OTP_LOCKTIME: getEnv("NX_OTP_LOCKTIME", "3600"),
+    OTP_MAX_ATTEMPTS: getEnv("NX_OTP_MAX_ATTEMPTS", "5"),
+
+
+    REDIS_URL: getEnv("NX_REDIS_URL"),
+    REDIS_TOKEN: getEnv("NX_REDIS_TOKEN"),
 
     API_GATEWAY_HOST: getEnv("NX_API_GATEWAY_HOST", "localhost"),
     API_GATEWAY_PORT: getEnv("NX_API_GATEWAY_PORT", "9000"),

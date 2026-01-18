@@ -10,7 +10,10 @@ export class PrismaAuthRepository implements IAuthRepository {
         return prisma.user.findUnique({ where: { email } });
     }
     async createUser(data: any) {
-        return prisma.user.create({ data });
+        return prisma.user.create(data);
+    }
+    async updateUser(where: any, data: any) {
+        return prisma.user.update({ where, data });
     }
 }
 

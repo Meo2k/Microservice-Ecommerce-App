@@ -1,5 +1,5 @@
 import { Express, Router } from "express";
-import { registerController, loginController } from "../auth.controller";
+import { authController } from "../auth.controller";
 import { asyncHandler } from "@org/shared";
 
 const router = (app: Express)=>{
@@ -7,7 +7,12 @@ const router = (app: Express)=>{
 }
 
 const authRouter = Router()
-.post("/register", asyncHandler(registerController))
-.post("/login", asyncHandler(loginController))
+.post("/register", asyncHandler(authController.register))
+.post("/verify-otp", asyncHandler(authController.verifyOtp))
+.post("/resend-otp", asyncHandler(authController.resendOtp))
+.post("/login", asyncHandler(authController.login))
+
+// middleware 
+.get("/me", asyncHandler(authController.getMe))
 
 export default router
