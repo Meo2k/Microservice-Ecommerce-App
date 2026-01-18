@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "seed": "node -r @swc-node/register libs/database/prisma/seed.ts",
+    "seed": "npx -y tsx libs/database/prisma/seed.ts",
     "start": "npx nx run-many --target=serve --output-style=stream-without-prefixes",
     "build": "nx run-many --target=build --all"
   },

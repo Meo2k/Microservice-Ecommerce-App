@@ -39,5 +39,10 @@ export class OtpService implements IOtpService {
         const remainingAttempts = maxAttempts - currentAttempts
         throw new ValidationError(OTP_MESSAGE.INVALID, {remainingAttempts})
     }
+
+    resetOTP = async (to: string): Promise<void> => {
+        await redis.del(`otp:${to}`)
+        await redis.del(`otp_attempts:${to}`)
+    }
     
 }

@@ -91,6 +91,7 @@ export class AuthService {
         }
 
         await this.authRepo.updateUser( { id: user.id }, { is_verified: true })
+        await this.otpService.resetOTP(email)
     
         return {
             status: HTTP_STATUS.OK,
@@ -110,7 +111,7 @@ export class AuthService {
 
         const storedData = await this.otpService.findOtpByEmail(email)
 
-        if (storedData.otp) {
+        if (!storedData.otp) {
             throw new UnauthorizedError(AUTH_MESSAGE.RESEND_OTP.INVALID)
         }
 
