@@ -3,6 +3,7 @@ import 'reflect-metadata';
 
 import express from 'express';
 import passport from 'passport';
+import cookieParser from 'cookie-parser';
 import { ENV, errorHandler } from '@org/shared';
 import router from './routes';
 
@@ -15,6 +16,7 @@ const port: any = ENV.AUTH_SERVICE_PORT;
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 app.use(passport.initialize());
 

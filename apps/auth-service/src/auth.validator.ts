@@ -40,6 +40,7 @@ export interface GetMeSchemaType extends Request {
     user: User
 }
 
+
 export type RegisterSchemaType = z.infer<typeof registerSchema>
 export type LoginSchemaType = z.infer<typeof loginSchema>
 export type VerifyOtpSchemaType = z.infer<typeof verifyOtpSchema>

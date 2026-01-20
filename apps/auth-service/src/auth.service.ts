@@ -1,11 +1,10 @@
 import { User as UserSchemaType } from "@org/database"
 import { LoginSchemaType, RegisterSchemaType, ResendOtpSchemaType, VerifyOtpSchemaType } from "./auth.validator";
-import { AUTH_MESSAGE, comparePassword, ConflictError, HTTP_STATUS, NotFoundError, UnauthorizedError } from "@org/shared";
+import { AUTH_MESSAGE, ConflictError, HTTP_STATUS, NotFoundError, UnauthorizedError } from "@org/shared";
 import { IAuthRepository } from "./interfaces/auth.interface";
 import { ITokenService } from "./interfaces/jwt-token.interface";
 import { IEmailService } from "@org/redis";
 import { IOtpService } from "@org/redis";
-
 
 export class AuthService {
     constructor(
@@ -15,7 +14,7 @@ export class AuthService {
         private otpService: IOtpService
     ) {}
 
-    async register(body: RegisterSchemaType) {
+    register = async (body: RegisterSchemaType) => {
         const { username, email, password } = body
         const userExists = await this.authRepo.findUserByEmail(email)
 
@@ -44,7 +43,7 @@ export class AuthService {
         };
     }
 
-    async login (body: LoginSchemaType) {
+    login = async (body: LoginSchemaType) => {
         const { email, password } = body
         const user = await this.authRepo.findUserByEmail(email) as UserSchemaType 
 
@@ -52,7 +51,7 @@ export class AuthService {
             throw new NotFoundError(AUTH_MESSAGE.LOGIN.NOT_FOUND)
         }
 
-        const isPasswordValid = await comparePassword(password, user.password)
+        const isPasswordValid = await this.authRepo.comparePassword(password, user.password)
 
         if (!isPasswordValid) {
             throw new UnauthorizedError(AUTH_MESSAGE.LOGIN.UNAUTHORIZED)
@@ -72,7 +71,7 @@ export class AuthService {
         };
     }
 
-    async verifyOtp(body: VerifyOtpSchemaType) {
+    verifyOtp = async (body: VerifyOtpSchemaType) => {
         const { email, otp } = body
         
         const user = await this.authRepo.findUserByEmail(email) as UserSchemaType
@@ -101,7 +100,7 @@ export class AuthService {
         };
     }
 
-    async resendOtp(body: ResendOtpSchemaType) {
+    resendOtp = async (body: ResendOtpSchemaType) => {
         const { email } = body
         const user = await this.authRepo.findUserByEmail(email) as UserSchemaType // Safe now as we fixed client
 
@@ -124,5 +123,24 @@ export class AuthService {
             },
         };
     }
+    getMe = async (user: UserSchemaType) => {
+        return {
+            status: HTTP_STATUS.OK,
+            metadata: {
+                message: AUTH_MESSAGE.GET_ME.SUCCESS,
+                user: this.authRepo.toUserResponseDto(user)
+            },
+        }
+    }
 
+    refreshToken = async (id: string) => {
+        const accessToken = this.tokenService.signAccess({ sub: id })
+        return {
+            status: HTTP_STATUS.OK,
+            metadata: {
+                message: AUTH_MESSAGE.REFRESH_TOKEN.SUCCESS,
+                accessToken,
+            },
+        };
+    }
 }

@@ -1,7 +1,6 @@
 import { Express, Router } from "express";
 import { authController } from "../auth.controller";
-import { asyncHandler } from "@org/shared";
-import { passportAuthenticateJwt } from "@org/shared";
+import { asyncHandler, authenticateRefreshToken, authenticateJwt } from "@org/shared";
 
 const router = (app: Express) => {
     app.use("/", authRouter)
@@ -14,6 +13,7 @@ const authRouter = Router()
     .post("/login", asyncHandler(authController.login))
 
     // middleware 
-    .get("/me", passportAuthenticateJwt, asyncHandler(authController.getMe))
+    .get("/me", authenticateJwt, asyncHandler(authController.getMe))
+    .post("/refresh-token", authenticateRefreshToken, asyncHandler(authController.refreshToken))
 
 export default router
