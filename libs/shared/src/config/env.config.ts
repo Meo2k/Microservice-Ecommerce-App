@@ -8,6 +8,10 @@ export const ENV = {
     EMAIL_PASS: getEnv("NX_EMAIL_PASS", "password"),
     EMAIL_FROM: getEnv("NX_EMAIL_FROM", "user@gmail.com"),
 
+    DATABASE_URL_POSTGRESQL: getEnv("NX_DATABASE_URL_POSTGRESQL"),
+    DATABASE_URL_MONGODB: getEnv("NX_DATABASE_URL_MONGODB"),
+
+
     ACCESS_TOKEN_KEY: getEnv("NX_ACCESS_TOKEN_KEY", "access_token_key"),
     ACCESS_TOKEN_EXPIRED: getEnv("NX_ACCESS_TOKEN_EXPIRED", "1h"),
     REFRESH_TOKEN_KEY: getEnv("NX_REFRESH_TOKEN_KEY", "refresh_token_key"),

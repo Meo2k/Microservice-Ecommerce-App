@@ -59,8 +59,8 @@ export class AuthService {
         }
 
 
-        const accessToken = this.tokenService.signAccess({ id: user.id })
-        const refreshToken = this.tokenService.signRefresh({ id: user.id })
+        const accessToken = this.tokenService.signAccess({ sub: user.id })
+        const refreshToken = this.tokenService.signRefresh({ sub: user.id })
     
         return {
             status: HTTP_STATUS.OK,

@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  //url      = env("NX_DATABASE_URL")
+  //url      = env("NX_DATABASE_URL_POSTGRESQL")
 }
 
 model Permission {

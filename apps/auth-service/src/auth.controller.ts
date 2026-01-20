@@ -4,7 +4,7 @@ import { PrismaAuthRepository } from "./repositories/auth.repository";
 import { JwtTokenService } from "./repositories/jwt-token.repository";
 import { AuthService } from "./auth.service";
 import ms from "ms";
-import { AUTH_MESSAGE, ENV, HTTP_STATUS } from "@org/shared";
+import { AUTH_MESSAGE, ENV, HTTP_STATUS, setupPassport } from "@org/shared";
 import { EmailService } from "@org/redis";
 import { toUserResponseDto } from "./dtos/auth.dto";
 import { OtpService } from "@org/redis";
@@ -67,6 +67,8 @@ const tokenService = new JwtTokenService();
 const emailService = new EmailService();
 const otpService = new OtpService();
 const authService = new AuthService(authRepo, tokenService, emailService, otpService);
+
+setupPassport(authRepo.findUserById)
 
 export const authController = new AuthController(authService)
 

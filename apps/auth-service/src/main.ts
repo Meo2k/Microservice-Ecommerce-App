@@ -1,10 +1,13 @@
 import * as dotenv from 'dotenv';
-dotenv.config();
-dotenv.config({ path: 'libs/database/.env' });
 import 'reflect-metadata';
+
 import express from 'express';
+import passport from 'passport';
 import { ENV, errorHandler } from '@org/shared';
 import router from './routes';
+
+
+dotenv.config();
 
 const host = ENV.AUTH_SERVICE_HOST;
 const port: any = ENV.AUTH_SERVICE_PORT;
@@ -13,6 +16,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(passport.initialize());
 
 router(app)
 

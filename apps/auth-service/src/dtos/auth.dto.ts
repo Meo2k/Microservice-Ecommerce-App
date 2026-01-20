@@ -10,8 +10,9 @@ export class UserResponseDto {
     createdAt!: Date;
     updatedAt!: Date;
 
-    @Exclude()
-    password?: string;
+    @Exclude() password?: string;
+    @Exclude() is_verified?: boolean;
+    @Exclude() is_locked?: boolean;
 
     constructor(partial: Partial<UserResponseDto>) {
         Object.assign(this, partial);
