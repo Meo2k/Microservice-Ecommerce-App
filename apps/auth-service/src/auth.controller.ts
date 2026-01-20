@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { loginSchema, registerSchema, resendOtpSchema, verifyOtpSchema } from "./auth.validator";
+import { changePasswordSchema, loginSchema, registerSchema, resendOtpSchema, sendOtpSchema, verifyOtpSchema } from "./auth.validator";
 import { AuthRepository } from "./repositories/auth.repository";
 import { JwtTokenService } from "./repositories/jwt-token.repository";
 import { AuthService } from "./auth.service";
@@ -39,6 +39,12 @@ class AuthController {
             .json(result.metadata)
     }
 
+    sendOtp = async (req: Request, res: Response) => {
+        const body = sendOtpSchema.parse(req.body);
+        const result = await this.authService.sendOtp(body);
+        return res.status(result.status).json(result.metadata)
+    }
+
     verifyOtp = async (req: Request, res: Response) => {
         const body = verifyOtpSchema.parse(req.body);
         const result = await this.authService.verifyOtp(body);
@@ -59,6 +65,11 @@ class AuthController {
     refreshToken = async (req: Request, res: Response) => {
         const {id} = (req as any).user
         const result = await this.authService.refreshToken(id);
+        return res.status(result.status).json(result.metadata)
+    }
+    changePassword = async (req: Request, res: Response) => {
+        const body = changePasswordSchema.parse(req.body);
+        const result = await this.authService.changePassword(body);
         return res.status(result.status).json(result.metadata)
     }
 }

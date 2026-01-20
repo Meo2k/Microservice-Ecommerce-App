@@ -15,10 +15,15 @@ export const AUTH_MESSAGE = {
         SUCCESS: "User fetched successfully",
         NOT_FOUND: "User not found"
     },
-    VERIFY_OTP: {
-        SUCCESS: "OTP verified successfully",
+    SEND_OTP: {
+        SUCCESS: "OTP sent successfully",
+    },
+    VALIDATE_OTP: {
         INVALID: "Invalid OTP or have been expired. Please try again.",
         NOT_FOUND: "User not found"
+    },
+    VERIFY_OTP: {
+        SUCCESS: "OTP verified successfully",
     },
     RESEND_OTP: {
         SUCCESS: "OTP resent successfully",
@@ -27,6 +32,11 @@ export const AUTH_MESSAGE = {
     },
     REFRESH_TOKEN: {
         SUCCESS: "Refresh token generated successfully",
+    }, 
+    CHANGE_PASSWORD: {
+        SUCCESS: "Password changed successfully",
+        OTP_INVALID: "Invalid OTP or have been expired. Please try again.",
+        NOT_FOUND: "User not found"
     }
 }
 

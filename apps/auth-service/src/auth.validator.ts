@@ -40,8 +40,22 @@ export interface GetMeSchemaType extends Request {
     user: User
 }
 
+export const changePasswordSchema = z.object({
+    code: z.string().trim().length(4, "Code must be exactly 4 characters long"),
+    email: emailSchema,
+    password: passwordSchema,
+    confirm_password: passwordSchema,
+}).refine((data) => data.password === data.confirm_password, {
+    message: "Passwords do not match",
+})
+
+export const sendOtpSchema = z.object({
+    email: emailSchema,
+})
 
 export type RegisterSchemaType = z.infer<typeof registerSchema>
 export type LoginSchemaType = z.infer<typeof loginSchema>
 export type VerifyOtpSchemaType = z.infer<typeof verifyOtpSchema>
 export type ResendOtpSchemaType = z.infer<typeof resendOtpSchema>
+export type ChangePasswordSchemaType = z.infer<typeof changePasswordSchema>
+export type SendOtpSchemaType = z.infer<typeof sendOtpSchema>
