@@ -24,6 +24,9 @@ export const AUTH_MESSAGE = {
         SUCCESS: "OTP resent successfully",
         INVALID: "Invalid OTP or have been expired. Please try again.",
         NOT_FOUND: "User not found"
+    },
+    REFRESH_TOKEN: {
+        SUCCESS: "Refresh token generated successfully",
     }
 }
 

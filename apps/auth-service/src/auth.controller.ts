@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
-import { GetMeSchemaType, loginSchema, registerSchema, resendOtpSchema, verifyOtpSchema } from "./auth.validator";
-import { PrismaAuthRepository } from "./repositories/auth.repository";
+import { loginSchema, registerSchema, resendOtpSchema, verifyOtpSchema } from "./auth.validator";
+import { AuthRepository } from "./repositories/auth.repository";
 import { JwtTokenService } from "./repositories/jwt-token.repository";
 import { AuthService } from "./auth.service";
 import ms from "ms";
-import { AUTH_MESSAGE, ENV, HTTP_STATUS } from "@org/shared";
+import { ENV, setupPassport } from "@org/shared";
 import { EmailService } from "@org/redis";
-import { toUserResponseDto } from "./dtos/auth.dto";
 import { OtpService } from "@org/redis";
 
 class AuthController {
@@ -53,20 +52,25 @@ class AuthController {
     }
 
     getMe = async (req: Request, res: Response) => {
-        const user = (req as unknown as GetMeSchemaType).user
-        return res.status(HTTP_STATUS.OK).json({
-            message: AUTH_MESSAGE.GET_ME.SUCCESS,
-            user: toUserResponseDto(user)
-        })
+        const user = (req as any).user
+        const result = await this.authService.getMe(user)
+        return res.status(result.status).json(result.metadata)
+    }
+    refreshToken = async (req: Request, res: Response) => {
+        const {id} = (req as any).user
+        const result = await this.authService.refreshToken(id);
+        return res.status(result.status).json(result.metadata)
     }
 }
 
 
-const authRepo = new PrismaAuthRepository();
+const authRepo = new AuthRepository();
 const tokenService = new JwtTokenService();
 const emailService = new EmailService();
 const otpService = new OtpService();
 const authService = new AuthService(authRepo, tokenService, emailService, otpService);
+
+setupPassport(authRepo.findUserById)
 
 export const authController = new AuthController(authService)
 

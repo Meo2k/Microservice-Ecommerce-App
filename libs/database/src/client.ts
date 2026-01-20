@@ -3,7 +3,7 @@ import { hashPassword } from '@org/shared';
 
 const prismaClientSingleton = () => {
     return new PrismaClient({
-        datasourceUrl: process.env['NX_DATABASE_URL'],
+        datasourceUrl: process.env['NX_DATABASE_URL_POSTGRESQL'],
     }).$extends({
         query: {
             user: {
