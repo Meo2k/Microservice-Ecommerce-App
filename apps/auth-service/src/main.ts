@@ -5,7 +5,7 @@ import express from 'express';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import { ENV, errorHandler } from '@org/shared';
-import router from './routes';
+import { authRouter } from './routes';
 
 
 dotenv.config();
@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 app.use(passport.initialize());
 
-router(app)
+app.use("/", authRouter)
 
 app.use(errorHandler)
 

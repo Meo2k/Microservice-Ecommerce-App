@@ -1,107 +1,64 @@
 import 'dotenv/config';
 import { PrismaClient } from '.././src/client';
-import { PermissionsConfig } from '../../shared/src/config/permissions.config';
 import { hashPassword } from '../../shared/src/utils/password.util';
-
+import { ADMIN_PERM, SELLER_PERM } from '../../shared/src/config/permissions.config';
 
 const prisma = new PrismaClient();
-
 
 const ADMIN_EMAIL = process.env.NX_ADMIN_EMAIL || "admin@org.com";
 const ADMIN_PASSWORD = process.env.NX_ADMIN_PASSWORD || "admin";
 
 async function main() {
-    await Promise.all([
-        prisma.rolePermission.deleteMany(),
-        prisma.userRole.deleteMany(),
-    ])
-    await Promise.all([
-        prisma.permission.deleteMany(),
-        prisma.role.deleteMany(),
-        prisma.user.deleteMany(),
-    ])
+    await prisma.userRole.deleteMany();
+    await prisma.role.deleteMany();
+    await prisma.user.deleteMany();
 
     console.log('Database cleaned...');
     console.log('Seeding database...');
 
-    const permission = await prisma.permission.upsert({
-        where: { action: PermissionsConfig.ACTION.MANAGER },
-        update: {
-            resource: PermissionsConfig.RESOURCE.ALL
-        },
-        create: {
-            action: PermissionsConfig.ACTION.MANAGER,
-            resource: PermissionsConfig.RESOURCE.ALL,
+    const adminRole = await prisma.role.create({
+        data: {
+            name: 'ADMIN',
+            permissions: ADMIN_PERM,
         },
     });
-    console.log(`Permission ensured: ${permission.action}`);
+    console.log(`Role created: ${adminRole.name} with full permissions.`);
 
-    const role = await prisma.role.upsert({
-        where: { name: 'FULL_ACCESS' },
-        update: {},
-        create: {
-            name: 'FULL_ACCESS',
+    const sellerRole = await prisma.role.create({
+        data: {
+            name: 'SELLER',
+            permissions: SELLER_PERM,
         },
     });
-    console.log(`Role ensured: ${role.name}`);
+    console.log(`Role created: ${sellerRole.name} with seller permissions.`);
 
-    const rolePermissionInitial = await prisma.rolePermission.findFirst({
-        where: {
-            roleId: role.id,
-            permissionId: permission.id
+    const userRole = await prisma.role.create({
+        data: {
+            name: 'USER',
+            permissions: 0n,
+        },
+    });
+    console.log(`Role created: ${userRole.name} with basic permissions.`);
+
+    const hashedPassword = await hashPassword(ADMIN_PASSWORD);
+    const userAdmin = await prisma.user.create({
+        data: {
+            email: ADMIN_EMAIL,
+            password: hashedPassword,
+            username: 'Admin',
+            is_verified: true,
+            is_locked: false,
         }
     });
+    console.log(`Admin User created: ${ADMIN_EMAIL}`);
 
-    if (!rolePermissionInitial) {
-        await prisma.rolePermission.create({
-            data: {
-                roleId: role.id,
-                permissionId: permission.id
-            }
-        });
-        console.log('Linked Role "FULL_ACCESS" to Permission "MANAGER"');
-    } else {
-        console.log('Role "FULL_ACCESS" already has Permission "MANAGER"');
-    }
-
-
-    let userAdmin = await prisma.user.findUnique({
-        where: { email: ADMIN_EMAIL }
-    });
-
-    if (!userAdmin) {
-        const hashedPassword = await hashPassword(ADMIN_PASSWORD);
-        userAdmin = await prisma.user.create({
-            data: {
-                email: ADMIN_EMAIL,
-                password: hashedPassword,
-                username: 'Admin',
-            }
-        });
-        console.log(`Admin User created: ${ADMIN_EMAIL}`);
-    } else {
-        console.log(`Admin User already exists: ${ADMIN_EMAIL}`);
-    }
-
-    // Link User <-> Role (Assign FULL_ACCESS to Admin)
-    const userRoleRelation = await prisma.userRole.findFirst({
-        where: {
+    await prisma.userRole.create({
+        data: {
             userId: userAdmin.id,
-            roleId: role.id
+            roleId: adminRole.id
         }
     });
-
-    if (!userRoleRelation) {
-        await prisma.userRole.create({
-            data: {
-                userId: userAdmin.id,
-                roleId: role.id
-            }
-        });
-        console.log(`Assigned Role "FULL_ACCESS" to User "${ADMIN_EMAIL}"`);
-    } else {
-        console.log(`User "${ADMIN_EMAIL}" already has Role "FULL_ACCESS"`);
-    }
+    console.log(`Assigned Role "ADMIN" to User "${ADMIN_EMAIL}"`);
 
     console.log('Seeding finished successfully.');
 }

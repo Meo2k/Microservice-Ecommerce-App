@@ -1,5 +1,5 @@
 import { User as UserSchemaType } from "@org/database"
-import { LoginSchemaType, RegisterSchemaType, ResendOtpSchemaType, VerifyOtpSchemaType } from "./auth.validator";
+import { ChangePasswordSchemaType, LoginSchemaType, RegisterSchemaType, ResendOtpSchemaType, SendOtpSchemaType, VerifyOtpSchemaType } from "./auth.validator";
 import { AUTH_MESSAGE, ConflictError, HTTP_STATUS, NotFoundError, UnauthorizedError } from "@org/shared";
 import { IAuthRepository } from "./interfaces/auth.interface";
 import { ITokenService } from "./interfaces/jwt-token.interface";
@@ -71,23 +71,43 @@ export class AuthService {
         };
     }
 
+    /**
+     * @description private :  verify OTP 
+     */
+    private async _validateOtpOrThrow(email: string, code: string) {
+        
+        const user = await this.authRepo.findUserByEmail(email) as UserSchemaType;
+        if (!user) {
+            throw new NotFoundError(AUTH_MESSAGE.VALIDATE_OTP.NOT_FOUND);
+        }
+
+        const storedData = await this.otpService.findOtpByEmail(email);
+        if (!storedData.otp) {
+            throw new UnauthorizedError(AUTH_MESSAGE.VALIDATE_OTP.INVALID);
+        }
+
+        if (code !== storedData.otp) {
+            await this.otpService.handleFailedAttempts(email);
+        }
+        return user;
+    }
+    
+    sendOtp = async (body: SendOtpSchemaType) => {
+        const { email } = body
+        await this.otpService.checkOtpRestrictions(email)
+        await this.emailService.sendOtpToEmail(email, "otp.template")
+        return {
+            status: HTTP_STATUS.OK,
+            metadata: {
+                message: AUTH_MESSAGE.SEND_OTP.SUCCESS,
+            },
+        };
+    }
+
     verifyOtp = async (body: VerifyOtpSchemaType) => {
         const { email, otp } = body
         
-        const user = await this.authRepo.findUserByEmail(email) as UserSchemaType
-        if (!user) {
-            throw new NotFoundError(AUTH_MESSAGE.VERIFY_OTP.NOT_FOUND)
-        }
-
-        const storedData = await this.otpService.findOtpByEmail(email)
-
-        if (!storedData.otp) {
-            throw new UnauthorizedError(AUTH_MESSAGE.VERIFY_OTP.INVALID)
-        }
-
-        if (otp !== storedData.otp) {
-            this.otpService.handleFailedAttempts(email)
-        }
+        const user = await this._validateOtpOrThrow(email, otp)
 
         await this.authRepo.updateUser( { id: user.id }, { is_verified: true })
         await this.otpService.resetOTP(email)
@@ -123,6 +143,7 @@ export class AuthService {
             },
         };
     }
+
     getMe = async (user: UserSchemaType) => {
         return {
             status: HTTP_STATUS.OK,
@@ -142,5 +163,21 @@ export class AuthService {
                 accessToken,
             },
         };
+    }
+
+    changePassword = async (body: ChangePasswordSchemaType) => {
+        const { code, email, password } = body
+        const user = await this._validateOtpOrThrow(email, code)
+        
+        await this.authRepo.updateUser({ id: user.id }, { password })
+        await this.otpService.resetOTP(email)
+
+        return {
+            status: HTTP_STATUS.OK,
+            metadata: {
+                message: AUTH_MESSAGE.CHANGE_PASSWORD.SUCCESS,
+            },
+        };
+        
     }
 }

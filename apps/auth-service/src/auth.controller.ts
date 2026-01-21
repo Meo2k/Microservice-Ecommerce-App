@@ -1,14 +1,10 @@
 import { Request, Response } from "express";
-import { loginSchema, registerSchema, resendOtpSchema, verifyOtpSchema } from "./auth.validator";
-import { AuthRepository } from "./repositories/auth.repository";
-import { JwtTokenService } from "./repositories/jwt-token.repository";
+import { changePasswordSchema, loginSchema, registerSchema, resendOtpSchema, sendOtpSchema, verifyOtpSchema } from "./auth.validator";
+import { ENV } from "@org/shared";
 import { AuthService } from "./auth.service";
 import ms from "ms";
-import { ENV, setupPassport } from "@org/shared";
-import { EmailService } from "@org/redis";
-import { OtpService } from "@org/redis";
 
-class AuthController {
+export class AuthController {
     constructor(
         private readonly authService: AuthService
     ) { }
@@ -39,6 +35,12 @@ class AuthController {
             .json(result.metadata)
     }
 
+    sendOtp = async (req: Request, res: Response) => {
+        const body = sendOtpSchema.parse(req.body);
+        const result = await this.authService.sendOtp(body);
+        return res.status(result.status).json(result.metadata)
+    }
+
     verifyOtp = async (req: Request, res: Response) => {
         const body = verifyOtpSchema.parse(req.body);
         const result = await this.authService.verifyOtp(body);
@@ -52,26 +54,20 @@ class AuthController {
     }
 
     getMe = async (req: Request, res: Response) => {
-        const user = (req as any).user
+        const user = req.user!
         const result = await this.authService.getMe(user)
         return res.status(result.status).json(result.metadata)
     }
     refreshToken = async (req: Request, res: Response) => {
-        const {id} = (req as any).user
-        const result = await this.authService.refreshToken(id);
+        const { id } = req.user!;
+        const result = await this.authService.refreshToken(String(id));
+        return res.status(result.status).json(result.metadata)
+    }
+    changePassword = async (req: Request, res: Response) => {
+        const body = changePasswordSchema.parse(req.body);
+        const result = await this.authService.changePassword(body);
         return res.status(result.status).json(result.metadata)
     }
 }
-
-
-const authRepo = new AuthRepository();
-const tokenService = new JwtTokenService();
-const emailService = new EmailService();
-const otpService = new OtpService();
-const authService = new AuthService(authRepo, tokenService, emailService, otpService);
-
-setupPassport(authRepo.findUserById)
-
-export const authController = new AuthController(authService)
 
 

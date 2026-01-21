@@ -11,7 +11,7 @@ export class OtpService implements IOtpService {
         return {otp: otp as string | null}
     }
 
-        async checkOtpRestrictions(email: string) {
+    async checkOtpRestrictions(email: string) {
         if (await redis.get(`otp_locked:${email}`)) {
             throw new ValidationError(OTP_MESSAGE.LOCKED)
         }
