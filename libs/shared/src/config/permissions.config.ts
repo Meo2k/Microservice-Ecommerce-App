@@ -8,15 +8,16 @@ export enum Action {
 }
 
 export enum Resource {
-    USER = 0,
-    ORDER = 1,
-    PRODUCT = 2,
-    CATEGORY = 3,
-    SYSTEM = 4,
-    ROLE = 5,
+    ALL = 0,
+    USER = 1,
+    ORDER = 2,
+    PRODUCT = 3,
+    CATEGORY = 4,
+    SYSTEM = 5,
+    ROLE = 6,
 }
 
-export const ADMIN_PERM: bigint = (1n << 64n) - 1n;
+export const ADMIN_PERM: bigint = -1n;
 
 const SELLER_BASE_ACTIONS = BigInt(Action.READ | Action.CREATE | Action.UPDATE);
 

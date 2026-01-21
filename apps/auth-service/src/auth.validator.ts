@@ -49,13 +49,8 @@ export const changePasswordSchema = z.object({
     message: "Passwords do not match",
 })
 
-export const sendOtpSchema = z.object({
-    email: emailSchema,
-})
-
 export type RegisterSchemaType = z.infer<typeof registerSchema>
 export type LoginSchemaType = z.infer<typeof loginSchema>
 export type VerifyOtpSchemaType = z.infer<typeof verifyOtpSchema>
 export type ResendOtpSchemaType = z.infer<typeof resendOtpSchema>
 export type ChangePasswordSchemaType = z.infer<typeof changePasswordSchema>
-export type SendOtpSchemaType = z.infer<typeof sendOtpSchema>

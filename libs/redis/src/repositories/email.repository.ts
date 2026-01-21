@@ -16,7 +16,7 @@ export class EmailService implements IEmailService {
             throw new ValidationError(OTP_MESSAGE.COOLDOWN)
         }
 
-        await sendEmail(to, "Xác thực Email", "Xác thực Email", templateName, { otp, otpExpired: otpExpired / 60 })
+        await sendEmail(to, "Xác thực Email của Bạn !", "Xác thực Email", templateName, { otp, otpExpired: otpExpired / 60 })
 
         const p = redis.pipeline();
 

@@ -10,7 +10,8 @@
   },
   "include": [
     "src/**/*.ts",
-    "../../libs/shared/src/**/*.ts"
+    "../../libs/shared/src/**/*.ts",
+    "../../@types/**/*.d.ts"
   ],
   "exclude": [],
   "references": [
