@@ -11,6 +11,9 @@ export class AuthRepository implements IAuthRepository {
     async findUserByEmail(email: string) {
         return prisma.user.findUnique({ where: { email } });
     }
+    async findAllUser() {
+        return prisma.user.findMany();
+    }
     async createUser(data: any) {
         return prisma.user.create(data);
     }
@@ -22,6 +25,23 @@ export class AuthRepository implements IAuthRepository {
     }
     toUserResponseDto(user: User) {
         return toUserResponseDto(user);
+    }
+
+    async getPermissions(userId: number): Promise<bigint> {
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            include: {
+                userRole: {
+                    include: {
+                        role: true
+                    }
+                }
+            }
+        });
+
+        if (!user) return BigInt(0);
+
+        return user.userRole.reduce((acc, curr) => acc | curr.role.permissions, BigInt(0));
     }
 }
 

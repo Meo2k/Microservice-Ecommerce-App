@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { changePasswordSchema, loginSchema, registerSchema, resendOtpSchema, sendOtpSchema, verifyOtpSchema } from "./auth.validator";
+import { changePasswordSchema, loginSchema, registerSchema, resendOtpSchema, verifyOtpSchema } from "./auth.validator";
 import { ENV } from "@org/shared";
 import { AuthService } from "./auth.service";
 import ms from "ms";
@@ -35,12 +35,6 @@ export class AuthController {
             .json(result.metadata)
     }
 
-    sendOtp = async (req: Request, res: Response) => {
-        const body = sendOtpSchema.parse(req.body);
-        const result = await this.authService.sendOtp(body);
-        return res.status(result.status).json(result.metadata)
-    }
-
     verifyOtp = async (req: Request, res: Response) => {
         const body = verifyOtpSchema.parse(req.body);
         const result = await this.authService.verifyOtp(body);
@@ -66,6 +60,11 @@ export class AuthController {
     changePassword = async (req: Request, res: Response) => {
         const body = changePasswordSchema.parse(req.body);
         const result = await this.authService.changePassword(body);
+        return res.status(result.status).json(result.metadata)
+    }
+
+    getAllUser = async (req: Request, res: Response) => {
+        const result = await this.authService.getAllUser();
         return res.status(result.status).json(result.metadata)
     }
 }
