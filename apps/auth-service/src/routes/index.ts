@@ -1,12 +1,9 @@
-import { Express, Router } from "express";
-import { authController } from "../auth.controller";
+import { Router } from "express";
+import { authController } from "../dependencies";
 import { asyncHandler, authenticateRefreshToken, authenticateJwt } from "@org/shared";
 
-const router = (app: Express) => {
-    app.use("/", authRouter)
-}
 
-const authRouter = Router()
+export const authRouter = Router()
     .post("/register", asyncHandler(authController.register))
     .post("/send-otp", asyncHandler(authController.sendOtp))
     .post("/verify-otp", asyncHandler(authController.verifyOtp))
@@ -18,4 +15,6 @@ const authRouter = Router()
 
     .post("/change-password", authenticateJwt, asyncHandler(authController.changePassword))
 
-export default router
+//get all user (only for admin)
+
+
