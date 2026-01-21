@@ -5,26 +5,15 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("NX_DATABASE_URL")
-}
-
-model Permission {
-  id       Int    @id @default(autoincrement())
-  action   String @unique @db.VarChar(50)
-  resource String @db.VarChar(50)
-
-  rolePermission RolePermission[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  url      = env("NX_DATABASE_URL_POSTGRESQL")
 }
 
 model Role {
   id   Int    @id @default(autoincrement())
   name String @unique @db.VarChar(50)
 
-  rolePermission RolePermission[]
-  userRole       UserRole[]
+  userRole    UserRole[]
+  permissions BigInt     @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -46,6 +35,8 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([email])
 }
 
 model UserRole {
@@ -58,16 +49,7 @@ model UserRole {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
 
-model RolePermission {
-  id         Int        @id @default(autoincrement())
-  role       Role       @relation(fields: [roleId], references: [id])
-  permission Permission @relation(fields: [permissionId], references: [id])
-
-  roleId       Int
-  permissionId Int
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@index([userId])
+  @@index([roleId])
 }
