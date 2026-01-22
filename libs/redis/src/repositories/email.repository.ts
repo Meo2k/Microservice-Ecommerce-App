@@ -1,11 +1,11 @@
 
 import { ENV , generateOTP, OTP_MESSAGE, sendEmail, ValidationError} from "@org/shared"
-import { IEmailService } from '../interfaces/email.interface'
+import { IEmailRepository } from '../interfaces/email.interface'
 import { redis } from "../redis"
 
 
 
-export class EmailService implements IEmailService {
+export class EmailRepository implements IEmailRepository {
     constructor() {}
 
     async sendOtpToEmail(to: string, templateName: string ) {

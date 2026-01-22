@@ -1,10 +1,10 @@
 import { redis } from "../redis"
-import { IOtpService } from "../interfaces/otp.interface"
+import { IOtpRepository } from "../interfaces/otp.interface"
 import { ValidationError } from "@org/shared"
 import { OTP_MESSAGE } from "@org/shared"
 import { ENV } from "@org/shared"
 
-export class OtpService implements IOtpService {
+export class OtpRepository implements IOtpRepository {
     constructor() {}
     async findOtpByEmail(to: string): Promise<{otp: string | null}> {
         const otp =  await redis.get(`otp:${to}`)

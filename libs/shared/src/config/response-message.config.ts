@@ -41,6 +41,10 @@ export const AUTH_MESSAGE = {
     GET_ALL_USER: {
         SUCCESS: "Users fetched successfully",
         NOT_FOUND: "Users not found"
+    },
+    UNAUTHORIZED: {
+        NOT_VERIFIED: "User is not verified",
+        LOCKED: "User is locked"
     }
 }
 

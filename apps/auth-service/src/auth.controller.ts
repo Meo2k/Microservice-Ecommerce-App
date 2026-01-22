@@ -18,6 +18,7 @@ export class AuthController {
         return res.status(result.status).json(result)
     }
 
+
     /**
      * @description Login a user, apply to cookie and sliding expired
      */
