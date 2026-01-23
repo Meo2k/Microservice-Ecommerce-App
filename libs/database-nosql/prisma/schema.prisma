@@ -33,6 +33,7 @@ model Cart {
   userId    String     @unique
   groups    CartGroup[] // Gom nhóm theo từng Shop
   updatedAt DateTime   @updatedAt
+
 }
 
 type CartGroup {

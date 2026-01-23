@@ -24,6 +24,8 @@ model User {
   avatar_url String?
   email      String  @unique
 
+  address Address[]
+
   is_verified Boolean @default(false)
   is_locked   Boolean @default(false)
 
@@ -87,10 +89,31 @@ model Category {
   updatedAt DateTime @updatedAt
 }
 
+model Address {
+  id Int @id @default(autoincrement())
+  street String
+  district String 
+  isDefault Boolean @default(false)
+
+  user User @relation(fields: [userId], references: [id])
+  userId Int
+
+  city City @relation(fields: [cityId], references: [id])
+  cityId Int
+
+  country Country @relation(fields: [countryId], references: [id])
+  countryId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model City {
   id Int @id @default(autoincrement())
 
   name String @unique @db.VarChar(50)
+
+  address Address[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -101,6 +124,8 @@ model Country {
   id Int @id @default(autoincrement())
 
   name String @unique @db.VarChar(50)
+
+  address Address[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -1,4 +1,4 @@
-import { User } from "@org/database";
+import { Shop, User } from "@org/database";
 import { UserResponseDto } from "../dtos/auth.dto";
 
 export interface IAuthRepository {

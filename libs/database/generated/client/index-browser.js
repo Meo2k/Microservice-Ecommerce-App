@@ -150,6 +150,63 @@ exports.Prisma.UserRoleScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ShopScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  logo_url: 'logo_url',
+  cover_url: 'cover_url',
+  is_active: 'is_active',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AddressScalarFieldEnum = {
+  id: 'id',
+  street: 'street',
+  district: 'district',
+  isDefault: 'isDefault',
+  userId: 'userId',
+  cityId: 'cityId',
+  countryId: 'countryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CityScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CountryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  basePrice: 'basePrice',
+  stock: 'stock',
+  discount: 'discount',
+  shopId: 'shopId',
+  categoryId: 'categoryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -169,7 +226,13 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   Role: 'Role',
   User: 'User',
-  UserRole: 'UserRole'
+  UserRole: 'UserRole',
+  Shop: 'Shop',
+  Category: 'Category',
+  Address: 'Address',
+  City: 'City',
+  Country: 'Country',
+  Product: 'Product'
 };
 
 /**

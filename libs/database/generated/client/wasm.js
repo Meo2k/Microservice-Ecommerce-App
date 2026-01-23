@@ -122,6 +122,63 @@ exports.Prisma.UserRoleScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ShopScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  logo_url: 'logo_url',
+  cover_url: 'cover_url',
+  is_active: 'is_active',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AddressScalarFieldEnum = {
+  id: 'id',
+  street: 'street',
+  district: 'district',
+  isDefault: 'isDefault',
+  userId: 'userId',
+  cityId: 'cityId',
+  countryId: 'countryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CityScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CountryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  basePrice: 'basePrice',
+  stock: 'stock',
+  discount: 'discount',
+  shopId: 'shopId',
+  categoryId: 'categoryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -141,7 +198,13 @@ exports.Prisma.NullsOrder = {
 exports.Prisma.ModelName = {
   Role: 'Role',
   User: 'User',
-  UserRole: 'UserRole'
+  UserRole: 'UserRole',
+  Shop: 'Shop',
+  Category: 'Category',
+  Address: 'Address',
+  City: 'City',
+  Country: 'Country',
+  Product: 'Product'
 };
 /**
  * Create the Client
@@ -190,13 +253,13 @@ const config = {
       }
     }
   },
-  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"NX_DATABASE_URL_POSTGRESQL\")\n}\n\nmodel Role {\n  id   Int    @id @default(autoincrement())\n  name String @unique @db.VarChar(50)\n\n  userRole    UserRole[]\n  permissions BigInt     @default(0)\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel User {\n  id         Int     @id @default(autoincrement())\n  avatar_url String?\n  email      String  @unique\n\n  is_verified Boolean @default(false)\n  is_locked   Boolean @default(false)\n\n  password String\n  username String? @db.VarChar(50)\n  bio      String? @db.VarChar(150)\n\n  userRole UserRole[]\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@index([email])\n}\n\nmodel UserRole {\n  id   Int  @id @default(autoincrement())\n  user User @relation(fields: [userId], references: [id])\n  role Role @relation(fields: [roleId], references: [id])\n\n  userId Int\n  roleId Int\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@index([userId])\n  @@index([roleId])\n}\n",
-  "inlineSchemaHash": "4c8ea6898bf8bdc7cadb0018f6cd2eaf87a93700b4eecb81a963c26fcf70f6f1",
+  "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/client\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"NX_DATABASE_URL_POSTGRESQL\")\n}\n\nmodel Role {\n  id   Int    @id @default(autoincrement())\n  name String @unique @db.VarChar(50)\n\n  userRole    UserRole[]\n  permissions BigInt     @default(0)\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel User {\n  id         Int     @id @default(autoincrement())\n  avatar_url String?\n  email      String  @unique\n\n  address Address[]\n\n  is_verified Boolean @default(false)\n  is_locked   Boolean @default(false)\n\n  password String\n  username String? @db.VarChar(50)\n  bio      String? @db.VarChar(150)\n\n  userRole UserRole[]\n  shop     Shop[]\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@index([email])\n}\n\nmodel UserRole {\n  id   Int  @id @default(autoincrement())\n  user User @relation(fields: [userId], references: [id])\n  role Role @relation(fields: [roleId], references: [id])\n\n  userId Int\n  roleId Int\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@index([userId])\n  @@index([roleId])\n}\n\nmodel Shop {\n  id          Int     @id @default(autoincrement())\n  name        String\n  description String?\n  logo_url    String?\n  cover_url   String?\n  is_active   Boolean @default(true)\n\n  user   User @relation(fields: [userId], references: [id])\n  userId Int  @unique\n\n  products Product[]\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@index([userId])\n}\n\nmodel Category {\n  id Int @id @default(autoincrement())\n\n  name String @unique @db.VarChar(50)\n\n  products Product[]\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel Address {\n  id        Int     @id @default(autoincrement())\n  street    String\n  district  String\n  isDefault Boolean @default(false)\n\n  user   User @relation(fields: [userId], references: [id])\n  userId Int\n\n  city   City @relation(fields: [cityId], references: [id])\n  cityId Int\n\n  country   Country @relation(fields: [countryId], references: [id])\n  countryId Int\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel City {\n  id Int @id @default(autoincrement())\n\n  name String @unique @db.VarChar(50)\n\n  address Address[]\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel Country {\n  id Int @id @default(autoincrement())\n\n  name String @unique @db.VarChar(50)\n\n  address Address[]\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel Product {\n  id        String  @id @default(uuid())\n  name      String\n  basePrice Decimal @db.Decimal(12, 2)\n  stock     Int     @default(0)\n  discount  Int     @default(0)\n\n  shopId     Int\n  shop       Shop     @relation(fields: [shopId], references: [id])\n  categoryId Int\n  category   Category @relation(fields: [categoryId], references: [id])\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n\n  @@index([name])\n}\n",
+  "inlineSchemaHash": "339bf8c00ee23e47e0c0859c72fea1d9c41af3311e5c123d912051920eee237b",
   "copyEngine": true
 }
 config.dirname = '/'
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Role\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userRole\",\"kind\":\"object\",\"type\":\"UserRole\",\"relationName\":\"RoleToUserRole\"},{\"name\":\"permissions\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"avatar_url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"is_verified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"is_locked\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"bio\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userRole\",\"kind\":\"object\",\"type\":\"UserRole\",\"relationName\":\"UserToUserRole\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"UserRole\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToUserRole\"},{\"name\":\"role\",\"kind\":\"object\",\"type\":\"Role\",\"relationName\":\"RoleToUserRole\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"roleId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"Role\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userRole\",\"kind\":\"object\",\"type\":\"UserRole\",\"relationName\":\"RoleToUserRole\"},{\"name\":\"permissions\",\"kind\":\"scalar\",\"type\":\"BigInt\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"avatar_url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"address\",\"kind\":\"object\",\"type\":\"Address\",\"relationName\":\"AddressToUser\"},{\"name\":\"is_verified\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"is_locked\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"username\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"bio\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userRole\",\"kind\":\"object\",\"type\":\"UserRole\",\"relationName\":\"UserToUserRole\"},{\"name\":\"shop\",\"kind\":\"object\",\"type\":\"Shop\",\"relationName\":\"ShopToUser\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"UserRole\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"UserToUserRole\"},{\"name\":\"role\",\"kind\":\"object\",\"type\":\"Role\",\"relationName\":\"RoleToUserRole\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"roleId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Shop\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"description\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"logo_url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"cover_url\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"is_active\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"ShopToUser\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"products\",\"kind\":\"object\",\"type\":\"Product\",\"relationName\":\"ProductToShop\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Category\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"products\",\"kind\":\"object\",\"type\":\"Product\",\"relationName\":\"CategoryToProduct\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Address\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"street\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"district\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"isDefault\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"AddressToUser\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"city\",\"kind\":\"object\",\"type\":\"City\",\"relationName\":\"AddressToCity\"},{\"name\":\"cityId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"country\",\"kind\":\"object\",\"type\":\"Country\",\"relationName\":\"AddressToCountry\"},{\"name\":\"countryId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"City\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"address\",\"kind\":\"object\",\"type\":\"Address\",\"relationName\":\"AddressToCity\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Country\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"address\",\"kind\":\"object\",\"type\":\"Address\",\"relationName\":\"AddressToCountry\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Product\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"basePrice\",\"kind\":\"scalar\",\"type\":\"Decimal\"},{\"name\":\"stock\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"discount\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"shopId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"shop\",\"kind\":\"object\",\"type\":\"Shop\",\"relationName\":\"ProductToShop\"},{\"name\":\"categoryId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"category\",\"kind\":\"object\",\"type\":\"Category\",\"relationName\":\"CategoryToProduct\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.engineWasm = {
   getRuntime: async () => require('./query_engine_bg.js'),

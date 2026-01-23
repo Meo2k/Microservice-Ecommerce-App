@@ -6,6 +6,7 @@ export interface IUserRepository {
     findUserById(id: number): Promise<User | null>
     getAllUser(): Promise<User[]>
     updateUser(id: number, data: UpdateUserValidatorType): Promise<User>
+    deleteUser(id: number): Promise<User>
 
     toUserResponseDto(user: User): UserResponseDto
     getPermissions(userId: number): Promise<bigint>

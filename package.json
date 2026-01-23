@@ -4,10 +4,10 @@
   "license": "MIT",
   "scripts": {
     "seed": "npx -y tsx libs/database/prisma/seed.ts",
-    "db:generate": "prisma generate --schema=libs/database/prisma/schema.prisma",
-    "db:migrate": "prisma migrate dev --schema=libs/database/prisma/schema.prisma",
-    "db:studio": "prisma studio --schema=libs/database/prisma/schema.prisma",
-    "db:reset": "prisma migrate reset --schema=libs/database/prisma/schema.prisma",
+    "db:generate": "npx prisma generate --schema=libs/database/prisma/schema.prisma",
+    "db:migrate": "npx prisma migrate dev --schema=libs/database/prisma/schema.prisma",
+    "db:studio": "npx prisma studio --schema=libs/database/prisma/schema.prisma",
+    "db:reset": "npx prisma migrate reset --schema=libs/database/prisma/schema.prisma",
     "start": "npx nx run-many --target=serve --output-style=stream-without-prefixes",
     "build": "nx run-many --target=build --all"
   },
