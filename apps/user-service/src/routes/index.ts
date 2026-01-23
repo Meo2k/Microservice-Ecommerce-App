@@ -14,3 +14,11 @@ export const userRouter = Router()
     .get("/:userId", authenticateJwt, checkPermission(Resource.USER, Action.READ, true), asyncHandler(userController.getUserById))
     .delete("/:userId", authenticateJwt, checkPermission(Resource.USER, Action.DELETE, true), asyncHandler(userController.deleteUser))
 
+    .put("/:userId/address", authenticateJwt, checkPermission(Resource.USER, Action.UPDATE, true), asyncHandler(userController.updateUserAddress))
+    .get("/:userId/address", authenticateJwt, checkPermission(Resource.USER, Action.READ, true), asyncHandler(userController.getUserAddress))
+    .post("/:userId/address", authenticateJwt, checkPermission(Resource.USER, Action.CREATE, true), asyncHandler(userController.createUserAddress))
+    .delete("/:userId/address", authenticateJwt, checkPermission(Resource.USER, Action.DELETE, true), asyncHandler(userController.deleteUserAddress))
+
+
+
+

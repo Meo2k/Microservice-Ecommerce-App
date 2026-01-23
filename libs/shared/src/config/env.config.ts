@@ -21,6 +21,8 @@ export const ENV = {
     ADMIN_EMAIL: getEnv("NX_ADMIN_EMAIL", "admin@org.com"),
     ADMIN_PASSWORD: getEnv("NX_ADMIN_PASSWORD", "admin"),
 
+    MAX_ADDRESS: getEnv("NX_MAX_ADDRESS", "5"),
+
     OTP_EXPIRED: getEnv("NX_OTP_EXPIRED", "600"),
     OTP_COOLDOWN: getEnv("NX_OTP_COOLDOWN", "60"),
     OTP_LOCKTIME: getEnv("NX_OTP_LOCKTIME", "3600"),
@@ -39,6 +41,5 @@ export const ENV = {
 
     USER_SERVICE_PORT: getEnv("NX_USER_SERVICE_PORT", "6002"),
     USER_SERVICE_HOST: getEnv("NX_USER_SERVICE_HOST", "localhost"),
-
 
 }

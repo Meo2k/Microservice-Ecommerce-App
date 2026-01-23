@@ -9,7 +9,7 @@ export class UserResponseDto {
     bio!: string | null;
     createdAt!: Date;
     updatedAt!: Date;
-
+    
     @Exclude() password?: string;
     @Exclude() is_verified?: boolean;
     @Exclude() is_locked?: boolean;
