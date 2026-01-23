@@ -1,7 +1,8 @@
 import express from 'express';
+import { ENV } from '@org/shared';
 
-const host = process.env.HOST ?? 'localhost';
-const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+const host = ENV.USER_SERVICE_HOST 
+const port = Number(ENV.USER_SERVICE_PORT)
 
 const app = express();
 
@@ -10,5 +11,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, host, () => {
-    console.log(`[ ready ] http://${host}:${port}`);
+    console.log(`User Service is running on http://${host}:${port}`);
 });

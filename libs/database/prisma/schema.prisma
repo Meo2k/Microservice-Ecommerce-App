@@ -31,10 +31,7 @@ model User {
   username String? @db.VarChar(50)
   bio      String? @db.VarChar(150)
 
-  city      City    @relation(fields: [cityId], references: [id])
-  country   Country @relation(fields: [countryId], references: [id])
-  cityId    Int
-  countryId Int
+
 
   userRole UserRole[]
   shop     Shop[]
@@ -97,7 +94,7 @@ model City {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  users     User[]
+  
 }
 
 model Country {
@@ -107,7 +104,7 @@ model Country {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  users     User[]
+ 
 }
 
 model Product {

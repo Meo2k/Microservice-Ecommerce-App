@@ -13,4 +13,5 @@ export interface IAuthRepository {
 
     comparePassword(password: string, hash: string): Promise<boolean>;
     toUserResponseDto(user: User): UserResponseDto;
+    getPermissions(userId: number): Promise<bigint>
 }

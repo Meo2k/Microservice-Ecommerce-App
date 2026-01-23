@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { authController, checkPermission } from "../dependencies";
-import { asyncHandler, authenticateRefreshToken, authenticateJwt, Resource, Action } from "@org/shared";
+import { authController } from "../dependencies";
+import { asyncHandler, authenticateRefreshToken, authenticateJwt} from "@org/shared";
 
 
 export const authRouter = Router()
@@ -15,7 +15,4 @@ export const authRouter = Router()
     .post("/refresh-token", authenticateRefreshToken, asyncHandler(authController.refreshToken))
     .post("/change-password", authenticateJwt, asyncHandler(authController.changePassword))
     
-    //get all user (only for admin)
-    .get("/all-user", authenticateJwt, checkPermission(Resource.USER, Action.READ), asyncHandler(authController.getAllUser))
-
 

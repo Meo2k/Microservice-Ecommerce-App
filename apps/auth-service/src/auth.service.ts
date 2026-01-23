@@ -206,15 +206,4 @@ export class AuthService {
         
     }
 
-    getAllUser = async () => {
-        const users = await this.authRepo.findAllUser()
-        const usersDto = users.map(user => this.authRepo.toUserResponseDto(user))
-        return {
-            status: HTTP_STATUS.OK,
-            metadata: {
-                message: AUTH_MESSAGE.GET_ALL_USER.SUCCESS,
-                users: usersDto
-            },
-        }
-    }
 }

@@ -37,5 +37,8 @@ export const ENV = {
     AUTH_SERVICE_PORT: getEnv("NX_AUTH_SERVICE_PORT", "6001"),
     AUTH_SERVICE_HOST: getEnv("NX_AUTH_SERVICE_HOST", "localhost"),
 
+    USER_SERVICE_PORT: getEnv("NX_USER_SERVICE_PORT", "6002"),
+    USER_SERVICE_HOST: getEnv("NX_USER_SERVICE_HOST", "localhost"),
+
 
 }

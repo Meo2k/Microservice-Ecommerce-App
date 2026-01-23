@@ -1,6 +1,6 @@
 import { comparePassword } from "@org/shared";
 import { IAuthRepository } from "../interfaces/auth.interface";
-import { prisma, User } from "@org/database";
+import { prisma, User, getUserPermissions } from "@org/database";
 import { toUserResponseDto } from "../dtos/auth.dto";
 
 // src/repositories/prisma-auth.repository.ts
@@ -36,20 +36,7 @@ export class AuthRepository implements IAuthRepository {
     }
 
     async getPermissions(userId: number): Promise<bigint> {
-        const user = await prisma.user.findUnique({
-            where: { id: userId },
-            include: {
-                userRole: {
-                    include: {
-                        role: true
-                    }
-                }
-            }
-        });
-
-        if (!user) return BigInt(0);
-
-        return user.userRole.reduce((acc, curr) => acc | curr.role.permissions, BigInt(0));
+        return getUserPermissions(userId);
     }
 }
 

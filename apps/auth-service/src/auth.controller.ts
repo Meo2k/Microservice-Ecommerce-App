@@ -21,7 +21,7 @@ export class AuthController {
     registerSeller = async (req: Request, res: Response) => {
         const user = req.user!
         const body = registerSellerSchema.parse(req.body);
-        const result = await this.authService.registerSeller(user, body);
+        const result = await this.authService.createShop(user, body);
         return res.status(result.status).json(result)
     }
 
@@ -71,10 +71,6 @@ export class AuthController {
         return res.status(result.status).json(result.metadata)
     }
 
-    getAllUser = async (req: Request, res: Response) => {
-        const result = await this.authService.getAllUser();
-        return res.status(result.status).json(result.metadata)
-    }
 }
 
 

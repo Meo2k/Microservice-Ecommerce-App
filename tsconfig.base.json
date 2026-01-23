@@ -27,6 +27,9 @@
       "@org/database": [
         "libs/database/src/index.ts", 
       ],
+      "@org/database-nosql": [
+        "libs/database-nosql/src/index.ts"
+      ],
       "@org/redis": [
         "libs/redis/src/index.ts"
       ],
