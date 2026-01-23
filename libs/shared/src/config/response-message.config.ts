@@ -6,6 +6,10 @@ export const AUTH_MESSAGE = {
         SUCCESS: "User registered successfully",
         CONFLICT: "User already exists"
     },
+    REGISTER_SELLER: {
+        SUCCESS: "Seller registered successfully",
+        CONFLICT: "Seller already exists"
+    },
     LOGIN: {
         SUCCESS: "User logged in successfully",
         NOT_FOUND: "User not found",
@@ -38,9 +42,27 @@ export const AUTH_MESSAGE = {
         OTP_INVALID: "Invalid OTP or have been expired. Please try again.",
         NOT_FOUND: "User not found"
     }, 
+    UNAUTHORIZED: {
+        NOT_VERIFIED: "User is not verified",
+        LOCKED: "User is locked"
+    }
+}
+
+export const USER_MESSAGE = {
     GET_ALL_USER: {
         SUCCESS: "Users fetched successfully",
-        NOT_FOUND: "Users not found"
+    },
+    UPDATE_USER: {
+        SUCCESS: "User updated successfully",
+        NOT_FOUND: "User not found"
+    },
+    GET_USER: {
+        SUCCESS: "User fetched successfully",
+        NOT_FOUND: "User not found"
+    },
+    DELETE_USER: {
+        SUCCESS: "User deleted successfully",
+        NOT_FOUND: "User not found"
     }
 }
 

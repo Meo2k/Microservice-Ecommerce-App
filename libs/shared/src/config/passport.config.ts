@@ -3,6 +3,8 @@ import passport from 'passport';
 import { Request, Response, NextFunction } from 'express';
 import { ENV } from './env.config.js';
 import { UnauthorizedError } from '../utils/app-error.js';
+import { User as UserSchemaType } from '@org/database';
+import { AUTH_MESSAGE } from '../config/response-message.config.js';
 
 export type VerifyUserFn = (id: number) => Promise<any>;
 
@@ -37,21 +39,21 @@ export const setupPassport = (verifyUser: VerifyUserFn) => {
   }));
 
   passport.use('jwt-refresh', new JwtStrategy({
-    jwtFromRequest: extractJwtFromCookie, 
-    secretOrKey: ENV.REFRESH_TOKEN_KEY    
+      jwtFromRequest: extractJwtFromCookie, 
+      secretOrKey: ENV.REFRESH_TOKEN_KEY    
   }, async (jwt_payload: { sub: string }, done) => {
-    try {
+      try {
       const user = {id: jwt_payload.sub}
       return user ? done(null, user) : done(null, false);
-    } catch (err) {
-      return done(err, false);
-    }
+      } catch (err) {
+          return done(err, false);
+      }
   }));
 
 };
 
 export const authenticateJwt = (req: Request, res: Response, next: NextFunction) => {
-  passport.authenticate("jwt", { session: false }, (err: any, user: any, info: any) => {
+  passport.authenticate("jwt", { session: false }, (err: any, user: UserSchemaType, info: any) => {
     if (err) {
       return next(err);
     }
@@ -62,6 +64,14 @@ export const authenticateJwt = (req: Request, res: Response, next: NextFunction)
         message = info.message;
       }
       return next(new UnauthorizedError(message));
+    }
+
+    if (user.is_verified === false) {
+      return next(new UnauthorizedError(AUTH_MESSAGE.UNAUTHORIZED.NOT_VERIFIED));
+    }
+
+    if (user.is_locked === true) {
+      return next(new UnauthorizedError(AUTH_MESSAGE.UNAUTHORIZED.LOCKED));
     }
 
     (req as any).user = user;

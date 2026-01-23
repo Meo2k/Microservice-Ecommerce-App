@@ -16,7 +16,7 @@ export const ENV = {
     ACCESS_TOKEN_EXPIRED: getEnv("NX_ACCESS_TOKEN_EXPIRED", "1h"),
     REFRESH_TOKEN_KEY: getEnv("NX_REFRESH_TOKEN_KEY", "refresh_token_key"),
     REFRESH_TOKEN_EXPIRED: getEnv("NX_REFRESH_TOKEN_EXPIRED", "7d"),
-    SLIDING_EXPIRATION: getEnv("NX_SLIDING_EXPIRATION", "1h"),
+    ROTATE_TIME_TOKEN: getEnv("NX_ROTATE_TIME_TOKEN", "24h"),
 
     ADMIN_EMAIL: getEnv("NX_ADMIN_EMAIL", "admin@org.com"),
     ADMIN_PASSWORD: getEnv("NX_ADMIN_PASSWORD", "admin"),
@@ -36,6 +36,9 @@ export const ENV = {
 
     AUTH_SERVICE_PORT: getEnv("NX_AUTH_SERVICE_PORT", "6001"),
     AUTH_SERVICE_HOST: getEnv("NX_AUTH_SERVICE_HOST", "localhost"),
+
+    USER_SERVICE_PORT: getEnv("NX_USER_SERVICE_PORT", "6002"),
+    USER_SERVICE_HOST: getEnv("NX_USER_SERVICE_HOST", "localhost"),
 
 
 }

@@ -1,0 +1,55 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  //url      = env("NX_DATABASE_URL_MONGODB")
+}
+
+model ProductDetails {
+  id          String   @id @map("_id") // Trùng ID với Postgres
+  name        String
+  price       Float
+
+  shopId      String // id shop of postgres
+  shopName    String
+  
+  
+  // dynamic attributes
+  attributes  Attribute[] 
+
+}
+
+type Attribute {
+  k String // Key: "ram"
+  v String // Value: "16GB"
+}
+
+model Cart {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String     @unique
+  groups    CartGroup[] // Gom nhóm theo từng Shop
+  updatedAt DateTime   @updatedAt
+
+}
+
+type CartGroup {
+  shopId   String
+  shopName String
+  items    CartItem[]
+}
+
+type CartItem {
+  productId String
+  name      String
+  price     Float
+  quantity  Int
+  selectedAttributes Attribute[]
+}
+
+
+
+

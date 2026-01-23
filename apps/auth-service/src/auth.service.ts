@@ -1,44 +1,83 @@
 import { User as UserSchemaType } from "@org/database"
-import { ChangePasswordSchemaType, LoginSchemaType, RegisterSchemaType, ResendOtpSchemaType, VerifyOtpSchemaType } from "./auth.validator";
-import { AUTH_MESSAGE, ConflictError, HTTP_STATUS, NotFoundError, UnauthorizedError } from "@org/shared";
+import { ChangePasswordSchemaType, LoginSchemaType, RegisterSchemaType, RegisterSellerSchemaType, ResendOtpSchemaType, VerifyOtpSchemaType } from "./auth.validator";
+import { AUTH_MESSAGE, ConflictError, CUSTOM_PERM, HTTP_STATUS, NotFoundError, SELLER_PERM, UnauthorizedError } from "@org/shared";
 import { IAuthRepository } from "./interfaces/auth.interface";
-import { ITokenService } from "./interfaces/jwt-token.interface";
-import { IEmailService } from "@org/redis";
-import { IOtpService } from "@org/redis";
+import { ITokenRepository } from "./interfaces/jwt-token.interface";
+import { IEmailRepository } from "@org/redis";
+import { IOtpRepository } from "@org/redis";
 
 export class AuthService {
     constructor(
-        private authRepo: IAuthRepository,
-        private tokenService: ITokenService, 
-        private emailService: IEmailService, 
-        private otpService: IOtpService
+        private readonly authRepo: IAuthRepository,
+        private readonly tokenRepo: ITokenRepository, 
+        private readonly emailRepo: IEmailRepository, 
+        private readonly otpRepo: IOtpRepository, 
     ) {}
 
     register = async (body: RegisterSchemaType) => {
-        const { username, email, password } = body
+        const { username, email, password, isSeller } = body
         const userExists = await this.authRepo.findUserByEmail(email)
 
         if (userExists) {
             throw new ConflictError(AUTH_MESSAGE.REGISTER.CONFLICT)
         }
 
-        await this.otpService.checkOtpRestrictions(email)
-        await this.emailService.sendOtpToEmail(email, "otp.template")
+        await this.otpRepo.checkOtpRestrictions(email)
+        await this.emailRepo.sendOtpToEmail(email, "otp.template")
 
         await this.authRepo.createUser({
             data: {
                 username,
                 email,
                 password,
+                role: isSeller ? SELLER_PERM : CUSTOM_PERM
             }
         })
-
-        
 
         return {
             status: HTTP_STATUS.CREATED,
             metadata: {
                 message: AUTH_MESSAGE.REGISTER.SUCCESS,
+            },
+        };
+    }
+
+    // migrate to shop service
+    createShop = async (user: UserSchemaType, body: RegisterSellerSchemaType) => {
+        const { shopName, logoShop, coverShop, description, address, phone } = body
+
+        const shopExists = await this.authRepo.findShopByUserId(user.id)
+
+        if (shopExists) {
+            throw new ConflictError(AUTH_MESSAGE.REGISTER_SELLER.CONFLICT)
+        }
+
+        await this.authRepo.updateUser({ id: user.id }, { role: SELLER_PERM })
+
+        const dataCreatedShop = {
+            shopName,
+            address,
+            phone,
+            description,
+            userId: user.id,
+        } as any 
+
+        if (logoShop) {
+            dataCreatedShop.logo_url = logoShop
+        }
+
+        if (coverShop) {
+            dataCreatedShop.cover_url = coverShop
+        }
+   
+        await this.authRepo.createShop({
+            data: dataCreatedShop
+        })
+
+        return {
+            status: HTTP_STATUS.CREATED,
+            metadata: {
+                message: AUTH_MESSAGE.REGISTER_SELLER.SUCCESS,
             },
         };
     }
@@ -58,9 +97,9 @@ export class AuthService {
         }
 
 
-        const accessToken = this.tokenService.signAccess({ sub: user.id })
-        const refreshToken = this.tokenService.signRefresh({ sub: user.id })
-    
+        const accessToken = this.tokenRepo.signAccess({ sub: user.id })
+        const refreshToken = this.tokenRepo.signRefresh({ sub: user.id })
+  
         return {
             status: HTTP_STATUS.OK,
             refreshToken,
@@ -76,23 +115,19 @@ export class AuthService {
      */
     private async _validateOtpOrThrow(email: string, code: string) {
 
-        await this.otpService.checkOtpRestrictions(email)
+        await this.otpRepo.checkOtpRestrictions(email)
         const user = await this.authRepo.findUserByEmail(email) as UserSchemaType;
         if (!user) {
             throw new NotFoundError(AUTH_MESSAGE.VALIDATE_OTP.NOT_FOUND);
         }
 
-        const storedData = await this.otpService.findOtpByEmail(email);
-        console.log(">>>check : ", storedData, typeof (storedData.otp))
-        console.log(">>>code : ", code, typeof code)
-        console.log(">>>check type  : ", Number(code) !== Number(storedData.otp))
+        const storedData = await this.otpRepo.findOtpByEmail(email);
         if (!storedData.otp) {
             throw new UnauthorizedError(AUTH_MESSAGE.VALIDATE_OTP.INVALID);
         }
 
         if (Number(code) !== Number(storedData.otp)) {
-            console.log(">>>invalid otp")
-            await this.otpService.handleFailedAttempts(email);
+            await this.otpRepo.handleFailedAttempts(email);
         }
         return user;
     }
@@ -103,7 +138,7 @@ export class AuthService {
         const user = await this._validateOtpOrThrow(email, otp)
 
         await this.authRepo.updateUser( { id: user.id }, { is_verified: true })
-        await this.otpService.resetOTP(email)
+        await this.otpRepo.resetOTP(email)
     
         return {
             status: HTTP_STATUS.OK,
@@ -116,14 +151,14 @@ export class AuthService {
     resendOtp = async (body: ResendOtpSchemaType) => {
         const { email } = body
         
-        await this.otpService.checkOtpRestrictions(email)
+        await this.otpRepo.checkOtpRestrictions(email)
         const user = await this.authRepo.findUserByEmail(email) as UserSchemaType // Safe now as we fixed client
 
         if (!user) {
             throw new NotFoundError(AUTH_MESSAGE.RESEND_OTP.NOT_FOUND)
         }
 
-        await this.emailService.sendOtpToEmail(email, "otp.template")
+        await this.emailRepo.sendOtpToEmail(email, "otp.template")
 
         return {
             status: HTTP_STATUS.OK,
@@ -144,7 +179,7 @@ export class AuthService {
     }
 
     refreshToken = async (id: string) => {
-        const accessToken = this.tokenService.signAccess({ sub: id })
+        const accessToken = this.tokenRepo.signAccess({ sub: id })
         return {
             status: HTTP_STATUS.OK,
             metadata: {
@@ -153,13 +188,14 @@ export class AuthService {
             },
         };
     }
+        
 
     changePassword = async (body: ChangePasswordSchemaType) => {
         const { code, email, password } = body
         const user = await this._validateOtpOrThrow(email, code)
         
         await this.authRepo.updateUser({ id: user.id }, { password })
-        await this.otpService.resetOTP(email)
+        await this.otpRepo.resetOTP(email)
 
         return {
             status: HTTP_STATUS.OK,
@@ -170,15 +206,4 @@ export class AuthService {
         
     }
 
-    getAllUser = async () => {
-        const users = await this.authRepo.findAllUser()
-        const usersDto = users.map(user => this.authRepo.toUserResponseDto(user))
-        return {
-            status: HTTP_STATUS.OK,
-            metadata: {
-                message: AUTH_MESSAGE.GET_ALL_USER.SUCCESS,
-                users: usersDto
-            },
-        }
-    }
 }

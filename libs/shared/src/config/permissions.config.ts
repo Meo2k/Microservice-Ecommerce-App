@@ -18,6 +18,7 @@ export enum Resource {
 }
 
 export const ADMIN_PERM: bigint = -1n;
+export const CUSTOM_PERM: bigint = 0n;
 
 const SELLER_BASE_ACTIONS = BigInt(Action.READ | Action.CREATE | Action.UPDATE);
 

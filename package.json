@@ -4,10 +4,10 @@
   "license": "MIT",
   "scripts": {
     "seed": "npx -y tsx libs/database/prisma/seed.ts",
-    "db:generate": "prisma generate --schema=libs/database/prisma/schema.prisma",
-    "db:migrate": "prisma migrate dev --schema=libs/database/prisma/schema.prisma",
-    "db:studio": "prisma studio --schema=libs/database/prisma/schema.prisma",
-    "db:reset": "prisma migrate reset --schema=libs/database/prisma/schema.prisma",
+    "db:generate": "npx prisma generate --schema=libs/database/prisma/schema.prisma",
+    "db:migrate": "npx prisma migrate dev --schema=libs/database/prisma/schema.prisma",
+    "db:studio": "npx prisma studio --schema=libs/database/prisma/schema.prisma",
+    "db:reset": "npx prisma migrate reset --schema=libs/database/prisma/schema.prisma",
     "start": "npx nx run-many --target=serve --output-style=stream-without-prefixes",
     "build": "nx run-many --target=build --all"
   },
@@ -40,7 +40,8 @@
     "apps/*",
     "libs/shared",
     "libs/database",
-    "libs/redis"
+    "libs/redis",
+    "libs/database-nosql"
   ],
   "dependencies": {
     "@upstash/redis": "^1.36.1",
@@ -56,6 +57,7 @@
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.2.2",
+    "uuid": "^13.0.0",
     "zod": "^3.24.1"
   }
 }

@@ -17,6 +17,12 @@
     },
     {
       "path": "./libs/redis"
+    },
+    {
+      "path": "./apps/user-service"
+    },
+    {
+      "path": "./libs/database-nosql"
     }
   ]
 }

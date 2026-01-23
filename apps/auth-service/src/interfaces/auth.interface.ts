@@ -1,4 +1,4 @@
-import { User } from "@org/database";
+import { Shop, User } from "@org/database";
 import { UserResponseDto } from "../dtos/auth.dto";
 
 export interface IAuthRepository {
@@ -7,6 +7,11 @@ export interface IAuthRepository {
     findUserByEmail(email: string): Promise<User | null>;
     updateUser(where: any, data: any): Promise<User>;
     createUser(data: any): Promise<User>;
+
+    findShopByUserId(userId: number): Promise<Shop | null>;
+    createShop(data: any): Promise<Shop>;
+
     comparePassword(password: string, hash: string): Promise<boolean>;
     toUserResponseDto(user: User): UserResponseDto;
+    getPermissions(userId: number): Promise<bigint>
 }

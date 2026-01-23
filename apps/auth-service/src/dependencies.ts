@@ -1,16 +1,17 @@
 import { AuthRepository } from "./repositories/auth.repository";
-import { JwtTokenService } from "./repositories/jwt-token.repository";
+import { JwtTokenRepository } from "./repositories/jwt-token.repository";
 import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
 import { createCheckPermission, setupPassport } from "@org/shared";
-import { EmailService, OtpService, redis } from "@org/redis";
+import { EmailRepository, OtpRepository, redis } from "@org/redis";
 
 const authRepo = new AuthRepository();
-const tokenService = new JwtTokenService();
-const emailService = new EmailService();
-const otpService = new OtpService();
+const tokenRepo = new JwtTokenRepository();
+const emailRepo = new EmailRepository();
+const otpRepo = new OtpRepository();
+//const temporaryRepo = new TemporaryRepository()
 
-export const authService = new AuthService(authRepo, tokenService, emailService, otpService);
+export const authService = new AuthService(authRepo, tokenRepo, emailRepo, otpRepo);
 
 setupPassport(authRepo.findUserById);
 

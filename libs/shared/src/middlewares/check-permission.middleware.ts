@@ -11,11 +11,16 @@ export const createCheckPermission = (
     getCache: GetCacheFn,
     setCache: SetCacheFn
 ) => {
-    return (resource: Resource, action: Action) => {
+    return (resource: Resource, action: Action, isSelf: boolean = false) => {
         return async (req: Request, res: Response, next: NextFunction) => {
             try {
                 const { id } = req.user!;
+                const { userId } = req.params;
                 let perm: bigint;
+
+                if (userId && Number(userId) === Number(id) && isSelf) {
+                    next();
+                }
 
                 const userPerm = await getCache(`user_perm:${id}`);
 

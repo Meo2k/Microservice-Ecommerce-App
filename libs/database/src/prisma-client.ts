@@ -1,4 +1,4 @@
-import { PrismaClient } from '../generated/client';
+import { PrismaClient } from '../generated/client/index.js';
 import { hashPassword } from '@org/shared';
 
 const prismaClientSingleton = () => {
@@ -34,4 +34,4 @@ export const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
 
 if (process.env['NODE_ENV'] !== 'production') globalForPrisma.prisma = prisma;
 
-export * from '../generated/client';
+export * from '../generated/client/index.js';
