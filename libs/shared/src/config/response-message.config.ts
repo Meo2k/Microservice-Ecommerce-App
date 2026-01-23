@@ -63,7 +63,24 @@ export const USER_MESSAGE = {
     DELETE_USER: {
         SUCCESS: "User deleted successfully",
         NOT_FOUND: "User not found"
-    }
+    }, 
+    UPDATE_ADDRESS: {
+        SUCCESS: "Address updated successfully",
+        NOT_FOUND: "Address not found", 
+        MAX_ADDRESS: "User can have maximum 5 addresses"
+    }, 
+    GET_ADDRESS: {
+        SUCCESS: "Address fetched successfully",
+        NOT_FOUND: "Address not found"
+    }, 
+    DELETE_ADDRESS: {
+        SUCCESS: "Address deleted successfully",
+        NOT_FOUND: "Address not found"
+    }, 
+    CREATE_ADDRESS: {
+        SUCCESS: "Address created successfully",
+        NOT_FOUND: "Address not found"
+    }, 
 }
 
 export const OTP_MESSAGE = {
