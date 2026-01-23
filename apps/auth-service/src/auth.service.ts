@@ -1,9 +1,9 @@
 import { User as UserSchemaType } from "@org/database"
-import { ChangePasswordSchemaType, LoginSchemaType, RegisterSchemaType, ResendOtpSchemaType, VerifyOtpSchemaType } from "./auth.validator";
-import { AUTH_MESSAGE, ConflictError, HTTP_STATUS, NotFoundError, UnauthorizedError } from "@org/shared";
+import { ChangePasswordSchemaType, LoginSchemaType, RegisterSchemaType, RegisterSellerSchemaType, ResendOtpSchemaType, VerifyOtpSchemaType } from "./auth.validator";
+import { AUTH_MESSAGE, ConflictError, CUSTOM_PERM, HTTP_STATUS, NotFoundError, SELLER_PERM, UnauthorizedError } from "@org/shared";
 import { IAuthRepository } from "./interfaces/auth.interface";
 import { ITokenRepository } from "./interfaces/jwt-token.interface";
-import { IEmailRepository, ITemporaryRepository } from "@org/redis";
+import { IEmailRepository } from "@org/redis";
 import { IOtpRepository } from "@org/redis";
 
 export class AuthService {
@@ -15,7 +15,7 @@ export class AuthService {
     ) {}
 
     register = async (body: RegisterSchemaType) => {
-        const { username, email, password } = body
+        const { username, email, password, isSeller } = body
         const userExists = await this.authRepo.findUserByEmail(email)
 
         if (userExists) {
@@ -30,15 +30,54 @@ export class AuthService {
                 username,
                 email,
                 password,
+                role: isSeller ? SELLER_PERM : CUSTOM_PERM
             }
         })
-
-        
 
         return {
             status: HTTP_STATUS.CREATED,
             metadata: {
                 message: AUTH_MESSAGE.REGISTER.SUCCESS,
+            },
+        };
+    }
+
+    // migrate to shop service
+    createShop = async (user: UserSchemaType, body: RegisterSellerSchemaType) => {
+        const { shopName, logoShop, coverShop, description, address, phone } = body
+
+        const shopExists = await this.authRepo.findShopByUserId(user.id)
+
+        if (shopExists) {
+            throw new ConflictError(AUTH_MESSAGE.REGISTER_SELLER.CONFLICT)
+        }
+
+        await this.authRepo.updateUser({ id: user.id }, { role: SELLER_PERM })
+
+        const dataCreatedShop = {
+            shopName,
+            address,
+            phone,
+            description,
+            userId: user.id,
+        } as any 
+
+        if (logoShop) {
+            dataCreatedShop.logo_url = logoShop
+        }
+
+        if (coverShop) {
+            dataCreatedShop.cover_url = coverShop
+        }
+   
+        await this.authRepo.createShop({
+            data: dataCreatedShop
+        })
+
+        return {
+            status: HTTP_STATUS.CREATED,
+            metadata: {
+                message: AUTH_MESSAGE.REGISTER_SELLER.SUCCESS,
             },
         };
     }

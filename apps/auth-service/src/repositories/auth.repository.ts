@@ -20,6 +20,14 @@ export class AuthRepository implements IAuthRepository {
     async updateUser(where: any, data: any) {
         return prisma.user.update({ where, data });
     }
+
+    async findShopByUserId(userId: number) {
+        return prisma.shop.findUnique({ where: { userId } });
+    }
+    async createShop(data: any) {
+        return prisma.shop.create(data);
+    }
+
     async comparePassword(password: string, hash: string) {
         return comparePassword(password, hash);
     }

@@ -40,7 +40,8 @@
     "apps/*",
     "libs/shared",
     "libs/database",
-    "libs/redis"
+    "libs/redis",
+    "libs/database-nosql"
   ],
   "dependencies": {
     "@upstash/redis": "^1.36.1",

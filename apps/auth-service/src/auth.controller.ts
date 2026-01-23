@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { changePasswordSchema, loginSchema, registerSchema, resendOtpSchema, verifyOtpSchema } from "./auth.validator";
+import { changePasswordSchema, loginSchema, registerSchema, registerSellerSchema, resendOtpSchema, verifyOtpSchema } from "./auth.validator";
 import { ENV } from "@org/shared";
 import { AuthService } from "./auth.service";
 import ms from "ms";
@@ -15,6 +15,13 @@ export class AuthController {
     register = async (req: Request, res: Response) => {
         const body = registerSchema.parse(req.body);
         const result = await this.authService.register(body);
+        return res.status(result.status).json(result)
+    }
+
+    registerSeller = async (req: Request, res: Response) => {
+        const user = req.user!
+        const body = registerSellerSchema.parse(req.body);
+        const result = await this.authService.registerSeller(user, body);
         return res.status(result.status).json(result)
     }
 

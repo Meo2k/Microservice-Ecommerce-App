@@ -6,6 +6,10 @@ export const AUTH_MESSAGE = {
         SUCCESS: "User registered successfully",
         CONFLICT: "User already exists"
     },
+    REGISTER_SELLER: {
+        SUCCESS: "Seller registered successfully",
+        CONFLICT: "Seller already exists"
+    },
     LOGIN: {
         SUCCESS: "User logged in successfully",
         NOT_FOUND: "User not found",

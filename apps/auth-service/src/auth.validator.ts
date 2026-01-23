@@ -20,6 +20,7 @@ export const registerSchema = z.object({
     username: z.string().trim().max(255, "Username must be at most 255 characters long").optional(),
     email: emailSchema,
     password: passwordSchema,
+    isSeller: z.boolean().optional().default(false),
 })
 
 export const loginSchema = z.object({
@@ -49,8 +50,19 @@ export const changePasswordSchema = z.object({
     message: "Passwords do not match",
 })
 
+export const registerSellerSchema = z.object({
+    shopName: z.string().trim().max(255, "Shop name must be at most 255 characters long"),
+    logoShop: z.string().trim().optional(),
+    coverShop: z.string().trim().optional(),
+    description: z.string().trim().max(255, "Description must be at most 255 characters long").optional(),
+    address: z.string().trim().max(255, "Address must be at most 255 characters long"),
+    phone: z.string().trim().max(255, "Phone must be at most 255 characters long"),
+})
+
 export type RegisterSchemaType = z.infer<typeof registerSchema>
 export type LoginSchemaType = z.infer<typeof loginSchema>
 export type VerifyOtpSchemaType = z.infer<typeof verifyOtpSchema>
 export type ResendOtpSchemaType = z.infer<typeof resendOtpSchema>
 export type ChangePasswordSchemaType = z.infer<typeof changePasswordSchema>
+export type RegisterSellerSchemaType = z.infer<typeof registerSellerSchema>
+export type RegisterShopSchemaType = z.infer<typeof registerSellerSchema>

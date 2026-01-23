@@ -31,7 +31,13 @@ model User {
   username String? @db.VarChar(50)
   bio      String? @db.VarChar(150)
 
+  city      City    @relation(fields: [cityId], references: [id])
+  country   Country @relation(fields: [countryId], references: [id])
+  cityId    Int
+  countryId Int
+
   userRole UserRole[]
+  shop     Shop[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -52,4 +58,72 @@ model UserRole {
 
   @@index([userId])
   @@index([roleId])
+}
+
+model Shop {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+  logo_url    String?
+  cover_url   String?
+  is_active   Boolean @default(true)
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
+
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+
+  name String @unique @db.VarChar(50)
+
+  products Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model City {
+  id Int @id @default(autoincrement())
+
+  name String @unique @db.VarChar(50)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     User[]
+}
+
+model Country {
+  id Int @id @default(autoincrement())
+
+  name String @unique @db.VarChar(50)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     User[]
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  basePrice   Decimal  @db.Decimal(12, 2)
+  stock       Int      @default(0)
+  discount    Int      @default(0)
+
+  shopId      Int
+  shop        Shop     @relation(fields: [shopId], references: [id])
+  categoryId  Int
+  category    Category @relation(fields: [categoryId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([name])
 }

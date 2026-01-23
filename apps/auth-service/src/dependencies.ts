@@ -4,7 +4,6 @@ import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
 import { createCheckPermission, setupPassport } from "@org/shared";
 import { EmailRepository, OtpRepository, redis } from "@org/redis";
-import { TemporaryRepository } from "@org/redis";
 
 const authRepo = new AuthRepository();
 const tokenRepo = new JwtTokenRepository();

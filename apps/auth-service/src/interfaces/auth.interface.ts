@@ -7,6 +7,10 @@ export interface IAuthRepository {
     findUserByEmail(email: string): Promise<User | null>;
     updateUser(where: any, data: any): Promise<User>;
     createUser(data: any): Promise<User>;
+
+    findShopByUserId(userId: number): Promise<Shop | null>;
+    createShop(data: any): Promise<Shop>;
+
     comparePassword(password: string, hash: string): Promise<boolean>;
     toUserResponseDto(user: User): UserResponseDto;
 }

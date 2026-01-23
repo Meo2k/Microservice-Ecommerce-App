@@ -5,7 +5,7 @@ import { asyncHandler, authenticateRefreshToken, authenticateJwt, Resource, Acti
 
 export const authRouter = Router()
     .post("/register", asyncHandler(authController.register))
-    //.post("/register-seller", asyncHandler(authController.registerSeller))
+    .post("/register-seller", asyncHandler(authController.registerSeller))
 
     .post("/verify-otp", asyncHandler(authController.verifyOtp))
     .post("/resend-otp", asyncHandler(authController.resendOtp))
