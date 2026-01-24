@@ -14,5 +14,9 @@
     "src/**/*.ts",
     "generated/**/*.ts"
   ],
-  "references": []
+  "references": [
+    {
+      "path": "../shared/tsconfig.lib.json"
+    }
+  ]
 }

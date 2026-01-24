@@ -23,6 +23,9 @@
     },
     {
       "path": "./libs/database-nosql"
+    },
+    {
+      "path": "./apps/product-service"
     }
   ]
 }
