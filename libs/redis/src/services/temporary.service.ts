@@ -1,11 +1,10 @@
-import { ITemporaryRepository } from "../interfaces/temporary.interface.js";
+import { ITemporaryService } from "../interfaces/temporary.interface.js";
 import { redis } from "../redis.js";
 
 /**
- * Temporary Cache Repository Implementation using Redis
- * Provides generic key-value data access with expiration
+ * Temporary Cache Service Implementation using Redis
  */
-export class TemporaryRepository implements ITemporaryRepository {
+export class TemporaryService implements ITemporaryService {
     constructor() { }
 
     async getKey(key: string): Promise<string | null> {

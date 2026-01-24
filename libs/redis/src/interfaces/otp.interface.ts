@@ -1,8 +1,8 @@
 /**
- * OTP Repository Interface
- * Defines contract for OTP data operations and validation
+ * OTP Service Interface
+ * Defines contract for OTP operations
  */
-export interface IOtpRepository {
+export interface IOtpService {
     findOtpByEmail(to: string): Promise<{ otp: string | null }>;
     checkOtpRestrictions(to: string): Promise<void>;
     handleFailedAttempts(to: string): Promise<void>;

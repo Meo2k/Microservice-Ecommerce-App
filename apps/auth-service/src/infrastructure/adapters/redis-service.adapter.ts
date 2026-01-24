@@ -1,46 +1,46 @@
-import { EmailRepository, OtpRepository } from "@org/redis";
+import { EmailService, OtpService } from "@org/redis";
 import { IEmailService, IOtpService } from "../../application/ports/index.js";
 
 /**
  * Adapter for Email Service
- * Adapts @org/redis EmailRepository to application's IEmailService port
+ * Adapts @org/redis EmailService to application's IEmailService port
  */
 export class RedisEmailServiceAdapter implements IEmailService {
-    private emailRepo: EmailRepository;
+    private emailService: EmailService;
 
     constructor() {
-        this.emailRepo = new EmailRepository();
+        this.emailService = new EmailService();
     }
 
     async sendOtpToEmail(email: string, template: string): Promise<void> {
-        await this.emailRepo.sendOtpToEmail(email, template);
+        await this.emailService.sendOtpToEmail(email, template);
     }
 }
 
 /**
  * Adapter for OTP Service
- * Adapts @org/redis OtpRepository to application's IOtpService port
+ * Adapts @org/redis OtpService to application's IOtpService port
  */
 export class RedisOtpServiceAdapter implements IOtpService {
-    private otpRepo: OtpRepository;
+    private otpService: OtpService;
 
     constructor() {
-        this.otpRepo = new OtpRepository();
+        this.otpService = new OtpService();
     }
 
     async checkOtpRestrictions(email: string): Promise<void> {
-        await this.otpRepo.checkOtpRestrictions(email);
+        await this.otpService.checkOtpRestrictions(email);
     }
 
     async findOtpByEmail(email: string): Promise<{ otp: string | null }> {
-        return this.otpRepo.findOtpByEmail(email);
+        return this.otpService.findOtpByEmail(email);
     }
 
     async handleFailedAttempts(email: string): Promise<void> {
-        await this.otpRepo.handleFailedAttempts(email);
+        await this.otpService.handleFailedAttempts(email);
     }
 
     async resetOTP(email: string): Promise<void> {
-        await this.otpRepo.resetOTP(email);
+        await this.otpService.resetOTP(email);
     }
 }

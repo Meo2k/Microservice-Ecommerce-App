@@ -1,12 +1,16 @@
-
+/**
+ * @org/redis - Redis Services Library
+ * 
+ * Provides Redis-based services for microservices.
+ */
 
 // Redis client
 export * from './redis.js';
 
-// Interfaces (Contracts)
+// Interfaces
 export * from './interfaces/email.interface.js';
 export * from './interfaces/otp.interface.js';
 export * from './interfaces/temporary.interface.js';
 
-// Repositories (Implementations)
-export * from './repositories/index.js';
+// Services
+export * from './services/index.js';

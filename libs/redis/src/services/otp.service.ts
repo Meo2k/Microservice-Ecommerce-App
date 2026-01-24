@@ -1,12 +1,11 @@
 import { redis } from "../redis.js";
-import { IOtpRepository } from "../interfaces/otp.interface.js";
+import { IOtpService } from "../interfaces/otp.interface.js";
 import { ValidationError, OTP_MESSAGE, ENV } from "@org/shared";
 
 /**
- * OTP Repository Implementation using Redis
- * Handles OTP data access with business logic for validation and locking
+ * OTP Service Implementation using Redis
  */
-export class OtpRepository implements IOtpRepository {
+export class OtpService implements IOtpService {
     constructor() { }
 
     async findOtpByEmail(email: string): Promise<{ otp: string | null }> {

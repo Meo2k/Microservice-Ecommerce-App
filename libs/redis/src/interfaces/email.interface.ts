@@ -1,7 +1,7 @@
 /**
- * Email Repository Interface
- * Defines contract for email-based OTP data operations
+ * Email Service Interface
+ * Defines contract for email operations
  */
-export interface IEmailRepository {
+export interface IEmailService {
     sendOtpToEmail(to: string, templateName: string): Promise<void>;
 }

@@ -1,12 +1,11 @@
 import { ENV, generateOTP, OTP_MESSAGE, sendEmail, ValidationError } from "@org/shared";
-import { IEmailRepository } from '../interfaces/email.interface.js';
+import { IEmailService } from '../interfaces/email.interface.js';
 import { redis } from "../redis.js";
 
 /**
- * Email Repository Implementation using Redis
- * Handles email-based OTP operations with data access layer
+ * Email Service Implementation using Redis
  */
-export class EmailRepository implements IEmailRepository {
+export class EmailService implements IEmailService {
     constructor() { }
 
     async sendOtpToEmail(to: string, templateName: string): Promise<void> {
