@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { User } from "@org/database";
+import { UserEntity } from "../../../domain/entities/user.entity.js";
 import {
     RegisterUserUseCase,
     LoginUseCase,
@@ -75,7 +75,7 @@ export class AuthController {
     };
 
     getMe = async (req: Request, res: Response) => {
-        const user = (req as any).user as User;
+        const user = (req as any).user as UserEntity;
         const result = await this.getMeUseCase.execute(user);
         return res.status(result.status).json(result.metadata);
     };
@@ -87,7 +87,7 @@ export class AuthController {
     };
 
     createShop = async (req: Request, res: Response) => {
-        const user = (req as any).user as User;
+        const user = (req as any).user as UserEntity;
         const body = registerSellerValidator.parse(req.body);
         const result = await this.createShopUseCase.execute(user, body);
         return res.status(result.status).json(result.metadata);

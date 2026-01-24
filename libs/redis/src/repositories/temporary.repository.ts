@@ -1,19 +1,23 @@
-import { ITemporaryRepository } from "src/interfaces/temporary.interface";
-import { redis } from "src/redis";
+import { ITemporaryRepository } from "../interfaces/temporary.interface.js";
+import { redis } from "../redis.js";
 
+/**
+ * Temporary Cache Repository Implementation using Redis
+ * Provides generic key-value data access with expiration
+ */
 export class TemporaryRepository implements ITemporaryRepository {
-    constructor(){}
+    constructor() { }
 
-    getKey = async (key: string) => {
-        const value = await redis.get(key)
-        return value
+    async getKey(key: string): Promise<string | null> {
+        const value = await redis.get(key);
+        return value as string | null;
     }
 
-    setKey = async (key: string, payload: object, options: {ex: number}) => {
-        await redis.set(key, payload, options)
+    async setKey(key: string, payload: object, options: { ex: number }): Promise<void> {
+        await redis.set(key, payload, options);
     }
 
-    deletePattern = async (pattern: string) => {
-        await redis.del(pattern)
+    async deletePattern(pattern: string): Promise<void> {
+        await redis.del(pattern);
     }
 }

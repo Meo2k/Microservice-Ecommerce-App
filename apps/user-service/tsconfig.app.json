@@ -15,6 +15,7 @@
     "src/**/*.ts",
     "../../libs/shared/src/**/*.ts",
     "../../libs/database-nosql/src/**/*.ts",
+    "../../libs/database-nosql/generated/**/*.ts",
     "../../libs/database/src/**/*.ts",
     "../../libs/redis/src/**/*.ts",
     "../../@types/**/*.d.ts"

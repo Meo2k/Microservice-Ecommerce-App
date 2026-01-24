@@ -1,25 +1,26 @@
-import { User, Address, City, Country } from "@org/database";
 
-/**
- * Domain Repository Interface
- * Defines the contract for data access without implementation details
- */
+import { UserEntity } from "../entities/user.entity.js";
+import { AddressEntity } from "../entities/address.entity.js";
+import { CountryEntity } from "../entities/country.entity.js";
+import { CityEntity } from "../entities/city.entity.js";
+
+
 export interface IUserRepository {
     // User operations
-    findById(id: number): Promise<User | null>;
-    findAll(): Promise<User[]>;
-    update(id: number, data: Partial<User>): Promise<User>;
-    delete(id: number): Promise<User>;
+    findById(id: number): Promise<UserEntity | null>;
+    findAll(): Promise<UserEntity[]>;
+    update(id: number, data: Partial<UserEntity>): Promise<UserEntity>;
+    delete(id: number): Promise<UserEntity>;
 
     // Address operations
-    findAddressesByUserId(userId: number): Promise<Address[]>;
-    createAddress(userId: number, data: Partial<Address>): Promise<Address>;
-    updateAddress(id: number, data: Partial<Address>): Promise<Address>;
-    deleteAddress(id: number): Promise<Address>;
+    findAddressesByUserId(userId: number): Promise<AddressEntity[]>;
+    createAddress(userId: number, data: Partial<AddressEntity>): Promise<AddressEntity>;
+    updateAddress(id: number, data: Partial<AddressEntity>): Promise<AddressEntity>;
+    deleteAddress(id: number): Promise<AddressEntity>;
 
     // Lookup operations
-    findCountryById(id: number): Promise<Country | null>;
-    findCityById(id: number): Promise<City | null>;
+    findCountryById(id: number): Promise<CountryEntity | null>;
+    findCityById(id: number): Promise<CityEntity | null>;
 
     // Permission operations
     getPermissions(userId: number): Promise<bigint>;

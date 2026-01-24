@@ -1,14 +1,11 @@
-/**
- * Domain Entity - Address
- */
 export class AddressEntity {
     constructor(
         public readonly id: number,
-        public readonly userId: number,
+        public userId: number,
         public street: string,
+        public district: string,
         public cityId: number,
         public countryId: number,
-        public postalCode: string | null,
         public isDefault: boolean,
         public readonly createdAt: Date,
         public updatedAt: Date
@@ -19,11 +16,11 @@ export class AddressEntity {
         this.updatedAt = new Date();
     }
 
-    update(street: string, cityId: number, countryId: number, postalCode: string | null): void {
+    update(street: string, district: string, cityId: number, countryId: number): void {
         this.street = street;
+        this.district = district;
         this.cityId = cityId;
         this.countryId = countryId;
-        this.postalCode = postalCode;
         this.updatedAt = new Date();
     }
 }

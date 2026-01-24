@@ -18,8 +18,8 @@ import {
 } from "../../application/use-cases/index.js";
 
 // Infrastructure
-import { PrismaAuthRepository } from "../database/repositories/prisma-auth.repository.js";
-import { JwtTokenRepository } from "../database/repositories/jwt-token.repository.js";
+import { PrismaAuthRepository } from "../repositories/prisma-auth.repository.js";
+import { JwtTokenRepository } from "../repositories/jwt-token.repository.js";
 import { RedisEmailServiceAdapter, RedisOtpServiceAdapter } from "../adapters/redis-service.adapter.js";
 import { AuthController } from "../http/controllers/auth.controller.js";
 

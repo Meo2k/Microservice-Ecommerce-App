@@ -1,7 +1,6 @@
 import { AUTH_MESSAGE, HTTP_STATUS, NotFoundError, UnauthorizedError } from "@org/shared";
 import { IAuthRepository, ITokenRepository } from "../../domain/repositories/auth.repository.interface.js";
 import { LoginDto } from "../dtos/index.js";
-import { User } from "@org/database";
 
 /**
  * Use Case: Login
@@ -17,7 +16,7 @@ export class LoginUseCase {
         const { email, password } = data;
 
         // Find user by email
-        const user = await this.authRepo.findUserByEmail(email) as User;
+        const user = await this.authRepo.findUserByEmail(email);
         if (!user) {
             throw new NotFoundError(AUTH_MESSAGE.LOGIN.NOT_FOUND);
         }

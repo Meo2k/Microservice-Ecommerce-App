@@ -17,7 +17,7 @@ import {
 } from "../../application/use-cases/index.js";
 
 // Infrastructure
-import { PrismaUserRepository } from "../database/repositories/prisma-user.repository.js";
+import { PrismaUserRepository } from "../repositories/prisma-user.repository.js";
 import { UserController } from "../http/controllers/user.controller.js";
 
 /**

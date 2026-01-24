@@ -1,3 +1,7 @@
+/**
+ * User Domain Entity
+ * Pure business logic, framework-agnostic
+ */
 export class UserEntity {
     constructor(
         public readonly id: number,
@@ -16,14 +20,27 @@ export class UserEntity {
         return this.isVerified && !this.isLocked;
     }
 
-    canBeDeleted(): boolean {
-        return !this.isActive();
+    canLogin(): boolean {
+        return this.isActive();
     }
 
-    updateProfile(username: string | null, bio: string | null, avatarUrl: string | null): void {
-        this.username = username;
-        this.bio = bio;
-        this.avatarUrl = avatarUrl;
+    verify(): void {
+        this.isVerified = true;
+        this.updatedAt = new Date();
+    }
+
+    lock(): void {
+        this.isLocked = true;
+        this.updatedAt = new Date();
+    }
+
+    unlock(): void {
+        this.isLocked = false;
+        this.updatedAt = new Date();
+    }
+
+    updatePassword(newPassword: string): void {
+        this.password = newPassword;
         this.updatedAt = new Date();
     }
 }

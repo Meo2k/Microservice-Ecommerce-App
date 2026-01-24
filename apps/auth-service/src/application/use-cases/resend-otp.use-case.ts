@@ -2,7 +2,6 @@ import { AUTH_MESSAGE, HTTP_STATUS, NotFoundError } from "@org/shared";
 import { IAuthRepository } from "../../domain/repositories/auth.repository.interface.js";
 import { IEmailService, IOtpService } from "../ports/external-services.port.js";
 import { ResendOtpDto } from "../dtos/index.js";
-import { User } from "@org/database";
 
 /**
  * Use Case: Resend OTP
@@ -22,7 +21,7 @@ export class ResendOtpUseCase {
         await this.otpService.checkOtpRestrictions(email);
 
         // Find user
-        const user = await this.authRepo.findUserByEmail(email) as User;
+        const user = await this.authRepo.findUserByEmail(email);
         if (!user) {
             throw new NotFoundError(AUTH_MESSAGE.RESEND_OTP.NOT_FOUND);
         }

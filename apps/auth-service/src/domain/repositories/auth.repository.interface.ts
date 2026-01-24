@@ -1,20 +1,18 @@
-import { User, Shop } from "@org/database";
+import { UserEntity } from "../entities/user.entity.js";
+import { ShopEntity } from "../entities/shop.entity.js";
 
-/**
- * Domain Repository Interface for Authentication
- * Defines contracts for data access without implementation details
- */
+
 export interface IAuthRepository {
     // User operations
-    findUserById(id: number): Promise<User | null>;
-    findUserByEmail(email: string): Promise<User | null>;
-    findAllUser(): Promise<User[]>;
-    createUser(data: any): Promise<User>;
-    updateUser(where: any, data: any): Promise<User>;
+    findUserById(id: number): Promise<UserEntity | null>;
+    findUserByEmail(email: string): Promise<UserEntity | null>;
+    findAllUser(): Promise<UserEntity[]>;
+    createUser(data: any): Promise<UserEntity>;
+    updateUser(where: any, data: any): Promise<UserEntity>;
 
     // Shop operations
-    findShopByUserId(userId: number): Promise<Shop | null>;
-    createShop(data: any): Promise<Shop>;
+    findShopByUserId(userId: number): Promise<ShopEntity | null>;
+    createShop(data: any): Promise<ShopEntity>;
 
     // Password operations
     comparePassword(password: string, hash: string): Promise<boolean>;
@@ -25,7 +23,6 @@ export interface IAuthRepository {
 
 /**
  * Token Repository Interface
- * Defines contracts for JWT token operations
  */
 export interface ITokenRepository {
     signAccess(payload: { sub: number | string }): string;

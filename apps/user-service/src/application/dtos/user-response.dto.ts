@@ -1,9 +1,9 @@
-import { User } from "@org/database";
-import { Exclude, plainToInstance } from "class-transformer";
+import { UserEntity } from "../../domain/entities/user.entity.js";
+import { Exclude } from "class-transformer";
 
 /**
  * DTO for User Response
- * Used to shape data going out to clients
+ * Transforms Domain Entity to API response
  */
 export class UserResponseDto {
     id!: number;
@@ -17,13 +17,25 @@ export class UserResponseDto {
     @Exclude() password?: string;
     @Exclude() is_verified?: boolean;
     @Exclude() is_locked?: boolean;
-    @Exclude() role?: bigint;
 
     constructor(partial: Partial<UserResponseDto>) {
         Object.assign(this, partial);
     }
 }
 
-export const toUserResponseDto = (user: User): UserResponseDto => {
-    return plainToInstance(UserResponseDto, user, { excludeExtraneousValues: false });
+/**
+ * Transform Domain Entity to Response DTO
+ * Excludes sensitive fields
+ */
+export const toUserResponseDto = (userEntity: UserEntity): UserResponseDto => {
+    return new UserResponseDto({
+        id: userEntity.id,
+        username: userEntity.username,
+        email: userEntity.email,
+        avatar_url: userEntity.avatarUrl,
+        bio: userEntity.bio,
+        createdAt: userEntity.createdAt,
+        updatedAt: userEntity.updatedAt
+        // Excludes: password, isVerified, isLocked
+    });
 };

@@ -1,32 +1,36 @@
+import { ENV, generateOTP, OTP_MESSAGE, sendEmail, ValidationError } from "@org/shared";
+import { IEmailRepository } from '../interfaces/email.interface.js';
+import { redis } from "../redis.js";
 
-import { ENV , generateOTP, OTP_MESSAGE, sendEmail, ValidationError} from "@org/shared"
-import { IEmailRepository } from '../interfaces/email.interface'
-import { redis } from "../redis"
-
-
-
+/**
+ * Email Repository Implementation using Redis
+ * Handles email-based OTP operations with data access layer
+ */
 export class EmailRepository implements IEmailRepository {
-    constructor() {}
+    constructor() { }
 
-    async sendOtpToEmail(to: string, templateName: string ) {
-        const otp = generateOTP()
-        const otpExpired = Number(ENV.OTP_EXPIRED)
+    async sendOtpToEmail(to: string, templateName: string): Promise<void> {
+        const otp = generateOTP();
+        const otpExpired = Number(ENV.OTP_EXPIRED);
 
+        // Check cooldown
         if (await redis.get(`otp_cooldown:${to}`)) {
-            throw new ValidationError(OTP_MESSAGE.COOLDOWN)
+            throw new ValidationError(OTP_MESSAGE.COOLDOWN);
         }
 
-        await sendEmail(to, "Xác thực Email của Bạn !", "Xác thực Email", templateName, { otp, otpExpired: otpExpired / 60 })
+        // Send email
+        await sendEmail(
+            to,
+            "Xác thực Email của Bạn!",
+            "Xác thực Email",
+            templateName,
+            { otp, otpExpired: otpExpired / 60 }
+        );
 
+        // Store OTP in Redis with expiration
         const p = redis.pipeline();
-
-        p.set(`otp:${to}`, otp, {ex: otpExpired}); // 5 minutes (expired)
-        p.set(`otp_cooldown:${to}`, "true", {ex: Number(ENV.OTP_COOLDOWN)}) // 1 minute (cooldown)
-
-        await p.exec()
-
-
+        p.set(`otp:${to}`, otp, { ex: otpExpired });
+        p.set(`otp_cooldown:${to}`, "true", { ex: Number(ENV.OTP_COOLDOWN) });
+        await p.exec();
     }
-
 }
-

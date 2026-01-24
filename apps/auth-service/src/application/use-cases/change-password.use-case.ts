@@ -2,7 +2,6 @@ import { AUTH_MESSAGE, HTTP_STATUS, NotFoundError, UnauthorizedError } from "@or
 import { IAuthRepository } from "../../domain/repositories/auth.repository.interface.js";
 import { IOtpService } from "../ports/external-services.port.js";
 import { ChangePasswordDto } from "../dtos/index.js";
-import { User } from "@org/database";
 
 /**
  * Use Case: Change Password
@@ -20,7 +19,7 @@ export class ChangePasswordUseCase {
         // Verify OTP
         await this.otpService.checkOtpRestrictions(email);
 
-        const user = await this.authRepo.findUserByEmail(email) as User;
+        const user = await this.authRepo.findUserByEmail(email);
         if (!user) {
             throw new NotFoundError(AUTH_MESSAGE.VALIDATE_OTP.NOT_FOUND);
         }

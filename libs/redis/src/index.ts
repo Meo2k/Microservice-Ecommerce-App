@@ -1,8 +1,12 @@
-export * from './redis.js';
-export * from './repositories/email.repository.js';
-export * from './interfaces/email.interface.js';
-export * from './repositories/otp.repository.js';
-export * from './interfaces/otp.interface.js';
-export * from './interfaces/temporary.interface.js'
-export * from "./repositories/temporary.repository.js"
 
+
+// Redis client
+export * from './redis.js';
+
+// Interfaces (Contracts)
+export * from './interfaces/email.interface.js';
+export * from './interfaces/otp.interface.js';
+export * from './interfaces/temporary.interface.js';
+
+// Repositories (Implementations)
+export * from './repositories/index.js';

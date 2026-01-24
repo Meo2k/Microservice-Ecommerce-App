@@ -1,7 +1,7 @@
 import { AUTH_MESSAGE, ConflictError, HTTP_STATUS, SELLER_PERM } from "@org/shared";
 import { IAuthRepository } from "../../domain/repositories/auth.repository.interface.js";
 import { RegisterSellerDto } from "../dtos/index.js";
-import { User } from "@org/database";
+import { UserEntity } from "../../domain/entities/user.entity.js";
 
 /**
  * Use Case: Create Shop (Register as Seller)
@@ -10,7 +10,7 @@ import { User } from "@org/database";
 export class CreateShopUseCase {
     constructor(private readonly authRepo: IAuthRepository) { }
 
-    async execute(user: User, data: RegisterSellerDto) {
+    async execute(user: UserEntity, data: RegisterSellerDto) {
         const { shopName, logoShop, coverShop, description, address, phone } = data;
 
         // Check if shop already exists

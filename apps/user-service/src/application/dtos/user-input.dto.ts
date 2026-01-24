@@ -15,7 +15,6 @@ export class UserAddressDto {
     street!: string;
     cityId!: number;
     countryId!: number;
-    postalCode?: string | null;
     isDefault?: boolean;
 }
 
@@ -26,7 +25,6 @@ export class CreateAddressDto {
     street!: string;
     cityId!: number;
     countryId!: number;
-    postalCode?: string | null;
     isDefault?: boolean;
 }
 
