@@ -1,0 +1,24 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "types": [
+      "node"
+    ],
+    "rootDir": "../../",
+    "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
+    "allowJs": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "../../libs/shared/src/**/*.ts",
+    "../../libs/database-nosql/src/**/*.ts",
+    "../../libs/database/src/**/*.ts",
+    "../../libs/redis/src/**/*.ts",
+    "../../@types/**/*.d.ts"
+  ],
+  "exclude": [],
+  "references": []
+}

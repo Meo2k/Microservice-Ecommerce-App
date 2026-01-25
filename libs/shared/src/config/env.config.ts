@@ -42,4 +42,7 @@ export const ENV = {
     USER_SERVICE_PORT: getEnv("NX_USER_SERVICE_PORT", "6002"),
     USER_SERVICE_HOST: getEnv("NX_USER_SERVICE_HOST", "localhost"),
 
+    PRODUCT_SERVICE_PORT: getEnv("NX_PRODUCT_SERVICE_PORT", "6003"),
+    PRODUCT_SERVICE_HOST: getEnv("NX_PRODUCT_SERVICE_HOST", "localhost"),
+
 }

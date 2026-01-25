@@ -6,8 +6,12 @@ import proxy from 'express-http-proxy';
 import morgan from 'morgan';
 import { ENV } from '@org/shared';
 
+
+
 const host = ENV.API_GATEWAY_HOST ?? 'localhost';
 const port = ENV.API_GATEWAY_PORT ? Number(ENV.API_GATEWAY_PORT) : 9000;
+
+console.log(`Configuring API Gateway for ${host}:${port}`);
 
 const app = express();
 app.set('trust proxy', 1);
@@ -36,6 +40,7 @@ const limiter = rateLimit({
 app.use(limiter);
 app.use("/auth", proxy(`http://${ENV.AUTH_SERVICE_HOST}:${ENV.AUTH_SERVICE_PORT}`))
 app.use("/user", proxy(`http://${ENV.USER_SERVICE_HOST}:${ENV.USER_SERVICE_PORT}`))
+app.use("/product", proxy(`http://${ENV.PRODUCT_SERVICE_HOST}:${ENV.PRODUCT_SERVICE_PORT}`))
 
 app.get('/health', (req, res) => {
     res.send({ 'message': 'API Gateway is running' });
@@ -44,3 +49,4 @@ app.get('/health', (req, res) => {
 app.listen(port, host, () => {
     console.log(`API Gateway is running on http://${host}:${port}`);
 });
+

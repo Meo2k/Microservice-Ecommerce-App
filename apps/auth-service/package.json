@@ -20,7 +20,17 @@
           "main": "apps/auth-service/src/main.ts",
           "tsConfig": "apps/auth-service/tsconfig.app.json",
           "assets": [
-            "apps/auth-service/src/assets"
+            "apps/auth-service/src/assets",
+            {
+              "input": "libs/database/generated/client",
+              "glob": "**/*",
+              "output": "libs/database/generated/client"
+            },
+            {
+              "input": "libs/database-nosql/generated/prisma",
+              "glob": "**/*",
+              "output": "libs/database-nosql/generated/prisma"
+            }
           ],
           "esbuildOptions": {
             "sourcemap": true,

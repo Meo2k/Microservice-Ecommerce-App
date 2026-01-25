@@ -3,17 +3,25 @@ import passport from 'passport';
 import { Request, Response, NextFunction } from 'express';
 import { ENV } from './env.config.js';
 import { UnauthorizedError } from '../utils/app-error.js';
-import { User as UserSchemaType } from '@org/database';
 import { AUTH_MESSAGE } from '../config/response-message.config.js';
+
+// Generic user type to avoid circular dependency
+export interface IUserAuth {
+  id: number;
+  email: string;
+  is_verified: boolean;
+  is_locked: boolean;
+  [key: string]: any;
+}
 
 export type VerifyUserFn = (id: number) => Promise<any>;
 
 const extractJwtFromCookie = (req: Request) => {
   let token = null;
   if (req && req.cookies) {
-    token = req.cookies['refresh_token']; 
+    token = req.cookies['refresh_token'];
   }
-  
+
   return token;
 };
 
@@ -39,21 +47,21 @@ export const setupPassport = (verifyUser: VerifyUserFn) => {
   }));
 
   passport.use('jwt-refresh', new JwtStrategy({
-      jwtFromRequest: extractJwtFromCookie, 
-      secretOrKey: ENV.REFRESH_TOKEN_KEY    
+    jwtFromRequest: extractJwtFromCookie,
+    secretOrKey: ENV.REFRESH_TOKEN_KEY
   }, async (jwt_payload: { sub: string }, done) => {
-      try {
-      const user = {id: jwt_payload.sub}
+    try {
+      const user = { id: jwt_payload.sub }
       return user ? done(null, user) : done(null, false);
-      } catch (err) {
-          return done(err, false);
-      }
+    } catch (err) {
+      return done(err, false);
+    }
   }));
 
 };
 
 export const authenticateJwt = (req: Request, res: Response, next: NextFunction) => {
-  passport.authenticate("jwt", { session: false }, (err: any, user: UserSchemaType, info: any) => {
+  passport.authenticate("jwt", { session: false }, (err: any, user: IUserAuth, info: any) => {
     if (err) {
       return next(err);
     }

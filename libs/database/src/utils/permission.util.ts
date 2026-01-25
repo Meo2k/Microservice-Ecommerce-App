@@ -1,4 +1,4 @@
-import { prisma } from '../prisma-client';
+import { prisma } from '../prisma-client.js';
 
 export const getUserPermissions = async (userId: number): Promise<bigint> => {
     const user = await prisma.user.findUnique({

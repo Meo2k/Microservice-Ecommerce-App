@@ -83,6 +83,13 @@ export const USER_MESSAGE = {
     }, 
 }
 
+export const PRODUCT_MESSAGE = {
+    CREATE_PRODUCT: {
+        SUCCESS: "Product created successfully",
+        
+    }
+}
+
 export const OTP_MESSAGE = {
     SUCCESS: "OTP sent successfully",
     LOCKED: `Account locked due to multiple failed attempts. Please try later ${Number(ENV.OTP_LOCKTIME) / 3600} hours.`,
