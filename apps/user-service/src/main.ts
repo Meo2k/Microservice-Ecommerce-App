@@ -11,7 +11,6 @@ const app = express();
 // Middleware
 app.use(express.json());
 
-// Routes - injected with dependencies from container
 const userRouter = createUserRouter(
     container.getUserController(),
     container.getCheckPermission()
