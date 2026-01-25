@@ -30,5 +30,4 @@ app.use(errorHandler);
 
 app.listen(port, host, () => {
     console.log(`✅ [Auth Service] Running on http://${host}:${port}`);
-    console.log(`📦 Clean Architecture applied successfully`);
 });

@@ -27,7 +27,7 @@ export class TokenProvider {
     }
 }
 
-// Export helper functions for easier usage
+
 export const signAccessToken = (payload: object) => TokenProvider.signAccessToken(payload);
 export const signRefreshToken = (payload: object) => TokenProvider.signRefreshToken(payload);
 export const verifyAccessToken = (token: string) => TokenProvider.verifyAccessToken(token);

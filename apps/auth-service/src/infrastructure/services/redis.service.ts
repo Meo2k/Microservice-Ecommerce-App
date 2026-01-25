@@ -1,11 +1,8 @@
 import { EmailService, OtpService } from "@org/redis";
-import { IEmailService, IOtpService } from "../../application/ports/index.js";
+import { IEmailService, IOtpService } from "../../application/services/external.js";
 
-/**
- * Adapter for Email Service
- * Adapts @org/redis EmailService to application's IEmailService port
- */
-export class RedisEmailServiceAdapter implements IEmailService {
+
+export class RedisEmailService implements IEmailService {
     private emailService: EmailService;
 
     constructor() {
@@ -17,11 +14,8 @@ export class RedisEmailServiceAdapter implements IEmailService {
     }
 }
 
-/**
- * Adapter for OTP Service
- * Adapts @org/redis OtpService to application's IOtpService port
- */
-export class RedisOtpServiceAdapter implements IOtpService {
+
+export class RedisOtpService implements IOtpService {
     private otpService: OtpService;
 
     constructor() {

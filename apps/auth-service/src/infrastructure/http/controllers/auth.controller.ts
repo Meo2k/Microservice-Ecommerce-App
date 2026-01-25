@@ -10,19 +10,8 @@ import {
     RefreshTokenUseCase,
     CreateShopUseCase,
 } from "../../../application/use-cases/index.js";
-import {
-    registerValidator,
-    loginValidator,
-    verifyOtpValidator,
-    resendOtpValidator,
-    changePasswordValidator,
-    registerSellerValidator,
-} from "../validators/auth.validator.js";
 
-/**
- * HTTP Controller for Auth operations
- * Infrastructure layer - handles HTTP requests/responses
- */
+
 export class AuthController {
     constructor(
         private readonly registerUserUseCase: RegisterUserUseCase,
@@ -36,13 +25,13 @@ export class AuthController {
     ) { }
 
     register = async (req: Request, res: Response) => {
-        const body = registerValidator.parse(req.body);
+        const body = req.body;
         const result = await this.registerUserUseCase.execute(body);
         return res.status(result.status).json(result.metadata);
     };
 
     login = async (req: Request, res: Response) => {
-        const body = loginValidator.parse(req.body);
+        const body = req.body;
         const result = await this.loginUseCase.execute(body);
 
         // Set refresh token as HTTP-only cookie
@@ -57,19 +46,19 @@ export class AuthController {
     };
 
     verifyOtp = async (req: Request, res: Response) => {
-        const body = verifyOtpValidator.parse(req.body);
+        const body = req.body;
         const result = await this.verifyOtpUseCase.execute(body);
         return res.status(result.status).json(result.metadata);
     };
 
     resendOtp = async (req: Request, res: Response) => {
-        const body = resendOtpValidator.parse(req.body);
+        const body = req.body;
         const result = await this.resendOtpUseCase.execute(body);
         return res.status(result.status).json(result.metadata);
     };
 
     changePassword = async (req: Request, res: Response) => {
-        const body = changePasswordValidator.parse(req.body);
+        const body = req.body;
         const result = await this.changePasswordUseCase.execute(body);
         return res.status(result.status).json(result.metadata);
     };
@@ -88,7 +77,7 @@ export class AuthController {
 
     createShop = async (req: Request, res: Response) => {
         const user = (req as any).user as UserEntity;
-        const body = registerSellerValidator.parse(req.body);
+        const body = req.body;
         const result = await this.createShopUseCase.execute(user, body);
         return res.status(result.status).json(result.metadata);
     };

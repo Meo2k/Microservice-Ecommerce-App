@@ -9,11 +9,7 @@ import {
     UpdateUserAddressUseCase,
     DeleteUserAddressUseCase,
 } from "../../../application/use-cases/index.js";
-import {
-    updateUserValidator,
-    createUserAddressValidator,
-    updateUserAddressValidator
-} from "../validators/user.validator.js";
+
 
 /**
  * HTTP Controller for User operations
@@ -44,7 +40,7 @@ export class UserController {
 
     updateUser = async (req: Request, res: Response) => {
         const { userId } = req.params;
-        const body = updateUserValidator.parse(req.body);
+        const body = req.body;
         const result = await this.updateUserUseCase.execute(Number(userId), body);
         return res.status(result.status).json(result.metadata);
     };
@@ -64,14 +60,14 @@ export class UserController {
 
     createUserAddress = async (req: Request, res: Response) => {
         const { userId } = req.params;
-        const body = createUserAddressValidator.parse(req.body);
+        const body = req.body;
         const result = await this.createUserAddressUseCase.execute(Number(userId), body);
         return res.status(result.status).json(result.metadata);
     };
 
     updateUserAddress = async (req: Request, res: Response) => {
         const { userId } = req.params;
-        const body = updateUserAddressValidator.parse(req.body);
+        const body = req.body;
         const result = await this.updateUserAddressUseCase.execute(Number(userId), body);
         return res.status(result.status).json(result.metadata);
     };

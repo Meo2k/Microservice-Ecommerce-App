@@ -1,4 +1,4 @@
-import { prisma, getUserPermissions, User, Address, City, Country } from "@org/database";
+import { prisma, User, Address, City, Country } from "@org/database";
 import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
 import { CountryEntity } from "../../domain/entities/country.entity.js";
 import { CityEntity } from "../../domain/entities/city.entity.js";
@@ -55,11 +55,8 @@ function toDomainCity(prismaCity: City): CityEntity {
     );
 }
 
-/**
- * Prisma implementation of User Repository
- * Maps Prisma types to Domain entities
- */
-export class PrismaUserRepository implements IUserRepository {
+
+export class UserRepository implements IUserRepository {
 
     async findById(id: number): Promise<UserEntity | null> {
         const user = await prisma.user.findUnique({ where: { id } });
@@ -113,7 +110,5 @@ export class PrismaUserRepository implements IUserRepository {
         return city ? toDomainCity(city) : null;
     }
 
-    async getPermissions(userId: number): Promise<bigint> {
-        return getUserPermissions(userId);
-    }
+
 }

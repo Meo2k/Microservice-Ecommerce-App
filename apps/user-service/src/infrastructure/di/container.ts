@@ -15,19 +15,20 @@ import {
     UpdateUserAddressUseCase,
     DeleteUserAddressUseCase,
 } from "../../application/use-cases/index.js";
+import { IPermissionService } from "../../application/services/index.js";
 
 // Infrastructure
-import { PrismaUserRepository } from "../repositories/prisma-user.repository.js";
+import { UserRepository } from "../repositories/prisma-user.repository.js";
+import { PermissionService } from "../services/permission.service.js";
 import { UserController } from "../http/controllers/user.controller.js";
 
-/**
- * Dependency Injection Container
- * Wires up all dependencies following Clean Architecture principles
- * Dependencies flow: Infrastructure -> Application -> Domain
- */
+
 class DIContainer {
     // Repositories (Infrastructure -> Domain)
     private userRepository: IUserRepository;
+
+    // Services
+    private permissionService: IPermissionService;
 
     // Use Cases (Application)
     private getAllUsersUseCase: GetAllUsersUseCase;
@@ -47,7 +48,8 @@ class DIContainer {
 
     constructor() {
         // Initialize repository
-        this.userRepository = new PrismaUserRepository();
+        this.userRepository = new UserRepository();
+        this.permissionService = new PermissionService();
 
         // Initialize use cases
         this.getAllUsersUseCase = new GetAllUsersUseCase(this.userRepository);
@@ -75,7 +77,7 @@ class DIContainer {
         setupPassport(this.userRepository.findById.bind(this.userRepository));
 
         this.checkPermission = createCheckPermission(
-            this.userRepository.getPermissions.bind(this.userRepository),
+            this.permissionService.getPermissions.bind(this.permissionService),
             (key) => redis.get(key) as Promise<string | null>,
             async (key, value, ttl) => { await redis.set(key, value, { ex: ttl }); }
         );
@@ -90,5 +92,4 @@ class DIContainer {
     }
 }
 
-// Export singleton instance
 export const container = new DIContainer();

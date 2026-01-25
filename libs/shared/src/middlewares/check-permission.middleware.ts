@@ -14,7 +14,7 @@ export const createCheckPermission = (
     return (resource: Resource, action: Action, isSelf: boolean = false) => {
         return async (req: Request, res: Response, next: NextFunction) => {
             try {
-                const { id } = req.user!;
+                const { id } = req.user as any;
                 const { userId } = req.params;
                 let perm: bigint;
 

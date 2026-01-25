@@ -1,6 +1,6 @@
 import { AUTH_MESSAGE, ConflictError, CUSTOM_PERM, HTTP_STATUS, SELLER_PERM } from "@org/shared";
 import { IAuthRepository } from "../../domain/repositories/auth.repository.interface.js";
-import { IEmailService, IOtpService } from "../ports/external-services.port.js";
+import { IEmailService, IOtpService } from "../services/external.js";
 import { RegisterDto } from "../dtos/index.js";
 
 /**
@@ -11,7 +11,7 @@ export class RegisterUserUseCase {
     constructor(
         private readonly authRepo: IAuthRepository,
         private readonly emailService: IEmailService,
-        private readonly otpService: IOtpService
+        private readonly otpService: IOtpService,
     ) { }
 
     async execute(data: RegisterDto) {

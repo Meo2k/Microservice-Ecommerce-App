@@ -20,7 +20,17 @@
           "main": "apps/product-service/src/main.ts",
           "tsConfig": "apps/product-service/tsconfig.app.json",
           "assets": [
-            "apps/product-service/src/assets"
+            "apps/product-service/src/assets",
+            {
+              "input": "libs/database/generated/client",
+              "glob": "**/*",
+              "output": "libs/database/generated/client"
+            },
+            {
+              "input": "libs/database-nosql/generated/prisma",
+              "glob": "**/*",
+              "output": "libs/database-nosql/generated/prisma"
+            }
           ],
           "esbuildOptions": {
             "sourcemap": true,

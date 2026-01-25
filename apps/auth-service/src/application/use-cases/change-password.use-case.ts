@@ -1,6 +1,7 @@
+
 import { AUTH_MESSAGE, HTTP_STATUS, NotFoundError, UnauthorizedError } from "@org/shared";
 import { IAuthRepository } from "../../domain/repositories/auth.repository.interface.js";
-import { IOtpService } from "../ports/external-services.port.js";
+import { IOtpService } from "../services/external.js";
 import { ChangePasswordDto } from "../dtos/index.js";
 
 /**
@@ -10,7 +11,7 @@ import { ChangePasswordDto } from "../dtos/index.js";
 export class ChangePasswordUseCase {
     constructor(
         private readonly authRepo: IAuthRepository,
-        private readonly otpService: IOtpService
+        private readonly otpService: IOtpService,
     ) { }
 
     async execute(data: ChangePasswordDto) {

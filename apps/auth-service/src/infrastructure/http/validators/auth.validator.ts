@@ -1,10 +1,6 @@
 import { z } from "zod";
 import { stringMsg } from "@org/shared";
 
-/**
- * Input validation schemas for Auth operations
- * Infrastructure layer - validates HTTP input
- */
 
 const emailSchema = z
     .string(stringMsg("Email"))

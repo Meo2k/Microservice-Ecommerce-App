@@ -21,5 +21,4 @@ app.use('/', userRouter);
 
 app.listen(port, host, () => {
     console.log(`✅ [User Service] Running on http://${host}:${port}`);
-    console.log(`📦 Clean Architecture applied successfully`);
 });

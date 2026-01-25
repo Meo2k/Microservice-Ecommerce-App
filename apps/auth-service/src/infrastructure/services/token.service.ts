@@ -1,9 +1,7 @@
 import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken } from "@org/shared";
-import { ITokenRepository } from "../../domain/repositories/auth.repository.interface.js";
+import { ITokenService } from "../../application/services/index.js";
 
-
-export class JwtTokenRepository implements ITokenRepository {
-
+export class TokenService implements ITokenService {
     signAccess(payload: { sub: number | string }): string {
         return signAccessToken(payload);
     }

@@ -2,10 +2,15 @@ import { setupPassport, createCheckPermission } from "@org/shared";
 import { redis } from "@org/redis";
 
 // Domain
-import { IAuthRepository, ITokenRepository } from "../../domain/repositories/auth.repository.interface.js";
+import { IAuthRepository } from "../../domain/repositories/auth.repository.interface.js";
 
 // Application
-import { IEmailService, IOtpService } from "../../application/ports/external-services.port.js";
+import {
+    ITokenService,
+    IPasswordService,
+    IPermissionService
+} from "../../application/services/index.js";
+import { IEmailService, IOtpService } from "../../application/services/external.js";
 import {
     RegisterUserUseCase,
     LoginUseCase,
@@ -19,24 +24,25 @@ import {
 
 // Infrastructure
 import { PrismaAuthRepository } from "../repositories/prisma-auth.repository.js";
-import { JwtTokenRepository } from "../repositories/jwt-token.repository.js";
-import { RedisEmailServiceAdapter, RedisOtpServiceAdapter } from "../adapters/redis-service.adapter.js";
+import { TokenService } from "../services/token.service.js";
+import { PasswordService } from "../services/password.service.js";
+import { PermissionService } from "../services/permission.service.js";
+import { RedisEmailService, RedisOtpService } from "../services/redis.service.js";
 import { AuthController } from "../http/controllers/auth.controller.js";
 
-/**
- * Dependency Injection Container for Auth Service
- * Wires up all dependencies following Clean Architecture principles
- */
-class DIContainer {
-    // Repositories (Infrastructure -> Domain)
-    private authRepository: IAuthRepository;
-    private tokenRepository: ITokenRepository;
 
-    // External Services (Infrastructure -> Application Ports)
+class DIContainer {
+    // Repositories
+    private authRepository: IAuthRepository;
+
+    // Services
+    private tokenService: ITokenService;
+    private passwordService: IPasswordService;
+    private permissionService: IPermissionService;
     private emailService: IEmailService;
     private otpService: IOtpService;
 
-    // Use Cases (Application)
+    // Use Cases
     private registerUserUseCase: RegisterUserUseCase;
     private loginUseCase: LoginUseCase;
     private verifyOtpUseCase: VerifyOtpUseCase;
@@ -46,7 +52,7 @@ class DIContainer {
     private refreshTokenUseCase: RefreshTokenUseCase;
     private createShopUseCase: CreateShopUseCase;
 
-    // Controllers (Infrastructure)
+    // Controllers
     public authController: AuthController;
 
     // Middleware
@@ -55,22 +61,25 @@ class DIContainer {
     constructor() {
         // Initialize repositories
         this.authRepository = new PrismaAuthRepository();
-        this.tokenRepository = new JwtTokenRepository();
 
-        // Initialize external service adapters
-        this.emailService = new RedisEmailServiceAdapter();
-        this.otpService = new RedisOtpServiceAdapter();
+        // Initialize services
+        this.tokenService = new TokenService();
+        this.passwordService = new PasswordService();
+        this.permissionService = new PermissionService();
+        this.emailService = new RedisEmailService();
+        this.otpService = new RedisOtpService();
 
         // Initialize use cases
         this.registerUserUseCase = new RegisterUserUseCase(
             this.authRepository,
             this.emailService,
-            this.otpService
+            this.otpService,
         );
 
         this.loginUseCase = new LoginUseCase(
             this.authRepository,
-            this.tokenRepository
+            this.tokenService, // Use TokenService instead of TokenRepository
+            this.passwordService // Add PasswordService
         );
 
         this.verifyOtpUseCase = new VerifyOtpUseCase(
@@ -86,12 +95,12 @@ class DIContainer {
 
         this.changePasswordUseCase = new ChangePasswordUseCase(
             this.authRepository,
-            this.otpService
+            this.otpService,
         );
 
         this.getMeUseCase = new GetMeUseCase();
 
-        this.refreshTokenUseCase = new RefreshTokenUseCase(this.tokenRepository);
+        this.refreshTokenUseCase = new RefreshTokenUseCase(this.tokenService);
 
         this.createShopUseCase = new CreateShopUseCase(this.authRepository);
 
@@ -111,7 +120,7 @@ class DIContainer {
         setupPassport(this.authRepository.findUserById.bind(this.authRepository));
 
         this.checkPermission = createCheckPermission(
-            this.authRepository.getPermissions.bind(this.authRepository),
+            this.permissionService.getPermissions.bind(this.permissionService),
             (key) => redis.get(key) as Promise<string | null>,
             async (key, value, ttl) => { await redis.set(key, value, { ex: ttl }); }
         );

@@ -1,5 +1,6 @@
 import { AUTH_MESSAGE, HTTP_STATUS, NotFoundError, UnauthorizedError } from "@org/shared";
-import { IAuthRepository, ITokenRepository } from "../../domain/repositories/auth.repository.interface.js";
+import { IAuthRepository } from "../../domain/repositories/auth.repository.interface.js";
+import { ITokenService, IPasswordService } from "../services/index.js";
 import { LoginDto } from "../dtos/index.js";
 
 /**
@@ -9,7 +10,8 @@ import { LoginDto } from "../dtos/index.js";
 export class LoginUseCase {
     constructor(
         private readonly authRepo: IAuthRepository,
-        private readonly tokenRepo: ITokenRepository
+        private readonly tokenService: ITokenService,
+        private readonly passwordService: IPasswordService
     ) { }
 
     async execute(data: LoginDto) {
@@ -22,14 +24,14 @@ export class LoginUseCase {
         }
 
         // Verify password
-        const isPasswordValid = await this.authRepo.comparePassword(password, user.password);
+        const isPasswordValid = await this.passwordService.comparePassword(password, user.password);
         if (!isPasswordValid) {
             throw new UnauthorizedError(AUTH_MESSAGE.LOGIN.UNAUTHORIZED);
         }
 
         // Generate tokens
-        const accessToken = this.tokenRepo.signAccess({ sub: user.id });
-        const refreshToken = this.tokenRepo.signRefresh({ sub: user.id });
+        const accessToken = this.tokenService.signAccess({ sub: user.id });
+        const refreshToken = this.tokenService.signRefresh({ sub: user.id });
 
         return {
             status: HTTP_STATUS.OK,

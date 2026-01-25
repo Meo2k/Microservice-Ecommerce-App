@@ -1,5 +1,5 @@
 import { PrismaClient } from '../generated/client/index.js';
-import { hashPassword } from '@org/shared';
+import { hashPassword } from './utils/password.util.js';
 
 const prismaClientSingleton = () => {
     return new PrismaClient({

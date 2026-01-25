@@ -11,8 +11,7 @@
     ]
   },
   "include": [
-    "src/**/*.ts",
-    "generated/**/*.ts"
+    "src/**/*.ts"
   ],
   "references": [
     {

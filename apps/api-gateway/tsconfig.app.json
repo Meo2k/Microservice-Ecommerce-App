@@ -11,6 +11,7 @@
   "include": [
     "src/**/*.ts",
     "../../libs/shared/src/**/*.ts",
+    "../../libs/database/src/**/*.ts",
     "../../@types/**/*.d.ts"
   ],
   "exclude": [],

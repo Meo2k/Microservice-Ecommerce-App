@@ -1,14 +1,14 @@
 import { AUTH_MESSAGE, HTTP_STATUS } from "@org/shared";
-import { ITokenRepository } from "../../domain/repositories/auth.repository.interface.js";
+import { ITokenService } from "../services/index.js";
 
 /**
  * Use Case: Refresh Access Token
  */
 export class RefreshTokenUseCase {
-    constructor(private readonly tokenRepo: ITokenRepository) { }
+    constructor(private readonly tokenService: ITokenService) { }
 
     async execute(userId: string) {
-        const accessToken = this.tokenRepo.signAccess({ sub: userId });
+        const accessToken = this.tokenService.signAccess({ sub: userId });
 
         return {
             status: HTTP_STATUS.OK,

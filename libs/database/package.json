@@ -2,6 +2,7 @@
   "name": "@org/database",
   "version": "0.0.1",
   "private": true,
+  "type": "module",
   "main": "./src/index.js",
   "module": "./src/index.js",
   "types": "./src/index.d.ts",
@@ -15,6 +16,8 @@
     }
   },
   "dependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "bcrypt": "^6.0.0",
     "tslib": "^2.3.0"
   }
 }

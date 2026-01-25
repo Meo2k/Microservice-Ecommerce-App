@@ -22,6 +22,4 @@ export interface IUserRepository {
     findCountryById(id: number): Promise<CountryEntity | null>;
     findCityById(id: number): Promise<CityEntity | null>;
 
-    // Permission operations
-    getPermissions(userId: number): Promise<bigint>;
 }

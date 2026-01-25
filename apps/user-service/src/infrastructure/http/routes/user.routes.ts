@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { authenticateJwt, Resource, Action, asyncHandler } from "@org/shared";
+import { authenticateJwt, Resource, Action, asyncHandler, validateRequest } from "@org/shared";
+import {
+    updateUserValidator,
+    createUserAddressValidator,
+    updateUserAddressValidator
+} from "../validators/user.validator.js";
 
 /**
  * User Routes
@@ -29,6 +34,7 @@ export const createUserRouter = (
             "/:userId",
             authenticateJwt,
             checkPermission(Resource.USER, Action.UPDATE, true),
+            validateRequest(updateUserValidator),
             asyncHandler(userController.updateUser)
         )
         .delete(
@@ -49,12 +55,14 @@ export const createUserRouter = (
             "/:userId/address",
             authenticateJwt,
             checkPermission(Resource.USER, Action.CREATE, true),
+            validateRequest(createUserAddressValidator),
             asyncHandler(userController.createUserAddress)
         )
         .put(
             "/:userId/address",
             authenticateJwt,
             checkPermission(Resource.USER, Action.UPDATE, true),
+            validateRequest(updateUserAddressValidator),
             asyncHandler(userController.updateUserAddress)
         )
         .delete(
