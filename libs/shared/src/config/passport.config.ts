@@ -3,7 +3,7 @@ import passport from 'passport';
 import { Request, Response, NextFunction } from 'express';
 import { ENV } from './env.config.js';
 import { UnauthorizedError } from '../utils/app-error.js';
-import { AUTH_MESSAGE } from '../config/response-message.config.js';
+import { SYSTEM_MESSAGE } from '../config/response-message.config.js';
 
 // Generic user type to avoid circular dependency
 export interface IUserAuth {
@@ -75,11 +75,11 @@ export const authenticateJwt = (req: Request, res: Response, next: NextFunction)
     }
 
     if (user.is_verified === false) {
-      return next(new UnauthorizedError(AUTH_MESSAGE.UNAUTHORIZED.NOT_VERIFIED));
+      return next(new UnauthorizedError(SYSTEM_MESSAGE.UNAUTHORIZED.NOT_VERIFIED));
     }
 
     if (user.is_locked === true) {
-      return next(new UnauthorizedError(AUTH_MESSAGE.UNAUTHORIZED.LOCKED));
+      return next(new UnauthorizedError(SYSTEM_MESSAGE.UNAUTHORIZED.LOCKED));
     }
 
     (req as any).user = user;

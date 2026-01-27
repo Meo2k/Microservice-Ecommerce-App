@@ -1,4 +1,3 @@
 export * from './prisma-client.js';
 export * from './utils/password.util.js';
-export * from './utils/permission.util.js';
 

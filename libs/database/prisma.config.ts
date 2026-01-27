@@ -1,7 +1,6 @@
 
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
-import {ENV} from "@org/shared"
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
@@ -10,6 +9,6 @@ export default defineConfig({
   },
   engine: "classic",
   datasource: {
-    url: ENV.DATABASE_URL_POSTGRESQL
+    url: process.env.NX_DATABASE_URL_POSTGRESQL as string 
   },
 });

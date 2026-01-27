@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import {
     GetAllUsersUseCase,
-    GetUserByIdUseCase,
     UpdateUserUseCase,
     DeleteUserUseCase,
     GetUserAddressesUseCase,
@@ -18,7 +17,6 @@ import {
 export class UserController {
     constructor(
         private readonly getAllUsersUseCase: GetAllUsersUseCase,
-        private readonly getUserByIdUseCase: GetUserByIdUseCase,
         private readonly updateUserUseCase: UpdateUserUseCase,
         private readonly deleteUserUseCase: DeleteUserUseCase,
         private readonly getUserAddressesUseCase: GetUserAddressesUseCase,
@@ -29,12 +27,6 @@ export class UserController {
 
     getAllUser = async (req: Request, res: Response) => {
         const result = await this.getAllUsersUseCase.execute();
-        return res.status(result.status).json(result.metadata);
-    };
-
-    getUserById = async (req: Request, res: Response) => {
-        const { userId } = req.params;
-        const result = await this.getUserByIdUseCase.execute(Number(userId));
         return res.status(result.status).json(result.metadata);
     };
 

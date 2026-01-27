@@ -64,8 +64,8 @@ export class AuthController {
     };
 
     getMe = async (req: Request, res: Response) => {
-        const user = (req as any).user as UserEntity;
-        const result = await this.getMeUseCase.execute(user);
+        const id = req.headers["x-user-id"] as any;
+        const result = await this.getMeUseCase.execute(id);
         return res.status(result.status).json(result.metadata);
     };
 

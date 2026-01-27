@@ -1,5 +1,5 @@
 import express from 'express';
-import { ENV } from '@org/shared';
+import { ENV, errorHandler } from '@org/shared';
 import { container } from './infrastructure/di/container.js';
 import { createUserRouter } from './infrastructure/http/routes/user.routes.js';
 
@@ -17,6 +17,8 @@ const userRouter = createUserRouter(
 );
 
 app.use('/', userRouter);
+
+app.use(errorHandler);
 
 app.listen(port, host, () => {
     console.log(`✅ [User Service] Running on http://${host}:${port}`);

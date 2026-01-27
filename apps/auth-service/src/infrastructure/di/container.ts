@@ -1,5 +1,4 @@
-import { setupPassport, createCheckPermission } from "@org/shared";
-import { redis } from "@org/redis";
+import { setupPassport, checkPermission } from "@org/shared";
 
 // Domain
 import { IAuthRepository } from "../../domain/repositories/auth.repository.interface.js";
@@ -8,7 +7,6 @@ import { IAuthRepository } from "../../domain/repositories/auth.repository.inter
 import {
     ITokenService,
     IPasswordService,
-    IPermissionService
 } from "../../application/services/index.js";
 import { IEmailService, IOtpService } from "../../application/services/external.js";
 import {
@@ -26,7 +24,6 @@ import {
 import { PrismaAuthRepository } from "../repositories/prisma-auth.repository.js";
 import { TokenService } from "../services/token.service.js";
 import { PasswordService } from "../services/password.service.js";
-import { PermissionService } from "../services/permission.service.js";
 import { RedisEmailService, RedisOtpService } from "../services/redis.service.js";
 import { AuthController } from "../http/controllers/auth.controller.js";
 
@@ -38,7 +35,6 @@ class DIContainer {
     // Services
     private tokenService: ITokenService;
     private passwordService: IPasswordService;
-    private permissionService: IPermissionService;
     private emailService: IEmailService;
     private otpService: IOtpService;
 
@@ -65,7 +61,6 @@ class DIContainer {
         // Initialize services
         this.tokenService = new TokenService();
         this.passwordService = new PasswordService();
-        this.permissionService = new PermissionService();
         this.emailService = new RedisEmailService();
         this.otpService = new RedisOtpService();
 
@@ -98,7 +93,7 @@ class DIContainer {
             this.otpService,
         );
 
-        this.getMeUseCase = new GetMeUseCase();
+        this.getMeUseCase = new GetMeUseCase(this.authRepository);
 
         this.refreshTokenUseCase = new RefreshTokenUseCase(this.tokenService);
 
@@ -119,11 +114,7 @@ class DIContainer {
         // Setup middleware
         setupPassport(this.authRepository.findUserById.bind(this.authRepository));
 
-        this.checkPermission = createCheckPermission(
-            this.permissionService.getPermissions.bind(this.permissionService),
-            (key) => redis.get(key) as Promise<string | null>,
-            async (key, value, ttl) => { await redis.set(key, value, { ex: ttl }); }
-        );
+        this.checkPermission = checkPermission;
     }
 
     getAuthController(): AuthController {

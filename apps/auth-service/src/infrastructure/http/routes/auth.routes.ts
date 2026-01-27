@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { asyncHandler, authenticateRefreshToken, authenticateJwt, validateRequest } from "@org/shared";
+import { asyncHandler, authenticateRefreshToken, validateRequest } from "@org/shared";
 import {
     registerValidator,
     loginValidator,
@@ -19,8 +19,8 @@ export const createAuthRouter = (authController: any): Router => {
         .post("/resend-otp", validateRequest(resendOtpValidator), asyncHandler(authController.resendOtp))
 
         // Protected routes
-        .get("/me", authenticateJwt, asyncHandler(authController.getMe))
+        .get("/me", asyncHandler(authController.getMe))
         .post("/refresh-token", authenticateRefreshToken, asyncHandler(authController.refreshToken))
         .post("/change-password", validateRequest(changePasswordValidator), asyncHandler(authController.changePassword))
-        .post("/register-seller", authenticateJwt, validateRequest(registerSellerValidator), asyncHandler(authController.createShop));
+        .post("/register-seller", validateRequest(registerSellerValidator), asyncHandler(authController.createShop));
 };

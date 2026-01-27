@@ -1,6 +1,13 @@
 
 import { ENV } from "./env.config.js"
 
+export const SYSTEM_MESSAGE = {
+    UNAUTHORIZED: {
+        NOT_VERIFIED: "User is not verified",
+        LOCKED: "User is locked"
+    }
+}
+
 export const AUTH_MESSAGE = {
     REGISTER: {
         SUCCESS: "User registered successfully",
@@ -42,10 +49,6 @@ export const AUTH_MESSAGE = {
         OTP_INVALID: "Invalid OTP or have been expired. Please try again.",
         NOT_FOUND: "User not found"
     }, 
-    UNAUTHORIZED: {
-        NOT_VERIFIED: "User is not verified",
-        LOCKED: "User is locked"
-    }
 }
 
 export const USER_MESSAGE = {

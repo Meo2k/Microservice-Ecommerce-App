@@ -1,5 +1,4 @@
-import { setupPassport, createCheckPermission } from "@org/shared";
-import { redis } from "@org/redis";
+import { setupPassport, checkPermission } from "@org/shared";
 
 // Domain
 import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
@@ -7,7 +6,6 @@ import { IUserRepository } from "../../domain/repositories/user.repository.inter
 // Application
 import {
     GetAllUsersUseCase,
-    GetUserByIdUseCase,
     UpdateUserUseCase,
     DeleteUserUseCase,
     GetUserAddressesUseCase,
@@ -15,11 +13,9 @@ import {
     UpdateUserAddressUseCase,
     DeleteUserAddressUseCase,
 } from "../../application/use-cases/index.js";
-import { IPermissionService } from "../../application/services/index.js";
 
 // Infrastructure
 import { UserRepository } from "../repositories/prisma-user.repository.js";
-import { PermissionService } from "../services/permission.service.js";
 import { UserController } from "../http/controllers/user.controller.js";
 
 
@@ -28,11 +24,9 @@ class DIContainer {
     private userRepository: IUserRepository;
 
     // Services
-    private permissionService: IPermissionService;
 
     // Use Cases (Application)
     private getAllUsersUseCase: GetAllUsersUseCase;
-    private getUserByIdUseCase: GetUserByIdUseCase;
     private updateUserUseCase: UpdateUserUseCase;
     private deleteUserUseCase: DeleteUserUseCase;
     private getUserAddressesUseCase: GetUserAddressesUseCase;
@@ -49,11 +43,9 @@ class DIContainer {
     constructor() {
         // Initialize repository
         this.userRepository = new UserRepository();
-        this.permissionService = new PermissionService();
 
         // Initialize use cases
         this.getAllUsersUseCase = new GetAllUsersUseCase(this.userRepository);
-        this.getUserByIdUseCase = new GetUserByIdUseCase(this.userRepository);
         this.updateUserUseCase = new UpdateUserUseCase(this.userRepository);
         this.deleteUserUseCase = new DeleteUserUseCase(this.userRepository);
         this.getUserAddressesUseCase = new GetUserAddressesUseCase(this.userRepository);
@@ -64,7 +56,6 @@ class DIContainer {
         // Initialize controller
         this.userController = new UserController(
             this.getAllUsersUseCase,
-            this.getUserByIdUseCase,
             this.updateUserUseCase,
             this.deleteUserUseCase,
             this.getUserAddressesUseCase,
@@ -76,11 +67,7 @@ class DIContainer {
         // Setup middleware
         setupPassport(this.userRepository.findById.bind(this.userRepository));
 
-        this.checkPermission = createCheckPermission(
-            this.permissionService.getPermissions.bind(this.permissionService),
-            (key) => redis.get(key) as Promise<string | null>,
-            async (key, value, ttl) => { await redis.set(key, value, { ex: ttl }); }
-        );
+        this.checkPermission = checkPermission;
     }
 
     getUserController(): UserController {

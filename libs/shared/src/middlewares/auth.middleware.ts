@@ -1,0 +1,82 @@
+import jwt from "jsonwebtoken";
+import { NextFunction, Request, Response } from "express";
+import { PUBLIC_ROUTES } from "../config/path.config.js";
+import { UnauthorizedError } from "../utils/app-error.js";
+import { ENV } from "../config/env.config.js";
+import { SYSTEM_MESSAGE } from "../config/response-message.config.js";
+
+
+export const createAuthMiddleware = (prisma: any, redis: any) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        const token = req.headers.authorization?.split(" ")[1];
+
+        const isPublic = PUBLIC_ROUTES.some((path) => req.path.startsWith(path));
+
+        if (!token) {
+            if (isPublic) return next();
+            return next(new UnauthorizedError("Unauthorized"));
+        }
+
+        try {
+            const decoded = jwt.verify(token, ENV.ACCESS_TOKEN_KEY) as { sub: string };
+            const userId = Number(decoded.sub);
+
+            const cachedData = await redis.get(`user_auth:${userId}`) as any;
+            let userData;
+
+            if (cachedData) {
+                if (typeof cachedData === 'object') {
+                    userData = cachedData;
+                } else {
+                    userData = JSON.parse(cachedData);
+                }
+            } else {
+                const dbUser = await prisma.user.findUnique({
+                    where: { id: userId },
+                    select: {
+                        is_verified: true,
+                        is_locked: true,
+                        userRole: {
+                            select: {
+                                role: { select: { permissions: true } }
+                            }
+                        }
+                    }
+                });
+
+
+                if (!dbUser) return next(new UnauthorizedError("User not found"));
+
+                const totalPermissions = dbUser.userRole.reduce(
+                    (acc: bigint, curr: any) => acc | curr.role.permissions,
+                    BigInt(0)
+                );
+
+                userData = {
+                    is_verified: dbUser.is_verified,
+                    is_locked: dbUser.is_locked,
+                    permissions: totalPermissions.toString()
+                };
+
+                await redis.set(`user_auth:${userId}`, JSON.stringify(userData), { ex: 3600 });
+            }
+
+            if (!userData.is_verified) {
+                return next(new UnauthorizedError(SYSTEM_MESSAGE.UNAUTHORIZED.NOT_VERIFIED));
+            }
+            if (userData.is_locked) {
+                return next(new UnauthorizedError(SYSTEM_MESSAGE.UNAUTHORIZED.LOCKED));
+            }
+
+            // inject user info into request headers 
+            req.headers['x-user-id'] = String(userId);
+            req.headers['x-user-permissions'] = userData.permissions;
+
+            next();
+        } catch (error) {
+            console.log("Error middleware : ", error)
+            return next(new UnauthorizedError("Invalid token"));
+        }
+    }
+}
+
