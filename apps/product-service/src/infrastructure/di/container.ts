@@ -1,5 +1,5 @@
 import { prisma } from "@org/database";
-import { CreateProductUseCase } from "../../application";
+import { CreateProductUseCase, DeleteProductUseCase, GetAllProductsByShopUseCase, GetDetailsProductUseCase, UpdateProductUseCase } from "../../application";
 import { IProductRepository } from "../../domain";
 import { ProductController } from "../http/product.controller";
 import { ProductRepository } from "../repositories";
@@ -9,15 +9,32 @@ import { redis } from "@org/redis";
 class DIContainer {
     private productRepository: IProductRepository;
 
+    // use case 
     private createProductUseCase: CreateProductUseCase;
+    private updateProductUseCase: UpdateProductUseCase;
+    private deleteProductUseCase: DeleteProductUseCase;
+    private getAllProductsByShopUseCase: GetAllProductsByShopUseCase;
+    private getDetailsProductUseCase: GetDetailsProductUseCase;
 
     private productController: ProductController;
 
     constructor() {
         this.productRepository = new ProductRepository();
-        this.createProductUseCase = new CreateProductUseCase(this.productRepository);
 
-        this.productController = new ProductController(this.createProductUseCase);
+        // use case 
+        this.createProductUseCase = new CreateProductUseCase(this.productRepository);
+        this.updateProductUseCase = new UpdateProductUseCase(this.productRepository);
+        this.deleteProductUseCase = new DeleteProductUseCase(this.productRepository);
+        this.getAllProductsByShopUseCase = new GetAllProductsByShopUseCase(this.productRepository);
+        this.getDetailsProductUseCase = new GetDetailsProductUseCase(this.productRepository);
+
+        this.productController = new ProductController(
+            this.createProductUseCase,
+            this.getAllProductsByShopUseCase,
+            this.getDetailsProductUseCase,
+            this.updateProductUseCase,
+            this.deleteProductUseCase
+        );
     }
 
     getProductController() {

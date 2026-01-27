@@ -1,4 +1,5 @@
 import {z} from "zod"; 
+import { ProductEntity } from "../../domain";
 
 export const createProductValidator = z.object({
     name: z.string().min(1, "Name is required"),

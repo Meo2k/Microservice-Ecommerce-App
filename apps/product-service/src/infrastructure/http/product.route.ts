@@ -1,16 +1,24 @@
 import { validateRequest } from "@org/shared";
 import { Router } from "express";
-import { createProductValidator } from "./product.validator";
+import { createProductValidator, updateProductValidator } from "./product.validator";
+import { asyncHandler } from "@org/shared";
 
 export const createProductRoute = (
     productController: any,
 ): Router => {
     return Router()
-        .get("/:shopId", productController.getProducts)
+        .get("/:shopId", asyncHandler(productController.getAllProductsByShop))
         .post(
             "/:shopId",
             validateRequest(createProductValidator),
-            productController.createProduct
-        );
+            asyncHandler(productController.createProduct)
+        )
+        .get("/:productId", asyncHandler(productController.getDetailsProduct))
+        .put(
+            "/:productId",
+            validateRequest(updateProductValidator),
+            asyncHandler(productController.updateProduct)
+        )
+        .delete("/:productId", asyncHandler(productController.deleteProduct));
 
 }

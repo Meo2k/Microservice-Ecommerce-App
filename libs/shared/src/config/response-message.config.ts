@@ -97,7 +97,24 @@ export const USER_MESSAGE = {
 export const PRODUCT_MESSAGE = {
     CREATE_PRODUCT: {
         SUCCESS: "Product created successfully",
-        
+    }, 
+    GET_ALL_PRODUCTS: {
+        SUCCESS: "Products fetched successfully",
+    }, 
+    GET_DETAILS_PRODUCT: {
+        SUCCESS: "Product fetched successfully",
+    }, 
+    UPDATE_PRODUCT: {
+        SUCCESS: "Product updated successfully",
+        NOT_FOUND: "Product not found"
+    }, 
+    DELETE_PRODUCT: {
+        SUCCESS: "Product deleted successfully", 
+        NOT_FOUND: "Product not found"
+    }, 
+    GET_ALL_PRODUCTS_BY_SHOP: {
+        SUCCESS: "Products fetched successfully in the shop",
+        NOT_FOUND: "Products not found in the shop "
     }
 }
 

@@ -29,8 +29,8 @@ export class ProductRepository implements IProductRepository {
         const newProduct = await prisma.product.create({ data: product as any });
         return toProductEntity(newProduct);
     }
-    async updateProduct(product: ProductEntity): Promise<ProductEntity> {
-        const updatedProduct = await prisma.product.update({ where: { id: product.id }, data: product as any });
+    async updateProduct(productId: string, data: object): Promise<ProductEntity> {
+        const updatedProduct = await prisma.product.update({ where: { id: productId }, data });
         return toProductEntity(updatedProduct);
     }
     async deleteProduct(productId: string): Promise<void> {
@@ -42,6 +42,11 @@ export class ProductRepository implements IProductRepository {
     }
     async getProducts(): Promise<ProductEntity[]> {
         const products = await prisma.product.findMany();
+        return products.map(toProductEntity);
+    }
+
+    async getProductsByCondition(where: object): Promise<ProductEntity[]> {
+        const products = await prisma.product.findMany({ where });
         return products.map(toProductEntity);
     }
 }
