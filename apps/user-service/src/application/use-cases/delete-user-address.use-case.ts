@@ -1,4 +1,4 @@
-import { HTTP_STATUS, USER_MESSAGE } from "@org/shared";
+import { HTTP_STATUS, NotFoundError, USER_MESSAGE } from "@org/shared";
 import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
 
 /**
@@ -10,7 +10,7 @@ export class DeleteUserAddressUseCase {
     async execute(userId: number, addressId: number) {
         const user = await this.userRepository.findById(userId);
         if (!user) {
-            throw new Error(USER_MESSAGE.UPDATE_USER.NOT_FOUND);
+            throw new NotFoundError(USER_MESSAGE.UPDATE_USER.NOT_FOUND);
         }
 
         const deletedAddress = await this.userRepository.deleteAddress(addressId);

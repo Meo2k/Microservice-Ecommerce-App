@@ -103,6 +103,7 @@ export const PRODUCT_MESSAGE = {
     }, 
     GET_DETAILS_PRODUCT: {
         SUCCESS: "Product fetched successfully",
+        NOT_FOUND: "Product not found"
     }, 
     UPDATE_PRODUCT: {
         SUCCESS: "Product updated successfully",

@@ -1,14 +1,13 @@
 import express from 'express';
+import { ENV } from '@org/shared';
 
-const host = process.env.HOST ?? 'localhost';
-const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+const host = ENV.SHOP_SERVICE_HOST ?? 'localhost';
+const port = Number(ENV.SHOP_SERVICE_PORT) ?? 6004;
 
 const app = express();
 
-app.get('/', (req, res) => {
-    res.send({ 'message': 'Hello API'});
-});
+
 
 app.listen(port, host, () => {
-    console.log(`[ ready ] http://${host}:${port}`);
+    console.log(`Shop Service is running on http://${host}:${port}`);
 });

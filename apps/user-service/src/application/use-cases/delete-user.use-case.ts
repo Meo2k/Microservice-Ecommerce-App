@@ -1,4 +1,4 @@
-import { HTTP_STATUS, USER_MESSAGE } from "@org/shared";
+import { HTTP_STATUS, NotFoundError, USER_MESSAGE } from "@org/shared";
 import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
 import { toUserResponseDto } from "../dtos/index.js";
 
@@ -12,7 +12,7 @@ export class DeleteUserUseCase {
         const user = await this.userRepository.findById(userId);
 
         if (!user) {
-            throw new Error(USER_MESSAGE.DELETE_USER.NOT_FOUND);
+            throw new NotFoundError(USER_MESSAGE.DELETE_USER.NOT_FOUND);
         }
 
         const deletedUser = await this.userRepository.delete(userId);
