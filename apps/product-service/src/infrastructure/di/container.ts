@@ -1,7 +1,10 @@
+import { prisma } from "@org/database";
 import { CreateProductUseCase } from "../../application";
 import { IProductRepository } from "../../domain";
 import { ProductController } from "../http/product.controller";
 import { ProductRepository } from "../repositories";
+import { Redis } from "@upstash/redis";
+import { redis } from "@org/redis";
 
 class DIContainer {
     private productRepository: IProductRepository;
@@ -19,6 +22,14 @@ class DIContainer {
 
     getProductController() {
         return this.productController;
+    }
+
+    getPrismaClient(): typeof prisma {
+        return prisma;
+    }
+
+    getRedis(): Redis {
+        return redis;
     }
 }
 

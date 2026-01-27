@@ -2,9 +2,17 @@
 import { ENV } from "./env.config.js"
 
 export const SYSTEM_MESSAGE = {
-    UNAUTHORIZED: {
+    AUTH: {
         NOT_VERIFIED: "User is not verified",
-        LOCKED: "User is locked"
+        LOCKED: "User is locked", 
+        NOT_FOUND: "User not found", 
+        UNAUTHORIZED: "Unauthorized", 
+        TOKEN_INVALID: "Invalid token "
+
+    }, 
+    SHOP: {
+        UNAUTHORIZED: "Unauthorized to this shop",
+        NOT_FOUND: "Shop not found"
     }
 }
 

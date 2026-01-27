@@ -1,4 +1,4 @@
-import { setupPassport, checkPermission } from "@org/shared";
+import { checkPermission } from "@org/shared";
 
 // Domain
 import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
@@ -63,9 +63,6 @@ class DIContainer {
             this.updateUserAddressUseCase,
             this.deleteUserAddressUseCase
         );
-
-        // Setup middleware
-        setupPassport(this.userRepository.findById.bind(this.userRepository));
 
         this.checkPermission = checkPermission;
     }

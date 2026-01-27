@@ -70,7 +70,7 @@ export class AuthController {
     };
 
     refreshToken = async (req: Request, res: Response) => {
-        const userId = (req as any).user.id;
+        const userId = req.headers["x-user-id"] as string;
         const result = await this.refreshTokenUseCase.execute(userId);
         return res.status(result.status).json(result.metadata);
     };

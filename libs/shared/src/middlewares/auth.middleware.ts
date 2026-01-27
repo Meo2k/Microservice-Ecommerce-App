@@ -14,7 +14,7 @@ export const createAuthMiddleware = (prisma: any, redis: any) => {
 
         if (!token) {
             if (isPublic) return next();
-            return next(new UnauthorizedError("Unauthorized"));
+            return next(new UnauthorizedError(SYSTEM_MESSAGE.AUTH.UNAUTHORIZED));
         }
 
         try {
@@ -45,7 +45,7 @@ export const createAuthMiddleware = (prisma: any, redis: any) => {
                 });
 
 
-                if (!dbUser) return next(new UnauthorizedError("User not found"));
+                if (!dbUser) return next(new UnauthorizedError(SYSTEM_MESSAGE.AUTH.NOT_FOUND));
 
                 const totalPermissions = dbUser.userRole.reduce(
                     (acc: bigint, curr: any) => acc | curr.role.permissions,
@@ -62,10 +62,10 @@ export const createAuthMiddleware = (prisma: any, redis: any) => {
             }
 
             if (!userData.is_verified) {
-                return next(new UnauthorizedError(SYSTEM_MESSAGE.UNAUTHORIZED.NOT_VERIFIED));
+                return next(new UnauthorizedError(SYSTEM_MESSAGE.AUTH.NOT_VERIFIED));
             }
             if (userData.is_locked) {
-                return next(new UnauthorizedError(SYSTEM_MESSAGE.UNAUTHORIZED.LOCKED));
+                return next(new UnauthorizedError(SYSTEM_MESSAGE.AUTH.LOCKED));
             }
 
             // inject user info into request headers 
@@ -75,8 +75,21 @@ export const createAuthMiddleware = (prisma: any, redis: any) => {
             next();
         } catch (error) {
             console.log("Error middleware : ", error)
-            return next(new UnauthorizedError("Invalid token"));
+            return next(new UnauthorizedError(SYSTEM_MESSAGE.AUTH.TOKEN_INVALID));
         }
     }
+}
+
+export const authenticateRefreshToken = (req: Request, res: Response, next: NextFunction)=>{
+    try {
+        const token = req.cookies["refresh_token"];
+        const decoded = jwt.verify(token, ENV.REFRESH_TOKEN_KEY) as { sub: string };
+        req.headers['x-user-id'] = String(decoded.sub)
+
+        next();
+    } catch (error) {
+        console.log("Error middleware : ", error)
+        return next(new UnauthorizedError(SYSTEM_MESSAGE.AUTH.TOKEN_INVALID));
+    } 
 }
 
