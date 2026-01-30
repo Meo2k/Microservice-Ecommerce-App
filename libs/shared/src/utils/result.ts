@@ -3,6 +3,7 @@ export interface ResultError {
     readonly status?: number;
     readonly code: string;
     readonly message: string;
+    readonly details?: any; 
 };
 
 export const ErrorNone: ResultError = {
@@ -48,6 +49,12 @@ export class Result<T> {
 
     public static fail<U>(error: ResultError): Result<U> {
         return new Result<U>(false, error);
+    }
+
+    public toJSON() {
+        return {
+            ...this._error,
+        };
     }
 }
 

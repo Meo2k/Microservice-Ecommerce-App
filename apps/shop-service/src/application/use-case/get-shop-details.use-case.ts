@@ -3,6 +3,7 @@ import { Result, ResultError } from "@org/shared";
 import { ShopErrors } from "../../domain/errors/shop.errors.js";
 import { IShopRepository } from "../../application/repositories/user.repository";
 import { ShopEntity } from "../../domain/entities/shop.entity.js";
+import { GetShopDetailsCommand } from "../../api/validators/shop.validator.js";
 
 class ShopResponse {
     constructor(
@@ -16,14 +17,12 @@ class ShopResponse {
     ) { }
 }
 
-export class GetShopDetailsCommand {
-    constructor(public shopId: string) { }
-}
+
 
 export class GetShopDetailsUseCase {
     constructor(private readonly shopRepository: IShopRepository) { }
 
-    private _to_response(shop: ShopEntity): ShopResponse {
+    private _toResponse(shop: ShopEntity): ShopResponse {
         return new ShopResponse(
             shop.id,
             shop.name, shop.description, shop.logo_url,
@@ -31,14 +30,13 @@ export class GetShopDetailsUseCase {
         );
     }
 
-    async execute(command: GetShopDetailsCommand): Promise<Result<ShopResponse|ResultError>> {
-        const shop = await this.shopRepository.getShopById(command.shopId);
+    async execute(command: GetShopDetailsCommand): Promise<Result<ShopResponse | ResultError>> {
+        const shop = await this.shopRepository.getShopById(command.params.shopId);
 
         if (!shop) {
             return Result.fail(ShopErrors.NotFound);
         }
 
-        return Result.ok(this._to_response(shop.value!));
+        return Result.ok(this._toResponse(shop.value!));
     }
 }
-

@@ -6,7 +6,7 @@ import { prisma, Shop as ShopModel } from "@org/database";
 
 export class ShopRepository implements IShopRepository {
     constructor() { }
-    private _to_domain(shopModel: ShopModel): ShopEntity{
+    private _toDomain(shopModel: ShopModel): ShopEntity{
         return new ShopEntity(
             shopModel.id, shopModel.name, shopModel.description,
             shopModel.logo_url, shopModel.cover_url, shopModel.is_active,
@@ -24,7 +24,7 @@ export class ShopRepository implements IShopRepository {
                 return Result.ok(null)
             }
 
-            return Result.ok(this._to_domain(shop));
+            return Result.ok(this._toDomain(shop));
 
         } catch (e) {
             return Result.fail({
