@@ -7,7 +7,7 @@ import {
     resendOtpValidator,
     changePasswordValidator,
     registerSellerValidator
-} from "../validators/auth.validator.js";
+} from "./auth.validator.js";
 
 
 export const createAuthRouter = (authController: any): Router => {

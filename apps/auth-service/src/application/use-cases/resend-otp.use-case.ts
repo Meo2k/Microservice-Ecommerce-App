@@ -1,5 +1,5 @@
 import { AUTH_MESSAGE, HTTP_STATUS, NotFoundError } from "@org/shared";
-import { IAuthRepository } from "../../domain/repositories/auth.repository.interface.js";
+import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { IEmailService, IOtpService } from "../services/external.js";
 import { ResendOtpDto } from "../dtos/index.js";
 

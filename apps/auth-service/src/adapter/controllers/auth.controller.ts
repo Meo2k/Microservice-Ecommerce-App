@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { UserEntity } from "../../../domain/entities/user.entity.js";
+import { UserEntity } from "../../domain/entities/user.entity.js";
 import {
     RegisterUserUseCase,
     LoginUseCase,
@@ -8,8 +8,9 @@ import {
     ChangePasswordUseCase,
     GetMeUseCase,
     RefreshTokenUseCase,
-    CreateShopUseCase,
-} from "../../../application/use-cases/index.js";
+} from "../../application/use-cases/index.js";
+import { HTTP_STATUS } from "libs/shared/src/config/http.config.js";
+import { AUTH_MESSAGE } from "libs/shared/src/config/response-message.config.js";
 
 
 export class AuthController {
@@ -21,7 +22,6 @@ export class AuthController {
         private readonly changePasswordUseCase: ChangePasswordUseCase,
         private readonly getMeUseCase: GetMeUseCase,
         private readonly refreshTokenUseCase: RefreshTokenUseCase,
-        private readonly createShopUseCase: CreateShopUseCase
     ) { }
 
     register = async (req: Request, res: Response) => {
@@ -35,14 +35,15 @@ export class AuthController {
         const result = await this.loginUseCase.execute(body);
 
         // Set refresh token as HTTP-only cookie
-        res.cookie("refresh_token", result.refreshToken, {
+
+        return res.status(result.status)
+        .cookie("refresh_token", result.refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        });
-
-        return res.status(result.status).json(result.metadata);
+        })
+        .json(result.metadata);
     };
 
     verifyOtp = async (req: Request, res: Response) => {
@@ -60,13 +61,25 @@ export class AuthController {
     changePassword = async (req: Request, res: Response) => {
         const body = req.body;
         const result = await this.changePasswordUseCase.execute(body);
-        return res.status(result.status).json(result.metadata);
+        if (!result.isSuccess) {
+            return res.status(result.error.status!).json(result.error);
+        }
+        return res.status(HTTP_STATUS.OK).json({
+            message: AUTH_MESSAGE.CHANGE_PASSWORD.SUCCESS,
+            data: result.value,
+        });
     };
 
     getMe = async (req: Request, res: Response) => {
         const id = req.headers["x-user-id"] as any;
         const result = await this.getMeUseCase.execute(id);
-        return res.status(result.status).json(result.metadata);
+        if (!result.isSuccess) {
+            return res.status(result.error.status!).json(result.error);
+        }
+        return res.status(HTTP_STATUS.OK).json({
+            message: AUTH_MESSAGE.GET_ME.SUCCESS,
+            data: result.value,
+        });
     };
 
     refreshToken = async (req: Request, res: Response) => {
@@ -75,10 +88,4 @@ export class AuthController {
         return res.status(result.status).json(result.metadata);
     };
 
-    createShop = async (req: Request, res: Response) => {
-        const user = (req as any).user as UserEntity;
-        const body = req.body;
-        const result = await this.createShopUseCase.execute(user, body);
-        return res.status(result.status).json(result.metadata);
-    };
 }

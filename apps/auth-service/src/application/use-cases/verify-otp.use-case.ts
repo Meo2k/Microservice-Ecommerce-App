@@ -1,5 +1,5 @@
 import { AUTH_MESSAGE, HTTP_STATUS, NotFoundError, UnauthorizedError } from "@org/shared";
-import { IAuthRepository } from "../../domain/repositories/auth.repository.interface.js";
+import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { IOtpService } from "../services/external.js";
 import { VerifyOtpDto } from "../dtos/index.js";
 

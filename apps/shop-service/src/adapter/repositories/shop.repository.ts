@@ -33,4 +33,30 @@ export class ShopRepository implements IShopRepository {
             });
         }
     }
+
+    async findShopByUserId(userId: number): Promise<ShopEntity | null> {
+        const shop = await prisma.shop.findUnique({
+            where: { userId },
+            select: {
+                id: true,
+                userId: true,
+                name: true,
+                description: true,
+                logo_url: true,
+                cover_url: true,
+                is_active: true,
+                createdAt: true,
+                updatedAt: true
+            }
+        });
+        return shop ? this._toDomain(shop) : null;
+    }
+
+    async createShop(data: any): Promise<ShopEntity> {
+        const shop = await prisma.shop.create({
+            data
+        });
+        return this._toDomain(shop);
+    }
+
 }

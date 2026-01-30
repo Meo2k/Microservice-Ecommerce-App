@@ -1,9 +1,7 @@
 import { checkPermission } from "@org/shared";
 
-// Domain
-import { IAuthRepository } from "../../domain/repositories/auth.repository.interface.js";
+import { IAuthRepository } from "../../application/repositories/auth.repository.interface.js";
 
-// Application
 import {
     ITokenService,
     IPasswordService,
@@ -17,28 +15,23 @@ import {
     ChangePasswordUseCase,
     GetMeUseCase,
     RefreshTokenUseCase,
-    CreateShopUseCase,
 } from "../../application/use-cases/index.js";
 
-// Infrastructure
-import { PrismaAuthRepository } from "../repositories/prisma-auth.repository.js";
+import { AuthRepository } from "../repositories/auth.repository.js";
 import { TokenService } from "../services/token.service.js";
 import { PasswordService } from "../services/password.service.js";
 import { RedisEmailService, RedisOtpService } from "../services/redis.service.js";
-import { AuthController } from "../http/controllers/auth.controller.js";
+import { AuthController } from "../controllers/auth.controller.js";
 
 
 class DIContainer {
-    // Repositories
     private authRepository: IAuthRepository;
 
-    // Services
     private tokenService: ITokenService;
     private passwordService: IPasswordService;
     private emailService: IEmailService;
     private otpService: IOtpService;
 
-    // Use Cases
     private registerUserUseCase: RegisterUserUseCase;
     private loginUseCase: LoginUseCase;
     private verifyOtpUseCase: VerifyOtpUseCase;
@@ -46,25 +39,19 @@ class DIContainer {
     private changePasswordUseCase: ChangePasswordUseCase;
     private getMeUseCase: GetMeUseCase;
     private refreshTokenUseCase: RefreshTokenUseCase;
-    private createShopUseCase: CreateShopUseCase;
 
-    // Controllers
     public authController: AuthController;
 
-    // Middleware
     public checkPermission: any;
 
     constructor() {
-        // Initialize repositories
-        this.authRepository = new PrismaAuthRepository();
+        this.authRepository = new AuthRepository();
 
-        // Initialize services
         this.tokenService = new TokenService();
         this.passwordService = new PasswordService();
         this.emailService = new RedisEmailService();
         this.otpService = new RedisOtpService();
 
-        // Initialize use cases
         this.registerUserUseCase = new RegisterUserUseCase(
             this.authRepository,
             this.emailService,
@@ -73,8 +60,8 @@ class DIContainer {
 
         this.loginUseCase = new LoginUseCase(
             this.authRepository,
-            this.tokenService, // Use TokenService instead of TokenRepository
-            this.passwordService // Add PasswordService
+            this.tokenService,
+            this.passwordService
         );
 
         this.verifyOtpUseCase = new VerifyOtpUseCase(
@@ -97,9 +84,7 @@ class DIContainer {
 
         this.refreshTokenUseCase = new RefreshTokenUseCase(this.tokenService);
 
-        this.createShopUseCase = new CreateShopUseCase(this.authRepository);
 
-        // Initialize controller
         this.authController = new AuthController(
             this.registerUserUseCase,
             this.loginUseCase,
@@ -108,9 +93,8 @@ class DIContainer {
             this.changePasswordUseCase,
             this.getMeUseCase,
             this.refreshTokenUseCase,
-            this.createShopUseCase
         );
-   
+
         this.checkPermission = checkPermission;
     }
 
@@ -123,5 +107,4 @@ class DIContainer {
     }
 }
 
-// Export singleton instance
 export const container = new DIContainer();

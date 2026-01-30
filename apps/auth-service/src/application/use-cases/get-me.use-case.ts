@@ -1,26 +1,19 @@
-import { AUTH_MESSAGE, HTTP_STATUS, NotFoundError } from "@org/shared";
-import { toUserResponseDto } from "../dtos/index.js";
 import { IAuthRepository } from "../../domain/index.js";
+import { Result } from "@org/shared";
+import { UserError } from "../../domain/error.domain.js";
+import { toResponse, UserResponse } from "../dtos/response.dto.js";
 
 
-/**
- * Use Case: Get Current User Profile
- */
 export class GetMeUseCase {
     constructor(
         private readonly authRepo: IAuthRepository,
     ) { }
-    async execute(id: string) {
-        const user = await this.authRepo.findUserById(+id);
-        if (!user) {
-            throw new NotFoundError(AUTH_MESSAGE.GET_ME.NOT_FOUND);
+    async execute(id: string): Promise<Result<UserResponse>> {
+        const userResult = await this.authRepo.findUserById(+id);
+        if (!userResult.isSuccess) {
+            return Result.fail(UserError.NotFound);
         }
-        return {
-            status: HTTP_STATUS.OK,
-            metadata: {
-                message: AUTH_MESSAGE.GET_ME.SUCCESS,
-                user: toUserResponseDto(user)
-            },
-        };
+        const user = userResult.value!
+        return Result.ok(toResponse(user));
     }
 }

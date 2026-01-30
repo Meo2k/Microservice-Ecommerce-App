@@ -1,5 +1,5 @@
 import { AUTH_MESSAGE, ConflictError, CUSTOM_PERM, HTTP_STATUS, SELLER_PERM } from "@org/shared";
-import { IAuthRepository } from "../../domain/repositories/auth.repository.interface.js";
+import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { IEmailService, IOtpService } from "../services/external.js";
 import { RegisterDto } from "../dtos/index.js";
 
