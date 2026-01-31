@@ -1,5 +1,5 @@
 import { prisma, User, Address, City, Country } from "@org/database";
-import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
+import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
 import { CountryEntity } from "../../domain/entities/country.entity.js";
 import { CityEntity } from "../../domain/entities/city.entity.js";
 import { AddressEntity } from "../../domain/entities/address.entity.js";

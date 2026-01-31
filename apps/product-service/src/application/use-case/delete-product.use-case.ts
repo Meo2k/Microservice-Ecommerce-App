@@ -1,10 +1,10 @@
 import { Result } from "@org/shared";
-import { ProductRepository } from "../../infrastructure/repositories";
-import { DeleteProductCommand } from "../../infrastructure/http/product.validator.js";
+import { IProductRepository } from "../repositories/product.repository.interface";
+import { DeleteProductCommand } from "../../api/product.validator";
 import { ProductError } from "../../domain/errors/product.error.js";
 
 export class DeleteProductUseCase {
-    constructor(private readonly productRepo: ProductRepository) { }
+    constructor(private readonly productRepo: IProductRepository) { }
 
     async execute(command: DeleteProductCommand): Promise<Result<{ message: string }>> {
         const productId = String(command.params.productId);

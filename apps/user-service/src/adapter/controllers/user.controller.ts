@@ -7,7 +7,7 @@ import {
     CreateUserAddressUseCase,
     UpdateUserAddressUseCase,
     DeleteUserAddressUseCase,
-} from "../../../application/use-cases/index.js";
+} from "../../application/use-cases/index.js";
 import { BaseController } from "./base.controller.js";
 import { HTTP_STATUS } from "@org/shared";
 

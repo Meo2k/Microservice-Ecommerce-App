@@ -1,7 +1,7 @@
 import express from 'express';
 import { ENV, errorHandler } from '@org/shared';
-import { container } from './infrastructure/di/container.js';
-import { createUserRouter } from './infrastructure/http/routes/user.routes.js';
+import { container } from './adapter/di/container.js';
+import { createUserRouter } from './api/user.route.js';
 
 const host = ENV.USER_SERVICE_HOST;
 const port = Number(ENV.USER_SERVICE_PORT);

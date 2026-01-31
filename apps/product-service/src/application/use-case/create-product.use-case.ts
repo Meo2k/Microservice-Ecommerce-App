@@ -1,7 +1,7 @@
 import { Result } from "@org/shared";
-import { IProductRepository } from "../../domain/index";
+import { IProductRepository } from "../repositories/product.repository.interface";
 import { ProductEntity } from "../../domain/index";
-import { CreateProductCommand } from "../../infrastructure/http/product.validator.js";
+import { CreateProductCommand } from "../../api/product.validator";
 
 export class CreateProductUseCase {
     constructor(private readonly productRepository: IProductRepository) { }

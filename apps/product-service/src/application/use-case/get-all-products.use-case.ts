@@ -1,9 +1,9 @@
-import { ProductRepository } from "../../infrastructure/repositories";
+import { IProductRepository } from "../repositories/product.repository.interface";
 import { HTTP_STATUS, PRODUCT_MESSAGE } from "@org/shared";
 
 
 export class GetAllProductsUseCase {
-    constructor(private readonly productRepository: ProductRepository) {}
+    constructor(private readonly productRepository: IProductRepository) {}
     async execute() {
         const products = await this.productRepository.getProducts();
 

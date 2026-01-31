@@ -1,7 +1,7 @@
 import { Result } from "@org/shared";
-import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
+import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
 import { toUserResponseDto, UserResponseDto } from "../dtos/index.js";
-import { DeleteUserCommand } from "../../infrastructure/http/validators/user.validator.js";
+import { DeleteUserCommand } from "../../api/user.validator.js";
 import { UserError } from "../../domain/errors/user.error.js";
 
 /**

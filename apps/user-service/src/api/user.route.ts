@@ -4,7 +4,7 @@ import {
     updateUserValidator,
     createUserAddressValidator,
     updateUserAddressValidator
-} from "../validators/user.validator.js";
+} from "./user.validator.js";
 
 /**
  * User Routes

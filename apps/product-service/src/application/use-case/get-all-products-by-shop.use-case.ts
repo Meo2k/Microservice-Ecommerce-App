@@ -1,9 +1,9 @@
 import { Result } from "@org/shared";
-import { ProductRepository } from "../../infrastructure/repositories";
-import { GetAllProductsByShopCommand } from "../../infrastructure/http/product.validator.js";
+import { IProductRepository } from "../repositories/product.repository.interface";
+import { GetAllProductsByShopCommand } from "../../api/product.validator";
 
 export class GetAllProductsByShopUseCase {
-    constructor(private readonly productRepo: ProductRepository) { }
+    constructor(private readonly productRepo: IProductRepository) { }
 
     async execute(command: GetAllProductsByShopCommand): Promise<Result<any[]>> {
         const shopId = String(command.params.shopId);

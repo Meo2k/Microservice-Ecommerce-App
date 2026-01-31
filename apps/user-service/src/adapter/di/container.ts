@@ -1,7 +1,7 @@
 import { checkPermission } from "@org/shared";
 
 // Domain
-import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
+import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
 
 // Application
 import {
@@ -16,7 +16,7 @@ import {
 
 // Infrastructure
 import { UserRepository } from "../repositories/prisma-user.repository.js";
-import { UserController } from "../http/controllers/user.controller.js";
+import { UserController } from "../controllers/user.controller.js";
 
 
 class DIContainer {

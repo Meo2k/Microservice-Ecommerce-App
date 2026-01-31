@@ -1,5 +1,5 @@
 import { Result } from "@org/shared";
-import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
+import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
 import { toUserResponseDto, UserResponseDto } from "../dtos/index.js";
 
 /**

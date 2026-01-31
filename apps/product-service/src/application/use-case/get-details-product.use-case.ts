@@ -1,10 +1,10 @@
 import { Result } from "@org/shared";
-import { ProductRepository } from "../../infrastructure/repositories";
-import { GetProductDetailsCommand } from "../../infrastructure/http/product.validator.js";
+import { IProductRepository } from "../repositories/product.repository.interface";
+import { GetProductDetailsCommand } from "../../api/product.validator";
 import { ProductError } from "../../domain/errors/product.error.js";
 
 export class GetDetailsProductUseCase {
-    constructor(private readonly productRepository: ProductRepository) { }
+    constructor(private readonly productRepository: IProductRepository) { }
 
     async execute(command: GetProductDetailsCommand): Promise<Result<any>> {
         const productId = String(command.params.productId);

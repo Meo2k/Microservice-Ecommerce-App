@@ -1,7 +1,7 @@
 import express from 'express';
 import { createCheckOwnership, ENV, errorHandler } from '@org/shared';
-import { createProductRoute } from './infrastructure/http/product.route';
-import { container } from './infrastructure/di/container';
+import { createProductRoute } from './api/product.route';
+import { container } from './adapter/di/container';
 
 const host = ENV.PRODUCT_SERVICE_HOST;
 const port = Number(ENV.PRODUCT_SERVICE_PORT);
