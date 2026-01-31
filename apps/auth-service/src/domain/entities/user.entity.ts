@@ -10,11 +10,28 @@ export class UserEntity {
         public avatarUrl: string | null,
         public bio: string | null,
         public password: string,
+        public roles: string[],
         public isVerified: boolean,
         public isLocked: boolean,
         public readonly createdAt: Date,
         public updatedAt: Date
     ) { }
+
+    static create(username: string | null | undefined, email: string, passwordHash: string, roles: string[]): UserEntity {
+        return new UserEntity(
+            0, // Temporary ID
+            email,
+            username ?? null,
+            null, // avatar
+            null, // bio
+            passwordHash,
+            roles,
+            false, // isVerified
+            false, // isLocked
+            new Date(),
+            new Date()
+        );
+    }
 
     isActive(): boolean {
         return this.isVerified && !this.isLocked;

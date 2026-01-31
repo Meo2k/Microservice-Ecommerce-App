@@ -1,4 +1,4 @@
-import { prisma, User as UserModel} from "@org/database";
+import { prisma } from "@org/database";
 
 import { IAuthRepository } from "../../application/repositories/auth.repository.interface";
 import { UserEntity } from "../../domain/entities/user.entity";
@@ -6,7 +6,11 @@ import { Result } from "@org/shared";
 
 
 export class AuthRepository implements IAuthRepository {
-    private _toDomain(userModel: UserModel): UserEntity {
+    private _toDomain(userModel: any): UserEntity {
+        const roles = userModel.userRole
+            ? userModel.userRole.map((ur: any) => ur.role.name)
+            : ['USER'];
+
         return new UserEntity(
             userModel.id,
             userModel.email,
@@ -14,6 +18,7 @@ export class AuthRepository implements IAuthRepository {
             userModel.avatar_url,
             userModel.bio,
             userModel.password,
+            roles,
             userModel.is_verified,
             userModel.is_locked,
             userModel.createdAt,
@@ -24,17 +29,10 @@ export class AuthRepository implements IAuthRepository {
     async findUserById(id: number): Promise<Result<UserEntity | null>> {
         const user = await prisma.user.findUnique({
             where: { id },
-            select: {
-                id: true,
-                email: true,
-                username: true,
-                avatar_url: true,
-                bio: true,
-                password: true,
-                is_verified: true,
-                is_locked: true,
-                createdAt: true,
-                updatedAt: true
+            include: {
+                userRole: {
+                    include: { role: true }
+                }
             }
         });
         return user ? Result.ok(this._toDomain(user)) : Result.ok(null);
@@ -43,17 +41,10 @@ export class AuthRepository implements IAuthRepository {
     async findUserByEmail(email: string): Promise<Result<UserEntity | null>> {
         const user = await prisma.user.findUnique({
             where: { email },
-            select: {
-                id: true,
-                email: true,
-                username: true,
-                avatar_url: true,
-                bio: true,
-                password: true,
-                is_verified: true,
-                is_locked: true,
-                createdAt: true,
-                updatedAt: true
+            include: {
+                userRole: {
+                    include: { role: true }
+                }
             }
         });
         return user ? Result.ok(this._toDomain(user)) : Result.ok(null);
@@ -61,25 +52,36 @@ export class AuthRepository implements IAuthRepository {
 
     async findAllUser(): Promise<Result<UserEntity[]>> {
         const users = await prisma.user.findMany({
-            select: {
-                id: true,
-                email: true,
-                username: true,
-                avatar_url: true,
-                bio: true,
-                password: true,
-                is_verified: true,
-                is_locked: true,
-                createdAt: true,
-                updatedAt: true
+            include: {
+                userRole: {
+                    include: { role: true }
+                }
             }
         });
         return Result.ok(users.map(this._toDomain));
     }
 
-    async createUser(data: any): Promise<Result<UserEntity>> {
+    async createUser(userEntity: UserEntity): Promise<Result<UserEntity>> {
         const user = await prisma.user.create({
-            data
+            data: {
+                username: userEntity.username,
+                email: userEntity.email,
+                password: userEntity.password,
+                is_verified: userEntity.isVerified,
+                is_locked: userEntity.isLocked,
+                userRole: {
+                    create: userEntity.roles.map((roleName) => ({
+                        role: {
+                            connect: { name: roleName }
+                        }
+                    }))
+                }
+            },
+            include: {
+                userRole: {
+                    include: { role: true }
+                }
+            }
         });
         return Result.ok(this._toDomain(user));
     }
@@ -93,6 +95,7 @@ export class AuthRepository implements IAuthRepository {
                 avatar_url: user.avatarUrl,
                 bio: user.bio,
                 password: user.password,
+                // role: user.role, // Removed
                 is_verified: user.isVerified,
                 is_locked: user.isLocked,
                 updatedAt: user.updatedAt

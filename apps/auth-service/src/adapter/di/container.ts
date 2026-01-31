@@ -56,6 +56,7 @@ class DIContainer {
             this.authRepository,
             this.emailService,
             this.otpService,
+            this.passwordService
         );
 
         this.loginUseCase = new LoginUseCase(
