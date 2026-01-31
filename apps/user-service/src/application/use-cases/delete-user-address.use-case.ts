@@ -1,7 +1,7 @@
 import { Result } from "@org/shared";
 import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
 import { DeleteUserAddressCommand } from "../../api/user.validator.js";
-import { UserError } from "../../domain/errors/user.error.js";
+import { UserError, AddressError } from "../../domain/errors/user.error.js";
 
 /**
  * Use Case: Delete User Address
@@ -18,9 +18,17 @@ export class DeleteUserAddressUseCase {
             return Result.fail(UserError.NotFound);
         }
 
+        const address = await this.userRepository.findAddressById(addressId);
+        if (!address) {
+            return Result.fail(AddressError.NotFound);
+        }
+
+        if (address.userId !== userId) {
+            return Result.fail(UserError.NotFound);
+        }
+
         const deletedAddress = await this.userRepository.deleteAddress(addressId);
 
         return Result.ok(deletedAddress);
     }
 }
-

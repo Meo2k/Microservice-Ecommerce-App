@@ -26,10 +26,18 @@ export class LoginUseCase {
         // Find user by email
         const userResult = await this.authRepo.findUserByEmail(email);
         if (!userResult) {
-            return Result.fail(UserError.NotFound); 
+            return Result.fail(UserError.NotFound);
         }
 
         const user = userResult.value!;
+
+        if (!user.canLogin()) {
+            // We might want specific errors like NotVerified or Locked.
+            // Entity could return specific reason, but for boolean check:
+            if (!user.isVerified) return Result.fail(UserError.UserNotVerified);
+            if (user.isLocked) return Result.fail(UserError.UserLocked);
+            return Result.fail(UserError.Forbidden);
+        }
 
         // Verify password
         const isPasswordValid = await this.passwordService.comparePassword(password, user.password);

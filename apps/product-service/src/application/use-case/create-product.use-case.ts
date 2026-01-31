@@ -1,6 +1,6 @@
 import { Result } from "@org/shared";
 import { IProductRepository } from "../repositories/product.repository.interface";
-import { ProductEntity } from "../../domain/index";
+import { ProductEntity } from "../../domain/entities/product.entity";
 import { CreateProductCommand } from "../../api/product.validator";
 
 export class CreateProductUseCase {

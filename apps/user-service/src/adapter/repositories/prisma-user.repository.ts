@@ -68,10 +68,29 @@ export class UserRepository implements IUserRepository {
         return users.map(toDomainUser);
     }
 
+    async save(user: UserEntity): Promise<UserEntity> {
+        const { id, ...data } = user;
+        const updated = await prisma.user.update({
+            where: { id },
+            data: {
+                username: data.username,
+                email: data.email,
+                password: data.password,
+                bio: data.bio,
+                avatar_url: data.avatarUrl,
+                is_verified: data.isVerified,
+                is_locked: data.isLocked,
+                updatedAt: new Date()
+            }
+        });
+        return toDomainUser(updated);
+    }
+
     async update(id: number, data: Partial<UserEntity>): Promise<UserEntity> {
         const updated = await prisma.user.update({ where: { id }, data: data as any });
         return toDomainUser(updated);
     }
+
 
     async delete(id: number): Promise<UserEntity> {
         const deleted = await prisma.user.delete({ where: { id } });
@@ -82,6 +101,12 @@ export class UserRepository implements IUserRepository {
         const addresses = await prisma.address.findMany({ where: { userId } });
         return addresses.map(toDomainAddress);
     }
+
+    async findAddressById(id: number): Promise<AddressEntity | null> {
+        const address = await prisma.address.findUnique({ where: { id } });
+        return address ? toDomainAddress(address) : null;
+    }
+
 
     async createAddress(userId: number, data: Partial<AddressEntity>): Promise<AddressEntity> {
         const created = await prisma.address.create({

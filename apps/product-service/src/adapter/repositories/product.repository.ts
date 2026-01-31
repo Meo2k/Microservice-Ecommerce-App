@@ -1,10 +1,10 @@
 import { prisma, Product } from "@org/database";
-import { IProductRepository } from "../../domain/index";
-import { ProductEntity } from "../../domain/index";
+import { IProductRepository } from "../../application/repositories/product.repository.interface";
+import { ProductEntity } from "../../domain/entities/product.entity";
 
 interface IAttribute {
-  k: string;
-  v: string;
+    k: string;
+    v: string;
 }
 
 function toProductEntity(product: Product): ProductEntity {

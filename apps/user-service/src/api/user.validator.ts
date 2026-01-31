@@ -24,6 +24,7 @@ export const createUserAddressValidator = z.object({
     }),
     body: z.object({
         street: z.string().min(1, "Street is required"),
+        district: z.string().optional().nullable(),
         cityId: z.number().int().positive(),
         countryId: z.number().int().positive(),
         postalCode: z.string().optional().nullable(),
@@ -39,11 +40,13 @@ export const updateUserAddressValidator = z.object({
     body: z.object({
         id: z.number().int().positive(),
         street: z.string().min(1, "Street is required"),
+        district: z.string().optional().nullable(),
         cityId: z.number().int().positive(),
         countryId: z.number().int().positive(),
         postalCode: z.string().optional().nullable(),
         isDefault: z.boolean().optional(),
     })
+
 });
 
 // Delete User Address

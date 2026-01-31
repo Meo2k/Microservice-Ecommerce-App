@@ -37,7 +37,10 @@ export class CreateUserAddressUseCase {
             return Result.fail(AddressError.MaxAddressReached);
         }
 
-        const createdAddress = await this.userRepository.createAddress(userId, data);
+        const createdAddress = await this.userRepository.createAddress(userId, {
+            ...data,
+            district: data.district ?? ""
+        });
 
         return Result.ok(createdAddress);
     }

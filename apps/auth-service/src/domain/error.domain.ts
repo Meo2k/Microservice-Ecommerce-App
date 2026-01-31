@@ -31,4 +31,19 @@ export const UserError = {
         code: ErrorCodes.ERR_BAD_REQUEST,
         message: ErrorMessages.Auth.OtpExpired
     } as ResultError,
+    UserNotVerified: {
+        status: HTTP_STATUS.FORBIDDEN,
+        code: ErrorCodes.ERR_FORBIDDEN,
+        message: ErrorMessages.Auth.UserNotVerified
+    } as ResultError,
+    UserLocked: {
+        status: HTTP_STATUS.FORBIDDEN,
+        code: ErrorCodes.ERR_FORBIDDEN,
+        message: ErrorMessages.Auth.UserLocked
+    } as ResultError,
+    Forbidden: {
+        status: HTTP_STATUS.FORBIDDEN,
+        code: ErrorCodes.ERR_FORBIDDEN,
+        message: ErrorMessages.Common.Forbidden
+    } as ResultError,
 };

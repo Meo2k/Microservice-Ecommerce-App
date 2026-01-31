@@ -6,23 +6,27 @@ import { UserError } from "../../domain/errors/user.error.js";
 
 /**
  * Use Case: Update User
+ * Uses domain entity methods for business logic
  */
 export class UpdateUserUseCase {
     constructor(private readonly userRepository: IUserRepository) { }
 
     async execute(command: UpdateUserCommand): Promise<Result<UserResponseDto>> {
         const userId = command.params.userId;
-        const data = command.body;
+        const { username, bio, avatar_url } = command.body;
 
+        // Fetch user entity
         const user = await this.userRepository.findById(userId);
-
         if (!user) {
             return Result.fail(UserError.NotFound);
         }
 
-        const updatedUser = await this.userRepository.update(userId, data);
+        // Use domain method to update profile
+        user.updateProfile(username ?? null, bio ?? null, avatar_url ?? null);
+
+        // Persist changes
+        const updatedUser = await this.userRepository.save(user);
 
         return Result.ok(toUserResponseDto(updatedUser));
     }
 }
-

@@ -1,19 +1,12 @@
+import { Result } from "@org/shared";
 import { IProductRepository } from "../repositories/product.repository.interface";
-import { HTTP_STATUS, PRODUCT_MESSAGE } from "@org/shared";
-
 
 export class GetAllProductsUseCase {
-    constructor(private readonly productRepository: IProductRepository) {}
-    async execute() {
+    constructor(private readonly productRepository: IProductRepository) { }
+
+    async execute(): Promise<Result<any[]>> {
         const products = await this.productRepository.getProducts();
 
-        // pagination 
-        return {
-            status: HTTP_STATUS.OK,
-            metadata: {
-                products,
-                message: PRODUCT_MESSAGE.GET_ALL_PRODUCTS.SUCCESS
-            }
-        }
+        return Result.ok(products);
     }
 }
