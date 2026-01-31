@@ -18,7 +18,10 @@ export class VerifyOtpUseCase {
         const { email, otp } = data.body;
 
         // Check OTP restrictions
-        await this.otpService.checkOtpRestrictions(email);
+        const otpCheck = await this.otpService.checkOtpRestrictions(email);
+        if (!otpCheck.isSuccess) {
+            return Result.fail(otpCheck.error);
+        }
 
         // Find user
         const userResult = await this.authRepo.findUserByEmail(email);
@@ -35,7 +38,11 @@ export class VerifyOtpUseCase {
         }
 
         if (Number(otp) !== Number(storedData.otp)) {
-            await this.otpService.handleFailedAttempts(email);
+            const handleResult = await this.otpService.handleFailedAttempts(email);
+            // If handling attempts resulted in a failure (e.g. locked), return it
+            if (!handleResult.isSuccess) {
+                return Result.fail(handleResult.error);
+            }
             return Result.fail(UserError.InvalidOtp);
         }
 

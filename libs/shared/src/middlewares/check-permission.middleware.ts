@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Action, Resource, PermissionManager } from "../config/permissions.config.js";
-import { UnauthorizedError } from "../utils/app-error.js";
+import { Result, ErrorCodes, HTTP_STATUS } from "../index.js";
 
 
 export const checkPermission = (resource: Resource, action: Action, isSelf: boolean = false) => {
@@ -13,13 +13,17 @@ export const checkPermission = (resource: Resource, action: Action, isSelf: bool
 
             if (userId && Number(userId) === Number(id) && isSelf) {
                 next();
+                return;
             }
 
 
             if (!PermissionManager.can(BigInt(perms), resource, action)) {
-                throw new UnauthorizedError("Access denied");
+                res.status(HTTP_STATUS.FORBIDDEN).json(Result.fail<any>({
+                    code: ErrorCodes.ERR_UNAUTHORIZED,
+                    message: "Access denied",
+                }));
+                return;
             }
-
             next();
         } catch (error) {
             next(error);

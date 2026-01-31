@@ -19,7 +19,10 @@ export class ResendOtpUseCase {
         const { email } = data.body;
 
         // Check OTP restrictions
-        await this.otpService.checkOtpRestrictions(email);
+        const otpCheck = await this.otpService.checkOtpRestrictions(email);
+        if (!otpCheck.isSuccess) {
+            return Result.fail(otpCheck.error);
+        }
 
         // Find user
         const userResult = await this.authRepo.findUserByEmail(email);
@@ -28,7 +31,10 @@ export class ResendOtpUseCase {
         }
 
         // Send new OTP
-        await this.emailService.sendOtpToEmail(email, "otp.template");
+        const emailResult = await this.emailService.sendOtpToEmail(email, "otp.template");
+        if (!emailResult.isSuccess) {
+            return Result.fail(emailResult.error);
+        }
 
         return Result.ok({ message: SuccessMessages.Auth.OtpResent });
     }

@@ -1,10 +1,9 @@
 import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import { PUBLIC_ROUTES } from "../config/path.config.js";
-import { UnauthorizedError } from "../utils/app-error.js";
 import { ENV } from "../config/env.config.js";
 import { SYSTEM_MESSAGE } from "../config/response-message.config.js";
-
+import { Result, ErrorCodes, HTTP_STATUS } from "../index.js";
 
 export const createAuthMiddleware = (prisma: any, redis: any) => {
     return async (req: Request, res: Response, next: NextFunction) => {
@@ -14,7 +13,11 @@ export const createAuthMiddleware = (prisma: any, redis: any) => {
 
         if (!token) {
             if (isPublic) return next();
-            return next(new UnauthorizedError(SYSTEM_MESSAGE.AUTH.UNAUTHORIZED));
+            res.status(HTTP_STATUS.UNAUTHORIZED).json(Result.fail<any>({
+                code: ErrorCodes.ERR_UNAUTHORIZED,
+                message: SYSTEM_MESSAGE.AUTH.UNAUTHORIZED,
+            }));
+            return;
         }
 
         try {
@@ -45,7 +48,13 @@ export const createAuthMiddleware = (prisma: any, redis: any) => {
                 });
 
 
-                if (!dbUser) return next(new UnauthorizedError(SYSTEM_MESSAGE.AUTH.NOT_FOUND));
+                if (!dbUser) {
+                    res.status(HTTP_STATUS.BAD_REQUEST).json(Result.fail<any>({
+                        code: ErrorCodes.ERR_BAD_REQUEST,
+                        message: SYSTEM_MESSAGE.AUTH.NOT_FOUND,
+                    }));
+                    return;
+                }
 
                 const totalPermissions = dbUser.userRole.reduce(
                     (acc: bigint, curr: any) => acc | curr.role.permissions,
@@ -62,10 +71,18 @@ export const createAuthMiddleware = (prisma: any, redis: any) => {
             }
 
             if (!userData.is_verified) {
-                return next(new UnauthorizedError(SYSTEM_MESSAGE.AUTH.NOT_VERIFIED));
+                res.status(HTTP_STATUS.UNAUTHORIZED).json(Result.fail<any>({
+                    code: ErrorCodes.ERR_UNAUTHORIZED,
+                    message: SYSTEM_MESSAGE.AUTH.NOT_VERIFIED,
+                }));
+                return;
             }
             if (userData.is_locked) {
-                return next(new UnauthorizedError(SYSTEM_MESSAGE.AUTH.LOCKED));
+                res.status(HTTP_STATUS.UNAUTHORIZED).json(Result.fail<any>({
+                    code: ErrorCodes.ERR_UNAUTHORIZED,
+                    message: SYSTEM_MESSAGE.AUTH.LOCKED,
+                }));
+                return;
             }
 
             // inject user info into request headers 
@@ -75,12 +92,16 @@ export const createAuthMiddleware = (prisma: any, redis: any) => {
             next();
         } catch (error) {
             console.log("Error middleware : ", error)
-            return next(new UnauthorizedError(SYSTEM_MESSAGE.AUTH.TOKEN_INVALID));
+            res.status(HTTP_STATUS.UNAUTHORIZED).json(Result.fail<any>({
+                code: ErrorCodes.ERR_UNAUTHORIZED,
+                message: SYSTEM_MESSAGE.AUTH.TOKEN_INVALID,
+            }));
+            return;
         }
     }
 }
 
-export const authenticateRefreshToken = (req: Request, res: Response, next: NextFunction)=>{
+export const authenticateRefreshToken = (req: Request, res: Response, next: NextFunction) => {
     try {
         const token = req.cookies["refresh_token"];
         const decoded = jwt.verify(token, ENV.REFRESH_TOKEN_KEY) as { sub: string };
@@ -89,7 +110,12 @@ export const authenticateRefreshToken = (req: Request, res: Response, next: Next
         next();
     } catch (error) {
         console.log("Error middleware : ", error)
-        return next(new UnauthorizedError(SYSTEM_MESSAGE.AUTH.TOKEN_INVALID));
-    } 
+        res.status(HTTP_STATUS.UNAUTHORIZED).json(Result.fail<any>({
+            status: HTTP_STATUS.UNAUTHORIZED,
+            code: ErrorCodes.ERR_UNAUTHORIZED,
+            message: SYSTEM_MESSAGE.AUTH.TOKEN_INVALID,
+        }));
+        return;
+    }
 }
 
