@@ -1,6 +1,6 @@
 import { redis } from "../redis.js";
 import { IOtpService } from "../interfaces/otp.interface.js";
-import { ValidationError, OTP_MESSAGE, ENV } from "@org/shared";
+import { Result, ErrorCodes, OTP_MESSAGE, ENV } from "@org/shared";
 
 /**
  * OTP Service Implementation using Redis
@@ -13,14 +13,19 @@ export class OtpService implements IOtpService {
         return { otp: otp as string | null };
     }
 
-    async checkOtpRestrictions(email: string): Promise<void> {
+    async checkOtpRestrictions(email: string): Promise<Result<void>> {
         if (await redis.get(`otp_locked:${email}`)) {
-            throw new ValidationError(OTP_MESSAGE.LOCKED);
+            return Result.fail({
+                code: ErrorCodes.ERR_BAD_REQUEST,
+                message: OTP_MESSAGE.LOCKED,
+            });
         }
+        return Result.ok();
     }
 
-    async handleFailedAttempts(email: string): Promise<void> {
-        await this.checkOtpRestrictions(email);
+    async handleFailedAttempts(email: string): Promise<Result<void>> {
+        const check = await this.checkOtpRestrictions(email);
+        if (!check.isSuccess) return check;
 
         const attemptsKey = `otp_attempts:${email}`;
         const lockKey = `otp_locked:${email}`;
@@ -35,11 +40,17 @@ export class OtpService implements IOtpService {
         if (currentAttempts > maxAttempts) {
             await redis.set(lockKey, "true", { ex: Number(ENV.OTP_LOCKTIME) });
             await redis.del(attemptsKey);
-            throw new ValidationError(OTP_MESSAGE.LOCKED);
+            return Result.fail({
+                code: ErrorCodes.ERR_BAD_REQUEST,
+                message: OTP_MESSAGE.LOCKED
+            });
         }
 
         const remainingAttempts = maxAttempts - currentAttempts;
-        throw new ValidationError(OTP_MESSAGE.INVALID, { remainingAttempts });
+        return Result.fail({
+            code: ErrorCodes.ERR_BAD_REQUEST,
+            message: `${OTP_MESSAGE.INVALID}. Remaining attempts: ${remainingAttempts}`
+        });
     }
 
     async resetOTP(email: string): Promise<void> {

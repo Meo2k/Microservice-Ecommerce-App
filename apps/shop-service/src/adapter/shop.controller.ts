@@ -1,6 +1,7 @@
 
 import { Request, Response } from "express";
-import { GetShopDetailsCommand, GetShopDetailsUseCase } from "../application/use-case/get-shop-details.use-case.js";
+import { GetShopDetailsUseCase } from "../application/use-case/get-shop-details.use-case.js";
+import { GetShopDetailsCommand } from "../api/validators/shop.validator.js";
 import { HTTP_STATUS } from "@org/shared";
 import { ShopErrors } from "../domain/errors/shop.errors.js";
 
@@ -10,7 +11,9 @@ export class ShopController {
     getShopDetails = async (req: Request, res: Response) => {
         const { shopId } = req.params;
 
-        const result = await this.getShopDetailsUseCase.execute(new GetShopDetailsCommand(shopId));
+        const result = await this.getShopDetailsUseCase.execute({
+            params: { shopId }
+        } as GetShopDetailsCommand);
 
         if (!result.isSuccess) {
 

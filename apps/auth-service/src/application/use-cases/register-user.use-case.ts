@@ -20,12 +20,15 @@ export class RegisterUserUseCase {
 
         // Check if user already exists
         const userExists = await this.authRepo.findUserByEmail(email);
-        if (userExists.isSuccess && userExists.value) { 
+        if (userExists.isSuccess && userExists.value) {
             return Result.fail(UserError.AlreadyExists);
         }
 
         // Check OTP restrictions and send OTP
-        await this.otpService.checkOtpRestrictions(email);
+        const otpCheck = await this.otpService.checkOtpRestrictions(email);
+        if (!otpCheck.isSuccess) {
+            return Result.fail(otpCheck.error);
+        }
 
         // Prepare user entity
         const hashedPassword = await this.passwordService.hashPassword(password);

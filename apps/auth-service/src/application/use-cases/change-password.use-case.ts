@@ -18,7 +18,10 @@ export class ChangePasswordUseCase {
         const { code, email, password } = data.body;
 
         // Verify OTP
-        await this.otpService.checkOtpRestrictions(email);
+        const otpCheck = await this.otpService.checkOtpRestrictions(email);
+        if (!otpCheck.isSuccess) {
+            return Result.fail(otpCheck.error);
+        }
 
         const userResult = await this.authRepo.findUserByEmail(email);
         if (!userResult.isSuccess) {
@@ -33,7 +36,10 @@ export class ChangePasswordUseCase {
         }
 
         if (Number(code) !== Number(storedData.otp)) {
-            await this.otpService.handleFailedAttempts(email);
+            const handleResult = await this.otpService.handleFailedAttempts(email);
+            if (!handleResult.isSuccess) {
+                return Result.fail(handleResult.error);
+            }
             return Result.fail(UserError.InvalidOtp);
         }
 

@@ -8,7 +8,7 @@ import {
     GetMeUseCase,
     RefreshTokenUseCase,
 } from "../../application/use-cases/index.js";
-import { HTTP_STATUS } from "libs/shared/src/config/http.config.js";
+import { HTTP_STATUS } from "@org/shared";
 import { BaseController } from "./base.controller.js";
 
 

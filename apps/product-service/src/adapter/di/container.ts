@@ -1,7 +1,7 @@
 import { prisma } from "@org/database";
 import { CreateProductUseCase, DeleteProductUseCase, GetAllProductsByShopUseCase, GetDetailsProductUseCase, UpdateProductUseCase } from "../../application";
 import { IProductRepository } from "../../domain";
-import { ProductController } from "../http/product.controller";
+import { ProductController } from "../controllers/product.controller";
 import { ProductRepository } from "../repositories";
 import { Redis } from "@upstash/redis";
 import { redis } from "@org/redis";
