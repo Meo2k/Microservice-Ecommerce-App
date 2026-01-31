@@ -5,8 +5,8 @@ import express from 'express';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
 import { ENV, errorHandler } from '@org/shared';
-import { container } from './infrastructure/di/container.js';
-import { createAuthRouter } from './infrastructure/http/routes/auth.routes.js';
+import { container } from './adapter/di/container.js';
+import { createAuthRouter } from './api/auth.route.js';
 
 dotenv.config();
 

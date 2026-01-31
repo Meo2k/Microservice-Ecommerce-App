@@ -1,6 +1,21 @@
 
 import { ENV } from "./env.config.js"
 
+export const SYSTEM_MESSAGE = {
+    AUTH: {
+        NOT_VERIFIED: "User is not verified",
+        LOCKED: "User is locked", 
+        NOT_FOUND: "User not found", 
+        UNAUTHORIZED: "Unauthorized", 
+        TOKEN_INVALID: "Invalid token "
+
+    }, 
+    SHOP: {
+        UNAUTHORIZED: "Unauthorized to this shop",
+        NOT_FOUND: "Shop not found"
+    }
+}
+
 export const AUTH_MESSAGE = {
     REGISTER: {
         SUCCESS: "User registered successfully",
@@ -42,10 +57,6 @@ export const AUTH_MESSAGE = {
         OTP_INVALID: "Invalid OTP or have been expired. Please try again.",
         NOT_FOUND: "User not found"
     }, 
-    UNAUTHORIZED: {
-        NOT_VERIFIED: "User is not verified",
-        LOCKED: "User is locked"
-    }
 }
 
 export const USER_MESSAGE = {
@@ -86,7 +97,25 @@ export const USER_MESSAGE = {
 export const PRODUCT_MESSAGE = {
     CREATE_PRODUCT: {
         SUCCESS: "Product created successfully",
-        
+    }, 
+    GET_ALL_PRODUCTS: {
+        SUCCESS: "Products fetched successfully",
+    }, 
+    GET_DETAILS_PRODUCT: {
+        SUCCESS: "Product fetched successfully",
+        NOT_FOUND: "Product not found"
+    }, 
+    UPDATE_PRODUCT: {
+        SUCCESS: "Product updated successfully",
+        NOT_FOUND: "Product not found"
+    }, 
+    DELETE_PRODUCT: {
+        SUCCESS: "Product deleted successfully", 
+        NOT_FOUND: "Product not found"
+    }, 
+    GET_ALL_PRODUCTS_BY_SHOP: {
+        SUCCESS: "Products fetched successfully in the shop",
+        NOT_FOUND: "Products not found in the shop "
     }
 }
 

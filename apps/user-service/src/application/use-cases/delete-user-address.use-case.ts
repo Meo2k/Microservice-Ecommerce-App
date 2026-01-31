@@ -1,5 +1,7 @@
-import { HTTP_STATUS, USER_MESSAGE } from "@org/shared";
-import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
+import { Result } from "@org/shared";
+import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
+import { DeleteUserAddressCommand } from "../../api/user.validator.js";
+import { UserError, AddressError } from "../../domain/errors/user.error.js";
 
 /**
  * Use Case: Delete User Address
@@ -7,20 +9,26 @@ import { IUserRepository } from "../../domain/repositories/user.repository.inter
 export class DeleteUserAddressUseCase {
     constructor(private readonly userRepository: IUserRepository) { }
 
-    async execute(userId: number, addressId: number) {
+    async execute(command: DeleteUserAddressCommand): Promise<Result<any>> {
+        const userId = command.params.userId;
+        const addressId = command.params.addressId;
+
         const user = await this.userRepository.findById(userId);
         if (!user) {
-            throw new Error(USER_MESSAGE.UPDATE_USER.NOT_FOUND);
+            return Result.fail(UserError.NotFound);
+        }
+
+        const address = await this.userRepository.findAddressById(addressId);
+        if (!address) {
+            return Result.fail(AddressError.NotFound);
+        }
+
+        if (address.userId !== userId) {
+            return Result.fail(UserError.NotFound);
         }
 
         const deletedAddress = await this.userRepository.deleteAddress(addressId);
 
-        return {
-            status: HTTP_STATUS.OK,
-            metadata: {
-                message: USER_MESSAGE.DELETE_ADDRESS.SUCCESS,
-                address: deletedAddress
-            },
-        };
+        return Result.ok(deletedAddress);
     }
 }

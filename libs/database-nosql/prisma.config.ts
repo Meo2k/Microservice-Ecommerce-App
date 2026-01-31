@@ -1,7 +1,6 @@
 
 import "dotenv/config";
-import { defineConfig, env } from "prisma/config";
-import { ENV } from "@org/shared";
+import { defineConfig } from "prisma/config";
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
@@ -10,6 +9,6 @@ export default defineConfig({
   },
   engine: "classic",
   datasource: {
-    url: ENV.DATABASE_URL_MONGODB,
+    url: process.env.NX_DATABASE_URL_MONGODB as string,
   },
 });

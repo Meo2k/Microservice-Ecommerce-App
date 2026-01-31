@@ -1,28 +1,32 @@
-import { HTTP_STATUS, USER_MESSAGE } from "@org/shared";
-import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
-import { toUserResponseDto, UpdateUserDto } from "../dtos/index.js";
+import { Result } from "@org/shared";
+import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
+import { toUserResponseDto, UserResponseDto } from "../dtos/index.js";
+import { UpdateUserCommand } from "../../api/user.validator.js";
+import { UserError } from "../../domain/errors/user.error.js";
 
 /**
  * Use Case: Update User
+ * Uses domain entity methods for business logic
  */
 export class UpdateUserUseCase {
     constructor(private readonly userRepository: IUserRepository) { }
 
-    async execute(userId: number, data: UpdateUserDto) {
-        const user = await this.userRepository.findById(userId);
+    async execute(command: UpdateUserCommand): Promise<Result<UserResponseDto>> {
+        const userId = command.params.userId;
+        const { username, bio, avatar_url } = command.body;
 
+        // Fetch user entity
+        const user = await this.userRepository.findById(userId);
         if (!user) {
-            throw new Error(USER_MESSAGE.UPDATE_USER.NOT_FOUND);
+            return Result.fail(UserError.NotFound);
         }
 
-        const updatedUser = await this.userRepository.update(userId, data);
+        // Use domain method to update profile
+        user.updateProfile(username ?? null, bio ?? null, avatar_url ?? null);
 
-        return {
-            status: HTTP_STATUS.OK,
-            metadata: {
-                message: USER_MESSAGE.UPDATE_USER.SUCCESS,
-                user: toUserResponseDto(updatedUser)
-            },
-        };
+        // Persist changes
+        const updatedUser = await this.userRepository.save(user);
+
+        return Result.ok(toUserResponseDto(updatedUser));
     }
 }

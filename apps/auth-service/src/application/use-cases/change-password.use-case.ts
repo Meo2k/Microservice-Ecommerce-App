@@ -1,49 +1,48 @@
 
-import { AUTH_MESSAGE, HTTP_STATUS, NotFoundError, UnauthorizedError } from "@org/shared";
-import { IAuthRepository } from "../../domain/repositories/auth.repository.interface.js";
+import { Result } from "@org/shared";
+import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { IOtpService } from "../services/external.js";
-import { ChangePasswordDto } from "../dtos/index.js";
+import { UserError } from "../../domain/error.domain.js";
+import { toResponse, UserResponse } from "../dtos/response.dto.js";
+import { ChangePasswordCommand } from "../../api/auth.validator.js";
 
-/**
- * Use Case: Change Password
- * Changes user password after OTP verification
- */
+
 export class ChangePasswordUseCase {
     constructor(
         private readonly authRepo: IAuthRepository,
         private readonly otpService: IOtpService,
     ) { }
 
-    async execute(data: ChangePasswordDto) {
-        const { code, email, password } = data;
+
+    async execute(data: ChangePasswordCommand): Promise<Result<UserResponse>> {
+        const { code, email, password } = data.body;
 
         // Verify OTP
         await this.otpService.checkOtpRestrictions(email);
 
-        const user = await this.authRepo.findUserByEmail(email);
-        if (!user) {
-            throw new NotFoundError(AUTH_MESSAGE.VALIDATE_OTP.NOT_FOUND);
+        const userResult = await this.authRepo.findUserByEmail(email);
+        if (!userResult.isSuccess) {
+            return Result.fail(UserError.NotFound);
         }
+
+        const user = userResult.value!;
 
         const storedData = await this.otpService.findOtpByEmail(email);
         if (!storedData.otp) {
-            throw new UnauthorizedError(AUTH_MESSAGE.VALIDATE_OTP.INVALID);
+            return Result.fail(UserError.InvalidOtp);
         }
 
         if (Number(code) !== Number(storedData.otp)) {
             await this.otpService.handleFailedAttempts(email);
-            throw new UnauthorizedError(AUTH_MESSAGE.VALIDATE_OTP.INVALID);
+            return Result.fail(UserError.InvalidOtp);
         }
 
+        user.updatePassword(password);
+
         // Update password
-        await this.authRepo.updateUser({ id: user.id }, { password });
+        await this.authRepo.save(user);
         await this.otpService.resetOTP(email);
 
-        return {
-            status: HTTP_STATUS.OK,
-            metadata: {
-                message: AUTH_MESSAGE.CHANGE_PASSWORD.SUCCESS,
-            },
-        };
+        return Result.ok(toResponse(user));
     }
 }

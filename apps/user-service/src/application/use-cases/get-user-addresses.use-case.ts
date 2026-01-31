@@ -1,5 +1,7 @@
-import { HTTP_STATUS, USER_MESSAGE } from "@org/shared";
-import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
+import { Result } from "@org/shared";
+import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
+import { GetUserAddressesCommand } from "../../api/user.validator.js";
+import { UserError } from "../../domain/errors/user.error.js";
 
 /**
  * Use Case: Get User Addresses
@@ -7,21 +9,18 @@ import { IUserRepository } from "../../domain/repositories/user.repository.inter
 export class GetUserAddressesUseCase {
     constructor(private readonly userRepository: IUserRepository) { }
 
-    async execute(userId: number) {
+    async execute(command: GetUserAddressesCommand): Promise<Result<any[]>> {
+        const userId = command.params.userId;
+
         const user = await this.userRepository.findById(userId);
 
         if (!user) {
-            throw new Error(USER_MESSAGE.GET_USER.NOT_FOUND);
+            return Result.fail(UserError.NotFound);
         }
 
         const addresses = await this.userRepository.findAddressesByUserId(userId);
 
-        return {
-            status: HTTP_STATUS.OK,
-            metadata: {
-                message: USER_MESSAGE.GET_ADDRESS.SUCCESS,
-                address: addresses
-            },
-        };
+        return Result.ok(addresses);
     }
 }
+

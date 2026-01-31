@@ -1,6 +1,6 @@
 import 'dotenv/config';
-import { PrismaClient } from '../src/prisma-client';
-import { hashPassword } from '../src/utils/password.util';
+import { PrismaClient } from'../src/prisma-client';
+import { hashPassword } from '../../shared/src/utils/password.util';
 import { ADMIN_PERM, SELLER_PERM } from '../../shared/src/config/permissions.config';
 
 const prisma = new PrismaClient();

@@ -1,6 +1,7 @@
-import { HTTP_STATUS, USER_MESSAGE } from "@org/shared";
-import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
-import { UpdateAddressDto } from "../dtos/index.js";
+import { Result } from "@org/shared";
+import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
+import { UpdateUserAddressCommand } from "../../api/user.validator.js";
+import { UserError, AddressError, CountryError, CityError } from "../../domain/errors/user.error.js";
 
 /**
  * Use Case: Update User Address
@@ -8,33 +9,49 @@ import { UpdateAddressDto } from "../dtos/index.js";
 export class UpdateUserAddressUseCase {
     constructor(private readonly userRepository: IUserRepository) { }
 
-    async execute(userId: number, data: UpdateAddressDto) {
+    async execute(command: UpdateUserAddressCommand): Promise<Result<any>> {
+        const userId = command.params.userId;
+        const data = command.body;
+
         // Verify user exists
         const user = await this.userRepository.findById(userId);
         if (!user) {
-            throw new Error(USER_MESSAGE.UPDATE_USER.NOT_FOUND);
+            return Result.fail(UserError.NotFound);
+        }
+
+        // Verify address exists and belongs to user
+        const address = await this.userRepository.findAddressById(data.id);
+        if (!address) {
+            return Result.fail(AddressError.NotFound);
+        }
+
+        if (address.userId !== userId) {
+            return Result.fail(UserError.NotFound); // Or Forbidden if available, for now keeping generic or specific
         }
 
         // Verify country exists
         const country = await this.userRepository.findCountryById(data.countryId);
         if (!country) {
-            throw new Error(USER_MESSAGE.UPDATE_ADDRESS.NOT_FOUND);
+            return Result.fail(CountryError.NotFound);
         }
 
         // Verify city exists
         const city = await this.userRepository.findCityById(data.cityId);
         if (!city) {
-            throw new Error(USER_MESSAGE.UPDATE_ADDRESS.NOT_FOUND);
+            return Result.fail(CityError.NotFound);
         }
 
-        const updatedAddress = await this.userRepository.updateAddress(data.id, data);
+        // Domain update
+        address.update(data.street, data.district ?? "", data.cityId, data.countryId);
+        if (data.isDefault) {
+            address.setAsDefault();
+        }
 
-        return {
-            status: HTTP_STATUS.OK,
-            metadata: {
-                message: USER_MESSAGE.UPDATE_ADDRESS.SUCCESS,
-                address: updatedAddress
-            },
-        };
+        // Persist
+        // Note: updateAddress takes Partial<AddressEntity>, so passing address entity is compatible
+        const updatedAddress = await this.userRepository.updateAddress(address.id, address);
+
+        return Result.ok(updatedAddress);
     }
 }
+

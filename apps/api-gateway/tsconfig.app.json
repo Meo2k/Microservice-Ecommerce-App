@@ -12,10 +12,17 @@
     "src/**/*.ts",
     "../../libs/shared/src/**/*.ts",
     "../../libs/database/src/**/*.ts",
+    "../../libs/redis/src/**/*.ts",
     "../../@types/**/*.d.ts"
   ],
   "exclude": [],
   "references": [
+    {
+      "path": "../../libs/redis/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/database/tsconfig.lib.json"
+    },
     {
       "path": "../../libs/shared/tsconfig.lib.json"
     }

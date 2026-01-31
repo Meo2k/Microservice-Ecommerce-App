@@ -1,6 +1,7 @@
-import { ENV, HTTP_STATUS, USER_MESSAGE } from "@org/shared";
-import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
-import { CreateAddressDto } from "../dtos/index.js";
+import { ENV, Result } from "@org/shared";
+import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
+import { CreateUserAddressCommand } from "../../api/user.validator.js";
+import { UserError, AddressError, CountryError, CityError } from "../../domain/errors/user.error.js";
 
 /**
  * Use Case: Create User Address
@@ -8,39 +9,40 @@ import { CreateAddressDto } from "../dtos/index.js";
 export class CreateUserAddressUseCase {
     constructor(private readonly userRepository: IUserRepository) { }
 
-    async execute(userId: number, data: CreateAddressDto) {
+    async execute(command: CreateUserAddressCommand): Promise<Result<any>> {
+        const userId = command.params.userId;
+        const data = command.body;
+
         // Verify user exists
         const user = await this.userRepository.findById(userId);
         if (!user) {
-            throw new Error(USER_MESSAGE.UPDATE_USER.NOT_FOUND);
+            return Result.fail(UserError.NotFound);
         }
 
         // Verify country exists
         const country = await this.userRepository.findCountryById(data.countryId);
         if (!country) {
-            throw new Error(USER_MESSAGE.UPDATE_ADDRESS.NOT_FOUND);
+            return Result.fail(CountryError.NotFound);
         }
 
         // Verify city exists
         const city = await this.userRepository.findCityById(data.cityId);
         if (!city) {
-            throw new Error(USER_MESSAGE.UPDATE_ADDRESS.NOT_FOUND);
+            return Result.fail(CityError.NotFound);
         }
 
         // Check address limit
         const addresses = await this.userRepository.findAddressesByUserId(userId);
         if (addresses.length >= Number(ENV.MAX_ADDRESS)) {
-            throw new Error(USER_MESSAGE.UPDATE_ADDRESS.MAX_ADDRESS);
+            return Result.fail(AddressError.MaxAddressReached);
         }
 
-        const createdAddress = await this.userRepository.createAddress(userId, data);
+        const createdAddress = await this.userRepository.createAddress(userId, {
+            ...data,
+            district: data.district ?? ""
+        });
 
-        return {
-            status: HTTP_STATUS.OK,
-            metadata: {
-                message: USER_MESSAGE.CREATE_ADDRESS.SUCCESS,
-                address: createdAddress
-            },
-        };
+        return Result.ok(createdAddress);
     }
 }
+
