@@ -1,7 +1,8 @@
-import { AUTH_MESSAGE, HTTP_STATUS, NotFoundError } from "@org/shared";
+import { Result } from "@org/shared";
 import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { IEmailService, IOtpService } from "../services/external.js";
-import { ResendOtpDto } from "../dtos/index.js";
+import { ResendOtpCommand } from "../../api/auth.validator.js";
+import { UserError } from "../../domain/error.domain.js";
 
 /**
  * Use Case: Resend OTP
@@ -14,26 +15,22 @@ export class ResendOtpUseCase {
         private readonly otpService: IOtpService
     ) { }
 
-    async execute(data: ResendOtpDto) {
-        const { email } = data;
+    async execute(data: ResendOtpCommand): Promise<Result<{ message: string }>> {
+        const { email } = data.body;
 
         // Check OTP restrictions
         await this.otpService.checkOtpRestrictions(email);
 
         // Find user
-        const user = await this.authRepo.findUserByEmail(email);
-        if (!user) {
-            throw new NotFoundError(AUTH_MESSAGE.RESEND_OTP.NOT_FOUND);
+        const userResult = await this.authRepo.findUserByEmail(email);
+        if (!userResult.isSuccess) {
+            return Result.fail(UserError.NotFound);
         }
 
         // Send new OTP
         await this.emailService.sendOtpToEmail(email, "otp.template");
 
-        return {
-            status: HTTP_STATUS.OK,
-            metadata: {
-                message: AUTH_MESSAGE.RESEND_OTP.SUCCESS,
-            },
-        };
+        return Result.ok({ message: "OTP resent successfully." });
     }
 }
+

@@ -1,17 +1,15 @@
-import { HTTP_STATUS, PRODUCT_MESSAGE } from "@org/shared";
+import { Result } from "@org/shared";
 import { IProductRepository } from "../../domain/index";
 import { ProductEntity } from "../../domain/index";
+import { CreateProductCommand } from "../../infrastructure/http/product.validator.js";
 
 export class CreateProductUseCase {
-    constructor(private readonly productRepository: IProductRepository) {}
-    async execute(product: ProductEntity) {
-        const newProduct = await this.productRepository.createProduct(product);
-        return {
-            status: HTTP_STATUS.CREATED, 
-            metadata: {
-                newProduct, 
-                message: PRODUCT_MESSAGE.CREATE_PRODUCT.SUCCESS
-            }
-        }
+    constructor(private readonly productRepository: IProductRepository) { }
+
+    async execute(command: CreateProductCommand): Promise<Result<ProductEntity>> {
+        const productData = command.body as any;
+        const newProduct = await this.productRepository.createProduct(productData);
+
+        return Result.ok(newProduct);
     }
 }

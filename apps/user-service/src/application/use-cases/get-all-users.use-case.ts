@@ -1,6 +1,6 @@
-import { HTTP_STATUS, USER_MESSAGE } from "@org/shared";
+import { Result } from "@org/shared";
 import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
-import { toUserResponseDto } from "../dtos/index.js";
+import { toUserResponseDto, UserResponseDto } from "../dtos/index.js";
 
 /**
  * Use Case: Get All Users
@@ -9,16 +9,11 @@ import { toUserResponseDto } from "../dtos/index.js";
 export class GetAllUsersUseCase {
     constructor(private readonly userRepository: IUserRepository) { }
 
-    async execute() {
+    async execute(): Promise<Result<UserResponseDto[]>> {
         const users = await this.userRepository.findAll();
         const usersDto = users.map(user => toUserResponseDto(user));
 
-        return {
-            status: HTTP_STATUS.OK,
-            metadata: {
-                message: USER_MESSAGE.GET_ALL_USER.SUCCESS,
-                users: usersDto
-            },
-        };
+        return Result.ok(usersDto);
     }
 }
+

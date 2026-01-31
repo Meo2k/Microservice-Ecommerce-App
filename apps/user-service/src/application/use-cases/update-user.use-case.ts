@@ -1,6 +1,8 @@
-import { HTTP_STATUS, NotFoundError, USER_MESSAGE } from "@org/shared";
+import { Result } from "@org/shared";
 import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
-import { toUserResponseDto, UpdateUserDto } from "../dtos/index.js";
+import { toUserResponseDto, UserResponseDto } from "../dtos/index.js";
+import { UpdateUserCommand } from "../../infrastructure/http/validators/user.validator.js";
+import { UserError } from "../../domain/errors/user.error.js";
 
 /**
  * Use Case: Update User
@@ -8,21 +10,19 @@ import { toUserResponseDto, UpdateUserDto } from "../dtos/index.js";
 export class UpdateUserUseCase {
     constructor(private readonly userRepository: IUserRepository) { }
 
-    async execute(userId: number, data: UpdateUserDto) {
+    async execute(command: UpdateUserCommand): Promise<Result<UserResponseDto>> {
+        const userId = command.params.userId;
+        const data = command.body;
+
         const user = await this.userRepository.findById(userId);
 
         if (!user) {
-            throw new NotFoundError(USER_MESSAGE.UPDATE_USER.NOT_FOUND);
+            return Result.fail(UserError.NotFound);
         }
 
         const updatedUser = await this.userRepository.update(userId, data);
 
-        return {
-            status: HTTP_STATUS.OK,
-            metadata: {
-                message: USER_MESSAGE.UPDATE_USER.SUCCESS,
-                user: toUserResponseDto(updatedUser)
-            },
-        };
+        return Result.ok(toUserResponseDto(updatedUser));
     }
 }
+

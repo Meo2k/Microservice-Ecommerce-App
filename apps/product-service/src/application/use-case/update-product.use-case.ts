@@ -1,22 +1,21 @@
+import { Result } from "@org/shared";
 import { ProductRepository } from "../../infrastructure/repositories";
-import { HTTP_STATUS } from "libs/shared/src/config/http.config";
-import { PRODUCT_MESSAGE } from "libs/shared/src/config/response-message.config";
-import { ProductEntity } from "../../domain";
-import { NotFoundError } from "libs/shared/src/utils/app-error";
+import { UpdateProductCommand } from "../../infrastructure/http/product.validator.js";
+import { ProductError } from "../../domain/errors/product.error.js";
 
 export class UpdateProductUseCase {
-    constructor(private readonly productRepository: ProductRepository) {}
-    async execute(productId: string, updateProductDto: ProductEntity) {
-        const product = await this.productRepository.updateProduct(productId, updateProductDto);
+    constructor(private readonly productRepository: ProductRepository) { }
+
+    async execute(command: UpdateProductCommand): Promise<Result<any>> {
+        const productId = String(command.params.productId);
+        const updateData = command.body as any;
+
+        const product = await this.productRepository.updateProduct(productId, updateData);
+
         if (!product) {
-            throw new NotFoundError(PRODUCT_MESSAGE.UPDATE_PRODUCT.NOT_FOUND);
+            return Result.fail(ProductError.NotFound);
         }
-        return {
-            status: HTTP_STATUS.OK,
-            metadata: {
-                product,
-                message: PRODUCT_MESSAGE.UPDATE_PRODUCT.SUCCESS
-            }
-        }
+
+        return Result.ok(product);
     }
 }

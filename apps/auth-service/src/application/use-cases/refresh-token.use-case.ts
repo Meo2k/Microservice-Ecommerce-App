@@ -1,19 +1,14 @@
-import { AUTH_MESSAGE, HTTP_STATUS } from "@org/shared";
+import { Result } from "@org/shared";
 import { ITokenService } from "../services/index.js";
 
 
 export class RefreshTokenUseCase {
     constructor(private readonly tokenService: ITokenService) { }
 
-    async execute(userId: string) {
+    async execute(userId: string): Promise<Result<{ accessToken: string }>> {
         const accessToken = this.tokenService.signAccess({ sub: userId });
 
-        return {
-            status: HTTP_STATUS.OK,
-            metadata: {
-                message: AUTH_MESSAGE.REFRESH_TOKEN.SUCCESS,
-                accessToken,
-            },
-        };
+        return Result.ok({ accessToken });
     }
 }
+

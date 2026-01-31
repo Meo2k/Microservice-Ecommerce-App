@@ -14,7 +14,7 @@ import { BaseController } from "./base.controller.js";
 
 export class AuthController extends BaseController {
     constructor(
-        
+
         private readonly registerUserUseCase: RegisterUserUseCase,
         private readonly loginUseCase: LoginUseCase,
         private readonly verifyOtpUseCase: VerifyOtpUseCase,
@@ -25,28 +25,25 @@ export class AuthController extends BaseController {
     ) { super() }
 
     register = async (req: Request, res: Response) => {
-        const body = req.body;
-        const result = await this.registerUserUseCase.execute(body);
-        return res.status(result.status).json(result.metadata);
+        const result = await this.registerUserUseCase.execute(req as any);
+        this.handleResult(result, res, HTTP_STATUS.CREATED);
     };
 
     login = async (req: Request, res: Response) => {
         const body = req.body;
         const result = await this.loginUseCase.execute(body);
 
-        this.handleResultWithCookie(result, res, HTTP_STATUS.OK,  "refresh_token");
+        this.handleResultWithCookie(result, res, HTTP_STATUS.OK, "refresh_token");
     };
 
     verifyOtp = async (req: Request, res: Response) => {
-        const body = req.body;
-        const result = await this.verifyOtpUseCase.execute(body);
-        return res.status(result.status).json(result.metadata);
+        const result = await this.verifyOtpUseCase.execute(req as any);
+        this.handleResult(result, res, HTTP_STATUS.OK);
     };
 
     resendOtp = async (req: Request, res: Response) => {
-        const body = req.body;
-        const result = await this.resendOtpUseCase.execute(body);
-        return res.status(result.status).json(result.metadata);
+        const result = await this.resendOtpUseCase.execute(req as any);
+        this.handleResult(result, res, HTTP_STATUS.OK);
     };
 
     changePassword = async (req: Request, res: Response) => {
@@ -64,7 +61,7 @@ export class AuthController extends BaseController {
     refreshToken = async (req: Request, res: Response) => {
         const userId = req.headers["x-user-id"] as string;
         const result = await this.refreshTokenUseCase.execute(userId);
-        return res.status(result.status).json(result.metadata);
+        this.handleResult(result, res, HTTP_STATUS.OK);
     };
 
 }

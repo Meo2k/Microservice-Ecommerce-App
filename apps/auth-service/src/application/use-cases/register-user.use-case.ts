@@ -1,7 +1,8 @@
-import { AUTH_MESSAGE, ConflictError, CUSTOM_PERM, HTTP_STATUS, SELLER_PERM } from "@org/shared";
+import { Result, CUSTOM_PERM, SELLER_PERM } from "@org/shared";
 import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { IEmailService, IOtpService } from "../services/external.js";
-import { RegisterDto } from "../dtos/index.js";
+import { RegisterCommand } from "../../api/auth.validator.js";
+import { UserError } from "../../domain/error.domain.js";
 
 /**
  * Use Case: Register new user
@@ -14,13 +15,13 @@ export class RegisterUserUseCase {
         private readonly otpService: IOtpService,
     ) { }
 
-    async execute(data: RegisterDto) {
-        const { username, email, password, isSeller } = data;
+    async execute(data: RegisterCommand): Promise<Result<{ message: string }>> {
+        const { username, email, password, isSeller } = data.body;
 
         // Check if user already exists
         const userExists = await this.authRepo.findUserByEmail(email);
-        if (userExists) {
-            throw new ConflictError(AUTH_MESSAGE.REGISTER.CONFLICT);
+        if (userExists.isSuccess) {
+            return Result.fail(UserError.AlreadyExists);
         }
 
         // Check OTP restrictions and send OTP
@@ -37,11 +38,6 @@ export class RegisterUserUseCase {
             }
         });
 
-        return {
-            status: HTTP_STATUS.CREATED,
-            metadata: {
-                message: AUTH_MESSAGE.REGISTER.SUCCESS,
-            },
-        };
+        return Result.ok({ message: "Registration successful. Please check your email for OTP verification." });
     }
 }

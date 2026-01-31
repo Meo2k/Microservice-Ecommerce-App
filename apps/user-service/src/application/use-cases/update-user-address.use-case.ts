@@ -1,6 +1,7 @@
-import { HTTP_STATUS, NotFoundError, USER_MESSAGE } from "@org/shared";
+import { Result } from "@org/shared";
 import { IUserRepository } from "../../domain/repositories/user.repository.interface.js";
-import { UpdateAddressDto } from "../dtos/index.js";
+import { UpdateUserAddressCommand } from "../../infrastructure/http/validators/user.validator.js";
+import { UserError, CountryError, CityError } from "../../domain/errors/user.error.js";
 
 /**
  * Use Case: Update User Address
@@ -8,33 +9,31 @@ import { UpdateAddressDto } from "../dtos/index.js";
 export class UpdateUserAddressUseCase {
     constructor(private readonly userRepository: IUserRepository) { }
 
-    async execute(userId: number, data: UpdateAddressDto) {
+    async execute(command: UpdateUserAddressCommand): Promise<Result<any>> {
+        const userId = command.params.userId;
+        const data = command.body;
+
         // Verify user exists
         const user = await this.userRepository.findById(userId);
         if (!user) {
-            throw new NotFoundError(USER_MESSAGE.UPDATE_USER.NOT_FOUND);
+            return Result.fail(UserError.NotFound);
         }
 
         // Verify country exists
         const country = await this.userRepository.findCountryById(data.countryId);
         if (!country) {
-            throw new NotFoundError(USER_MESSAGE.UPDATE_ADDRESS.NOT_FOUND);
+            return Result.fail(CountryError.NotFound);
         }
 
         // Verify city exists
         const city = await this.userRepository.findCityById(data.cityId);
         if (!city) {
-            throw new NotFoundError(USER_MESSAGE.UPDATE_ADDRESS.NOT_FOUND);
+            return Result.fail(CityError.NotFound);
         }
 
         const updatedAddress = await this.userRepository.updateAddress(data.id, data);
 
-        return {
-            status: HTTP_STATUS.OK,
-            metadata: {
-                message: USER_MESSAGE.UPDATE_ADDRESS.SUCCESS,
-                address: updatedAddress
-            },
-        };
+        return Result.ok(updatedAddress);
     }
 }
+

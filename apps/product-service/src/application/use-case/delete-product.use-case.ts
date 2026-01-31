@@ -1,21 +1,21 @@
-import { NotFoundError } from "libs/shared/src/utils/app-error";
+import { Result } from "@org/shared";
 import { ProductRepository } from "../../infrastructure/repositories";
-import { PRODUCT_MESSAGE } from "libs/shared/src/config/response-message.config";
-import { HTTP_STATUS } from "libs/shared/src/config/http.config";
+import { DeleteProductCommand } from "../../infrastructure/http/product.validator.js";
+import { ProductError } from "../../domain/errors/product.error.js";
 
 export class DeleteProductUseCase {
-    constructor(private readonly productRepo: ProductRepository) {}
-    async execute(productId: string) {
-        const product = await this.productRepo.getProductById(productId)
-        if (!product){
-            throw new NotFoundError(PRODUCT_MESSAGE.DELETE_PRODUCT.NOT_FOUND)
+    constructor(private readonly productRepo: ProductRepository) { }
+
+    async execute(command: DeleteProductCommand): Promise<Result<{ message: string }>> {
+        const productId = String(command.params.productId);
+
+        const product = await this.productRepo.getProductById(productId);
+        if (!product) {
+            return Result.fail(ProductError.NotFound);
         }
+
         await this.productRepo.deleteProduct(productId);
-        return {
-            status: HTTP_STATUS.OK,
-            metadata: {
-                message: PRODUCT_MESSAGE.DELETE_PRODUCT.SUCCESS
-            }
-        }
+
+        return Result.ok({ message: "Product deleted successfully" });
     }
 }

@@ -1,21 +1,19 @@
-import { HTTP_STATUS } from "libs/shared/src/config/http.config";
+import { Result } from "@org/shared";
 import { ProductRepository } from "../../infrastructure/repositories";
-import { PRODUCT_MESSAGE } from "libs/shared/src/config/response-message.config";
-import { NotFoundError } from "libs/shared/src/utils/app-error";
+import { GetProductDetailsCommand } from "../../infrastructure/http/product.validator.js";
+import { ProductError } from "../../domain/errors/product.error.js";
 
 export class GetDetailsProductUseCase {
-    constructor(private readonly productRepository: ProductRepository) {}
-    async execute(id: string) {
-        const product = await this.productRepository.getProductById(id);
+    constructor(private readonly productRepository: ProductRepository) { }
+
+    async execute(command: GetProductDetailsCommand): Promise<Result<any>> {
+        const productId = String(command.params.productId);
+        const product = await this.productRepository.getProductById(productId);
+
         if (!product) {
-            throw new NotFoundError(PRODUCT_MESSAGE.GET_DETAILS_PRODUCT.NOT_FOUND);
+            return Result.fail(ProductError.NotFound);
         }
-        return {
-            status: HTTP_STATUS.OK,
-            metadata: {
-                product,
-                message: PRODUCT_MESSAGE.GET_DETAILS_PRODUCT.SUCCESS
-            }
-        }
+
+        return Result.ok(product);
     }
 }
