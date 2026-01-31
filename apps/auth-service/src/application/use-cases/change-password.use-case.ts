@@ -4,6 +4,7 @@ import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { IOtpService } from "../services/external.js";
 import { UserError } from "../../domain/error.domain.js";
 import { toResponse, UserResponse } from "../dtos/response.dto.js";
+import { ChangePasswordCommand } from "../../api/auth.validator.js";
 
 
 export class ChangePasswordUseCase {
@@ -13,8 +14,8 @@ export class ChangePasswordUseCase {
     ) { }
 
 
-    async execute(data: any): Promise<Result<UserResponse>> {
-        const { code, email, password } = data;
+    async execute(data: ChangePasswordCommand): Promise<Result<UserResponse>> {
+        const { code, email, password } = data.body;
 
         // Verify OTP
         await this.otpService.checkOtpRestrictions(email);

@@ -1,12 +1,18 @@
-import { AUTH_MESSAGE, HTTP_STATUS, NotFoundError, UnauthorizedError } from "@org/shared";
 import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { ITokenService, IPasswordService } from "../services/index.js";
-import { LoginDto } from "../dtos/index.js";
+import { LoginCommand } from "../../api/auth.validator.js";
+import { Result } from "@org/shared";
+import { toResponse, UserResponse } from "../dtos/response.dto.js";
+import { UserError } from "../../domain/error.domain.js";
 
-/**
- * Use Case: Login
- * Handles user authentication and token generation
- */
+class LoginResponse {
+    constructor(
+        public readonly user: UserResponse,
+        public readonly accessToken: string,
+        public readonly refreshToken: string
+    ) { }
+}
+
 export class LoginUseCase {
     constructor(
         private readonly authRepo: IAuthRepository,
@@ -14,32 +20,27 @@ export class LoginUseCase {
         private readonly passwordService: IPasswordService
     ) { }
 
-    async execute(data: LoginDto) {
-        const { email, password } = data;
+    async execute(data: LoginCommand): Promise<Result<LoginResponse>> {
+        const { email, password } = data.body;
 
         // Find user by email
-        const user = await this.authRepo.findUserByEmail(email);
-        if (!user) {
-            throw new NotFoundError(AUTH_MESSAGE.LOGIN.NOT_FOUND);
+        const userResult = await this.authRepo.findUserByEmail(email);
+        if (!userResult) {
+            return Result.fail(UserError.NotFound); 
         }
+
+        const user = userResult.value!;
 
         // Verify password
         const isPasswordValid = await this.passwordService.comparePassword(password, user.password);
         if (!isPasswordValid) {
-            throw new UnauthorizedError(AUTH_MESSAGE.LOGIN.UNAUTHORIZED);
+            return Result.fail(UserError.InvalidPassword);
         }
 
         // Generate tokens
         const accessToken = this.tokenService.signAccess({ sub: user.id });
         const refreshToken = this.tokenService.signRefresh({ sub: user.id });
 
-        return {
-            status: HTTP_STATUS.OK,
-            refreshToken,
-            metadata: {
-                message: AUTH_MESSAGE.LOGIN.SUCCESS,
-                accessToken,
-            },
-        };
+        return Result.ok(new LoginResponse(toResponse(user), accessToken, refreshToken));
     }
 }

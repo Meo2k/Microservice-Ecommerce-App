@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { UserEntity } from "../../domain/entities/user.entity.js";
 import {
     RegisterUserUseCase,
     LoginUseCase,
@@ -10,11 +9,12 @@ import {
     RefreshTokenUseCase,
 } from "../../application/use-cases/index.js";
 import { HTTP_STATUS } from "libs/shared/src/config/http.config.js";
-import { AUTH_MESSAGE } from "libs/shared/src/config/response-message.config.js";
+import { BaseController } from "./base.controller.js";
 
 
-export class AuthController {
+export class AuthController extends BaseController {
     constructor(
+        
         private readonly registerUserUseCase: RegisterUserUseCase,
         private readonly loginUseCase: LoginUseCase,
         private readonly verifyOtpUseCase: VerifyOtpUseCase,
@@ -22,7 +22,7 @@ export class AuthController {
         private readonly changePasswordUseCase: ChangePasswordUseCase,
         private readonly getMeUseCase: GetMeUseCase,
         private readonly refreshTokenUseCase: RefreshTokenUseCase,
-    ) { }
+    ) { super() }
 
     register = async (req: Request, res: Response) => {
         const body = req.body;
@@ -34,16 +34,7 @@ export class AuthController {
         const body = req.body;
         const result = await this.loginUseCase.execute(body);
 
-        // Set refresh token as HTTP-only cookie
-
-        return res.status(result.status)
-        .cookie("refresh_token", result.refreshToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        })
-        .json(result.metadata);
+        this.handleResultWithCookie(result, res, HTTP_STATUS.OK,  "refresh_token");
     };
 
     verifyOtp = async (req: Request, res: Response) => {
@@ -61,25 +52,13 @@ export class AuthController {
     changePassword = async (req: Request, res: Response) => {
         const body = req.body;
         const result = await this.changePasswordUseCase.execute(body);
-        if (!result.isSuccess) {
-            return res.status(result.error.status!).json(result.error);
-        }
-        return res.status(HTTP_STATUS.OK).json({
-            message: AUTH_MESSAGE.CHANGE_PASSWORD.SUCCESS,
-            data: result.value,
-        });
+        this.handleResult(result, res, HTTP_STATUS.OK);
     };
 
     getMe = async (req: Request, res: Response) => {
         const id = req.headers["x-user-id"] as any;
         const result = await this.getMeUseCase.execute(id);
-        if (!result.isSuccess) {
-            return res.status(result.error.status!).json(result.error);
-        }
-        return res.status(HTTP_STATUS.OK).json({
-            message: AUTH_MESSAGE.GET_ME.SUCCESS,
-            data: result.value,
-        });
+        this.handleResult(result, res, HTTP_STATUS.OK);
     };
 
     refreshToken = async (req: Request, res: Response) => {

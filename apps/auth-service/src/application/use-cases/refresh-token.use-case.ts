@@ -1,9 +1,7 @@
 import { AUTH_MESSAGE, HTTP_STATUS } from "@org/shared";
 import { ITokenService } from "../services/index.js";
 
-/**
- * Use Case: Refresh Access Token
- */
+
 export class RefreshTokenUseCase {
     constructor(private readonly tokenService: ITokenService) { }
 
