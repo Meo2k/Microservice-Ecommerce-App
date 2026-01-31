@@ -1,20 +1,20 @@
-import { ErrorCodes, HTTP_STATUS, ResultError } from "@org/shared";
+import { ErrorCodes, HTTP_STATUS, ResultError, ErrorMessages } from "@org/shared";
 
 export const ProductError = {
     NotFound: {
         status: HTTP_STATUS.NOT_FOUND,
         code: ErrorCodes.ERR_NOT_FOUND,
-        message: "Product not found"
+        message: ErrorMessages.Product.ProductNotFound
     } as ResultError,
     AlreadyExists: {
         status: HTTP_STATUS.BAD_REQUEST,
         code: ErrorCodes.ERR_BAD_REQUEST,
-        message: "Product already exists"
+        message: ErrorMessages.Product.ProductAlreadyExists
     } as ResultError,
     InvalidData: {
         status: HTTP_STATUS.BAD_REQUEST,
         code: ErrorCodes.ERR_BAD_REQUEST,
-        message: "Invalid product data"
+        message: ErrorMessages.Product.InvalidProductData
     } as ResultError,
 };
 
@@ -22,6 +22,7 @@ export const ShopError = {
     NotFound: {
         status: HTTP_STATUS.NOT_FOUND,
         code: ErrorCodes.ERR_NOT_FOUND,
-        message: "Shop not found"
+        message: ErrorMessages.Shop.ShopNotFound
     } as ResultError,
 };
+

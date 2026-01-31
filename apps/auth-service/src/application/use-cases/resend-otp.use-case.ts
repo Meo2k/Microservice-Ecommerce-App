@@ -1,4 +1,4 @@
-import { Result } from "@org/shared";
+import { Result, SuccessMessages } from "@org/shared";
 import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { IEmailService, IOtpService } from "../services/external.js";
 import { ResendOtpCommand } from "../../api/auth.validator.js";
@@ -30,7 +30,7 @@ export class ResendOtpUseCase {
         // Send new OTP
         await this.emailService.sendOtpToEmail(email, "otp.template");
 
-        return Result.ok({ message: "OTP resent successfully." });
+        return Result.ok({ message: SuccessMessages.Auth.OtpResent });
     }
 }
 

@@ -1,4 +1,4 @@
-import { Result } from "@org/shared";
+import { Result, SuccessMessages } from "@org/shared";
 import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { IOtpService } from "../services/external.js";
 import { VerifyOtpCommand } from "../../api/auth.validator.js";
@@ -44,7 +44,7 @@ export class VerifyOtpUseCase {
         await this.authRepo.save(user);
         await this.otpService.resetOTP(email);
 
-        return Result.ok({ message: "OTP verified successfully." });
+        return Result.ok({ message: SuccessMessages.Auth.OtpVerified });
     }
 }
 

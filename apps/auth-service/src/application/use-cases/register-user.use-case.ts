@@ -1,4 +1,4 @@
-import { Result, CUSTOM_PERM, SELLER_PERM } from "@org/shared";
+import { Result, CUSTOM_PERM, SELLER_PERM, SuccessMessages } from "@org/shared";
 import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { IEmailService, IOtpService } from "../services/external.js";
 import { RegisterCommand } from "../../api/auth.validator.js";
@@ -38,6 +38,7 @@ export class RegisterUserUseCase {
             }
         });
 
-        return Result.ok({ message: "Registration successful. Please check your email for OTP verification." });
+        return Result.ok({ message: SuccessMessages.Auth.RegisterSuccess });
     }
 }
+
