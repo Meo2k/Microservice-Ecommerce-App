@@ -35,10 +35,18 @@ const LoginPage = () => {
       </div>
 
       {/* Right component  */}
-      <div className='w-full lg:w-1/2 pt-14 pb-5 lg:px-28 md:px-52 px-10 bg-background'>
+      <div className='w-full lg:w-1/2 lg:pt-12 pt-8 pb-5 px-6 sm:px-16 md:px-64 lg:px-14 xl:px-32 2xl:px-40 bg-background flex flex-col justify-center'>
         {/* Header */}
-          <div className='mb-8'>
-            <h1 className='text-4xl font-bold'>Welcome Back</h1>
+
+        {/* logo for mobile */}
+          <div className='flex items-center justify-center gap-2 lg:hidden'>
+              <span className='border-2 border-gray-200 rounded-lg'>
+                <Logo size={40}/>
+              </span>
+              <span className='text-2xl font-bold'>MiEmark</span>
+          </div>
+          <div className='my-7 lg:text-left text-center'>
+            <h1 className='text-3xl font-bold'>Welcome Back</h1>
             <p className='text-muted-foreground/80 font-medium mt-2'>Access your dashboard and manage your orders.</p>
           </div>
         {/* Form component */}
