@@ -29,6 +29,9 @@
     },
     {
       "path": "./apps/shop-service"
+    },
+    {
+      "path": "./apps/user-ui"
     }
   ]
 }
