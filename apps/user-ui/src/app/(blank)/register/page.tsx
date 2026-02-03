@@ -41,7 +41,7 @@ const RegisterPage = () => {
   return (
     <div className='w-full flex flex-col items-center py-10 min-h-screen bg-gray-100/80'>
       {/* Logo */}
-      <div className='flex items-center justify-center gap-2 lg:hidden'>
+      <div className='flex items-center justify-center gap-2'>
         <span className='border-2 border-gray-200 rounded-lg'>
           <Logo size={40} />
         </span>
@@ -131,7 +131,7 @@ const RegisterPage = () => {
         {/* logIn */}
         <div className='w-full flex items-center justify-center gap-2 mt-10'>
           <p className='text-foreground/60 text-sm font-medium'>Already have an account?</p>
-          <Link href="/login" className='text-blue-500 font-semibold'>Log in here</Link>
+          <Link href="/login" className='text-blue-500 font-semibold hover:underline'>Log in here</Link>
         </div>
       </div>
 
