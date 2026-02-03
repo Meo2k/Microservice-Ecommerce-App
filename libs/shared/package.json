@@ -9,6 +9,8 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
+      "browser": "./src/index.ts",
+      "node": "./src/server.ts",
       "@org/source": "./src/index.ts",
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",

@@ -1,5 +1,5 @@
 
-import { ENV } from "./env.config.js"
+import { ENV } from './env.config'
 
 export const SYSTEM_MESSAGE = {
     AUTH: {

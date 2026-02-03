@@ -1,8 +1,8 @@
 export interface ITokenService {
-    signAccess(payload: { sub: number | string }): string;
-    signRefresh(payload: { sub: number | string }): string;
-    verifyAccess(token: string): any;
-    verifyRefresh(token: string): any;
+    signAccess(payload: { sub: number | string }): Promise<string> | string;
+    signRefresh(payload: { sub: number | string }): Promise<string> | string;
+    verifyAccess(token: string): Promise<any> | any;
+    verifyRefresh(token: string): Promise<any> | any;
 }
 
 export interface IPasswordService {
@@ -13,4 +13,3 @@ export interface IPasswordService {
 export interface IPermissionService {
     getPermissions(userId: number): Promise<bigint>;
 }
-

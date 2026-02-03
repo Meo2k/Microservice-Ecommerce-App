@@ -1,6 +1,6 @@
 import { Result } from "@org/shared";
 import { IProductRepository } from "../repositories/product.repository.interface";
-import { GetProductDetailsCommand } from "../../api/product.validator";
+import { GetProductDetailsCommand } from "@org/shared";
 import { ProductError } from "../../domain/errors/product.error.js";
 
 export class GetDetailsProductUseCase {

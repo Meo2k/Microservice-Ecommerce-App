@@ -27,9 +27,10 @@ const RegisterPage = () => {
     },
   });
 
-  const onSubmit = () => {
-    handleSubmit((data) => console.log(data))
-  }
+  const onHandleSubmit = handleSubmit((data) => {
+    console.log(data);
+    handleStep(1);
+  });
 
 
   const [arrayStep, setArrayStep] = useState<string[]>(registerStep)
@@ -113,20 +114,22 @@ const RegisterPage = () => {
           </div>
 
           {/* Form */}
-          <form onSubmit={onSubmit} className='w-full flex flex-col my-10'>
+          <form onSubmit={onHandleSubmit} className='w-full flex flex-col my-10'>
             <div className='w-full flex flex-col'>
               <div className='space-y-6 w-full'>
                 <div className='space-y-2'>
                   <div className='font-bold text-sm'>Email Address</div>
                   <input type="email" id="email" placeholder="Enter your email"
                     {...register("email")}
-                    className='w-full border border-gray-300 rounded-md p-3' />
+                    className={`w-full border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-blue-500`} />
+                  {errors.email && <p className='text-red-500 text-xs mt-1 font-medium'>{errors.email.message}</p>}
                 </div>
                 <div className='space-y-2'>
                   <div className='font-bold text-sm'>Password</div>
                   <input type="password" id="password" placeholder="Enter your password"
                     {...register("password")}
-                    className='w-full border border-gray-300 rounded-md p-3' />
+                    className={`w-full border ${errors.password ? 'border-red-500' : 'border-gray-300'} rounded-md p-3 focus:outline-none focus:ring-1 focus:ring-blue-500`} />
+                  {errors.password && <p className='text-red-500 text-xs mt-1 font-medium'>{errors.password.message}</p>}
                 </div>
 
                 {/* Policy */}
@@ -146,10 +149,7 @@ const RegisterPage = () => {
             <button onClick={(e) => {
               handleStep(-1)
             }} className=' w-[40%] font-semibold text-foreground/90 px-2 py-3 border-2 border-gray-200 hover:bg-gray-100 rounded-lg cursor-pointer'>Back</button>
-            <button onClick={() => {
-              handleStep(1)
-              onSubmit()
-            }}
+            <button onClick={onHandleSubmit}
               className='w-[60%] px-2 py-3 font-semibold bg-blue-500
             text-white rounded-lg cursor-pointer hover:opacity-90'>
               Sign Up

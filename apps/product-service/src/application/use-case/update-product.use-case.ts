@@ -1,6 +1,6 @@
 import { Result } from "@org/shared";
 import { IProductRepository } from "../repositories/product.repository.interface";
-import { UpdateProductCommand } from "../../api/product.validator";
+import { UpdateProductCommand } from "@org/shared";
 import { ProductError } from "../../domain/errors/product.error.js";
 
 export class UpdateProductUseCase {

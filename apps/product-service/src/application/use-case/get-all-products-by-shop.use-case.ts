@@ -1,6 +1,6 @@
 import { Result } from "@org/shared";
 import { IProductRepository } from "../repositories/product.repository.interface";
-import { GetAllProductsByShopCommand } from "../../api/product.validator";
+import { GetAllProductsByShopCommand } from "@org/shared";
 
 export class GetAllProductsByShopUseCase {
     constructor(private readonly productRepo: IProductRepository) { }

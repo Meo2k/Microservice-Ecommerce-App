@@ -1,20 +1,20 @@
 import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken } from "@org/shared";
-import { ITokenService } from "../../application/services/index.js";
+import { ITokenService } from "../../application/services/index";
 
 export class TokenService implements ITokenService {
-    signAccess(payload: { sub: number | string }): string {
-        return signAccessToken(payload);
+    async signAccess(payload: { sub: number | string }): Promise<string> {
+        return await signAccessToken(payload);
     }
 
-    signRefresh(payload: { sub: number | string }): string {
-        return signRefreshToken(payload);
+    async signRefresh(payload: { sub: number | string }): Promise<string> {
+        return await signRefreshToken(payload);
     }
 
-    verifyAccess(token: string): any {
-        return verifyAccessToken(token);
+    async verifyAccess(token: string): Promise<any> {
+        return await verifyAccessToken(token);
     }
 
-    verifyRefresh(token: string): any {
-        return verifyRefreshToken(token);
+    async verifyRefresh(token: string): Promise<any> {
+        return await verifyRefreshToken(token);
     }
 }

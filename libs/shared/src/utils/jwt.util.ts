@@ -1,28 +1,30 @@
-
-import jwt from "jsonwebtoken";
-import { ENV } from "../config/env.config.js";
+import { ENV } from '../config/env.config';
 
 export class TokenProvider {
     private static readonly ACCESS_KEY = ENV.ACCESS_TOKEN_KEY as string;
     private static readonly REFRESH_KEY = ENV.REFRESH_TOKEN_KEY as string;
 
-    static signAccessToken(payload: object): string {
+    static async signAccessToken(payload: object): Promise<string> {
+        const jwt = (await import("jsonwebtoken")).default;
         return jwt.sign(payload, this.ACCESS_KEY, {
             expiresIn: ENV.ACCESS_TOKEN_EXPIRED as any
         });
     }
 
-    static signRefreshToken(payload: object): string {
+    static async signRefreshToken(payload: object): Promise<string> {
+        const jwt = (await import("jsonwebtoken")).default;
         return jwt.sign(payload, this.REFRESH_KEY, {
             expiresIn: ENV.REFRESH_TOKEN_EXPIRED as any
         });
     }
 
-    static verifyAccessToken(token: string) {
+    static async verifyAccessToken(token: string) {
+        const jwt = (await import("jsonwebtoken")).default;
         return jwt.verify(token, this.ACCESS_KEY);
     }
 
-    static verifyRefreshToken(token: string) {
+    static async verifyRefreshToken(token: string) {
+        const jwt = (await import("jsonwebtoken")).default;
         return jwt.verify(token, this.REFRESH_KEY);
     }
 }

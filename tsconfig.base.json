@@ -9,8 +9,8 @@
     "lib": [
       "es2022"
     ],
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
@@ -25,7 +25,7 @@
     ],
     "paths": {
       "@org/database": [
-        "libs/database/src/index.ts", 
+        "libs/database/src/index.ts",
       ],
       "@org/database-nosql": [
         "libs/database-nosql/src/index.ts"
@@ -35,6 +35,9 @@
       ],
       "@org/shared": [
         "libs/shared/src/index.ts"
+      ],
+      "@org/shared/*": [
+        "libs/shared/src/*"
       ]
     }
   }

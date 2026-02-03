@@ -11,7 +11,25 @@ const nextConfig = {
   // Use this to set Nx-specific options
   // See: https://nx.dev/recipes/next/next-config-setup
   nx: {},
-  allowedDevOrigins: ['14.225.44.169', 'localhost:3000'] 
+  allowedDevOrigins: ['14.225.44.169', 'localhost:3000'],
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        net: false,
+        tls: false,
+        fs: false,
+        dns: false,
+        child_process: false,
+        os: false,
+      };
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        '@org/shared': require('path').resolve(__dirname, '../../libs/shared/src/browser.ts'),
+      };
+    }
+    return config;
+  },
 };
 
 const plugins = [

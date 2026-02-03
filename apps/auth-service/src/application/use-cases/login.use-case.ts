@@ -46,8 +46,8 @@ export class LoginUseCase {
         }
 
         // Generate tokens
-        const accessToken = this.tokenService.signAccess({ sub: user.id });
-        const refreshToken = this.tokenService.signRefresh({ sub: user.id });
+        const accessToken = await this.tokenService.signAccess({ sub: user.id });
+        const refreshToken = await this.tokenService.signRefresh({ sub: user.id });
 
         return Result.ok(new LoginResponse(toResponse(user), accessToken, refreshToken));
     }
