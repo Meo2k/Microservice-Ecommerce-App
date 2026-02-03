@@ -4,7 +4,7 @@ import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { IOtpService } from "../services/external.js";
 import { UserError } from "../../domain/error.domain.js";
 import { toResponse, UserResponse } from "../dtos/response.dto.js";
-import { ChangePasswordCommand } from "../../api/auth.validator.js";
+import { ChangePasswordCommand } from "@org/shared";
 
 
 export class ChangePasswordUseCase {

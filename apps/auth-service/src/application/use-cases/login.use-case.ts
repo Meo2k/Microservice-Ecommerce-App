@@ -1,6 +1,6 @@
 import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { ITokenService, IPasswordService } from "../services/index.js";
-import { LoginCommand } from "../../api/auth.validator.js";
+import { LoginCommand } from "@org/shared";
 import { Result } from "@org/shared";
 import { toResponse, UserResponse } from "../dtos/response.dto.js";
 import { UserError } from "../../domain/error.domain.js";

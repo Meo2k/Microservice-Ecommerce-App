@@ -3,7 +3,7 @@ import { Result, ResultError } from "@org/shared";
 import { ShopErrors } from "../../domain/errors/shop.errors.js";
 import { IShopRepository } from "../../application/repositories/user.repository";
 import { ShopEntity } from "../../domain/entities/shop.entity.js";
-import { GetShopDetailsCommand } from "../../api/validators/shop.validator.js";
+import { GetShopDetailsCommand } from "@org/shared";
 
 class ShopResponse {
     constructor(

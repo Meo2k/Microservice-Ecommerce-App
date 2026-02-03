@@ -3,7 +3,7 @@ import Logo from '@/components/svg/logo'
 import { Checkbox } from '@/components/ui/checkbox'
 import { FieldLabel } from '@/components/ui/field'
 import Step from '@/components/ui/step'
-import { createAccountSchema, createAccountType } from '@/validator/register.validator'
+import { RegisterInput, registerSchema } from '@org/shared'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -18,8 +18,8 @@ const RegisterPage = () => {
 
 
   // hook 
-  const { register, handleSubmit, formState: { errors } } = useForm<createAccountType>({
-    resolver: zodResolver(createAccountSchema),
+  const { register, handleSubmit, formState: { errors } } = useForm<RegisterInput>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       username: '',
       email: '',

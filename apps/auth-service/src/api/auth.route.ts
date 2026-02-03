@@ -1,13 +1,15 @@
 import { Router } from "express";
-import { asyncHandler, authenticateRefreshToken, validateRequest } from "@org/shared";
 import {
+    asyncHandler,
+    authenticateRefreshToken,
+    validateRequest,
     registerValidator,
     loginValidator,
     verifyOtpValidator,
     resendOtpValidator,
     changePasswordValidator,
     registerSellerValidator
-} from "./auth.validator.js";
+} from "@org/shared";
 
 
 export const createAuthRouter = (authController: any): Router => {

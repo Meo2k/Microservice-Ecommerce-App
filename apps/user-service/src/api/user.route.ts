@@ -1,10 +1,5 @@
 import { Router } from "express";
-import { Resource, Action, asyncHandler, validateRequest } from "@org/shared";
-import {
-    updateUserValidator,
-    createUserAddressValidator,
-    updateUserAddressValidator
-} from "./user.validator.js";
+import { Resource, Action, asyncHandler, validateRequest, updateUserValidator, createUserAddressValidator, updateUserAddressValidator } from "@org/shared";
 
 /**
  * User Routes

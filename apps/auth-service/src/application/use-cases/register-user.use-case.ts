@@ -1,7 +1,6 @@
-import { Result, SuccessMessages } from "@org/shared";
+import { Result, SuccessMessages, RegisterCommand } from "@org/shared";
 import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { IEmailService, IOtpService } from "../services/external.js";
-import { RegisterCommand } from "../../api/auth.validator.js";
 import { UserError } from "../../domain/error.domain.js";
 import { IPasswordService } from "../services/index.js";
 import { UserEntity } from "../../domain/entities/user.entity.js";

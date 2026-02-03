@@ -3,7 +3,7 @@ export * from './utils/get-env.js';
 export * from './middlewares/async-handler.middleware.js';
 export * from './middlewares/error-handler.middleware.js';
 export * from './config/http.config.js';
-export * from './validator/string.js';
+export * from './validator/index.js';
 export * from './config/permissions.config.js';
 export * from './utils/password.util.js';
 export * from './config/response-message.config.js';

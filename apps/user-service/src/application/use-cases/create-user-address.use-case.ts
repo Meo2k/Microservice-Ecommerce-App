@@ -1,6 +1,6 @@
 import { ENV, Result } from "@org/shared";
 import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
-import { CreateUserAddressCommand } from "../../api/user.validator.js";
+import { CreateUserAddressCommand } from "@org/shared";
 import { UserError, AddressError, CountryError, CityError } from "../../domain/errors/user.error.js";
 
 /**

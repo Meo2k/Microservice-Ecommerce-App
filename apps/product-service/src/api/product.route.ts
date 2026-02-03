@@ -1,7 +1,5 @@
-import { validateRequest } from "@org/shared";
+import { validateRequest, asyncHandler, createProductValidator, updateProductValidator } from "@org/shared";
 import { Router } from "express";
-import { createProductValidator, updateProductValidator } from "./product.validator";
-import { asyncHandler } from "@org/shared";
 
 export const createProductRoute = (
     productController: any,
