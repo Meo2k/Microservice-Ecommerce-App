@@ -9,7 +9,7 @@ import Google from '@/components/svg/google'
 import Facebook from '@/components/svg/facebook'
 
 export const metadata = {
-  title: 'MiEmark - Login',
+  title: 'Login into your account',
   description: 'Login page',
 }
 
