@@ -1,6 +1,6 @@
-import { Result } from "@org/shared";
+import { Result } from "@org/shared/server";
 import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
-import { DeleteUserAddressCommand } from "@org/shared";
+import { DeleteUserAddressCommand } from "@org/shared/server";
 import { UserError, AddressError } from "../../domain/errors/user.error.js";
 
 /**

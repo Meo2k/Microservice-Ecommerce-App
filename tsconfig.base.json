@@ -36,6 +36,9 @@
       "@org/shared": [
         "libs/shared/src/index.ts"
       ],
+      "@org/shared/server": [
+        "libs/shared/src/server.ts"
+      ],
       "@org/shared/*": [
         "libs/shared/src/*"
       ]

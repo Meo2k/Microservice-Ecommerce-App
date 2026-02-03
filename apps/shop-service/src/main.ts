@@ -1,5 +1,5 @@
 import express from 'express';
-import { ENV } from '@org/shared';
+import { ENV } from '@org/shared/server';
 import { createShopRoutes } from './api/shop.route';
 import { container } from './adapter/di/container';
 

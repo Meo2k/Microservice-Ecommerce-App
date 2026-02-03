@@ -9,7 +9,7 @@ import {
     resendOtpValidator,
     changePasswordValidator,
     registerSellerValidator
-} from "@org/shared";
+} from "@org/shared/server";
 
 
 export const createAuthRouter = (authController: any): Router => {

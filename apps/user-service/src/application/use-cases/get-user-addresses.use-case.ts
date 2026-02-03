@@ -1,6 +1,6 @@
-import { Result } from "@org/shared";
+import { Result } from "@org/shared/server";
 import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
-import { GetUserAddressesCommand } from "@org/shared";
+import { GetUserAddressesCommand } from "@org/shared/server";
 import { UserError } from "../../domain/errors/user.error.js";
 
 /**

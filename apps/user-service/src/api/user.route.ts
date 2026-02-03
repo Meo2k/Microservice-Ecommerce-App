@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Resource, Action, asyncHandler, validateRequest, updateUserValidator, createUserAddressValidator, updateUserAddressValidator } from "@org/shared";
+import { Resource, Action, asyncHandler, validateRequest, updateUserValidator, createUserAddressValidator, updateUserAddressValidator } from "@org/shared/server";
 
 /**
  * User Routes

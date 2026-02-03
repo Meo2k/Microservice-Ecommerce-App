@@ -1,4 +1,4 @@
-import { ErrorCodes, HTTP_STATUS, ResultError } from "@org/shared";
+import { ErrorCodes, HTTP_STATUS, ResultError } from "@org/shared/server";
 
 export const ShopErrors = {
     MissingId: {

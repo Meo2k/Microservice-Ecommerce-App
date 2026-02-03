@@ -1,4 +1,4 @@
-import { comparePassword, hashPassword } from "@org/shared";
+import { comparePassword, hashPassword } from "@org/shared/server";
 import { IPasswordService } from "../../application/services/index.js";
 
 export class PasswordService implements IPasswordService {

@@ -1,7 +1,7 @@
 
 import { Request, Response } from "express";
 import { GetShopDetailsUseCase } from "../application/use-case/get-shop-details.use-case.js";
-import { GetShopDetailsCommand, HTTP_STATUS } from "@org/shared";
+import { GetShopDetailsCommand, HTTP_STATUS } from "@org/shared/server";
 import { ShopErrors } from "../domain/errors/shop.errors.js";
 
 export class ShopController {

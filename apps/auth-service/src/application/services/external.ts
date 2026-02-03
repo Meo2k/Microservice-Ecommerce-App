@@ -1,7 +1,7 @@
 /**
  * External Services Interfaces
  */
-import { Result } from "@org/shared";
+import { Result } from "@org/shared/server";
 
 export interface IEmailService {
     sendOtpToEmail(email: string, template: string): Promise<Result<void>>;

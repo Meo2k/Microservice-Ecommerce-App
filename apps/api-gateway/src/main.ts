@@ -4,8 +4,8 @@ import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import proxy from 'express-http-proxy';
 import morgan from 'morgan';
-import { ENV, errorHandler } from '@org/shared';
-import { createAuthMiddleware } from '@org/shared';
+import { ENV, errorHandler } from '@org/shared/server';
+import { createAuthMiddleware } from '@org/shared/server';
 import { prisma } from '@org/database';
 import { redis } from '@org/redis';
 

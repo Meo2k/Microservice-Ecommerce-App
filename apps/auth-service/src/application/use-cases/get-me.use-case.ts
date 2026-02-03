@@ -1,5 +1,5 @@
 import { IAuthRepository } from "../../domain/index.js";
-import { Result } from "@org/shared";
+import { Result } from "@org/shared/server";
 import { UserError } from "../../domain/error.domain.js";
 import { toResponse, UserResponse } from "../dtos/response.dto.js";
 

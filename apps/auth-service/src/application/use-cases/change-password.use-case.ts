@@ -1,10 +1,10 @@
 
-import { Result } from "@org/shared";
+import { Result } from "@org/shared/server";
 import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { IOtpService } from "../services/external.js";
 import { UserError } from "../../domain/error.domain.js";
 import { toResponse, UserResponse } from "../dtos/response.dto.js";
-import { ChangePasswordCommand } from "@org/shared";
+import { ChangePasswordCommand } from "@org/shared/server";
 
 
 export class ChangePasswordUseCase {

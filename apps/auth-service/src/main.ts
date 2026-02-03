@@ -4,7 +4,7 @@ import 'reflect-metadata';
 import express from 'express';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
-import { ENV, errorHandler } from '@org/shared';
+import { ENV, errorHandler } from '@org/shared/server';
 import { container } from './adapter/di/container.js';
 import { createAuthRouter } from './api/auth.route.js';
 

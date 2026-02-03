@@ -1,4 +1,4 @@
-import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken } from "@org/shared";
+import { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken } from "@org/shared/server";
 import { ITokenService } from "../../application/services/index";
 
 export class TokenService implements ITokenService {

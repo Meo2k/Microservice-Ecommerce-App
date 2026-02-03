@@ -1,7 +1,7 @@
-import { Result } from "@org/shared";
+import { Result } from "@org/shared/server";
 import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
 import { toUserResponseDto, UserResponseDto } from "../dtos/index.js";
-import { UpdateUserCommand } from "@org/shared";
+import { UpdateUserCommand } from "@org/shared/server";
 import { UserError } from "../../domain/errors/user.error.js";
 
 /**

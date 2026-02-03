@@ -1,19 +1,16 @@
-export * from './config/env.config';
-export * from './utils/get-env';
-export * from './middlewares/async-handler.middleware';
-export * from './middlewares/error-handler.middleware';
+// --- Common Code (Safe for Browser & Server) ---
+
+// Config
 export * from './config/http.config';
-export * from './validator/index';
 export * from './config/permissions.config';
-export * from './utils/password.util';
 export * from './config/response-message.config';
-export * from './utils/jwt.util';
-export * from './utils/otp.util';
-export * from './utils/email.util';
-export * from './middlewares/check-ownership.middleware';
-export * from './middlewares/check-permission.middleware';
-export * from "./utils/index";
-export * from "./middlewares/validate.middleware";
-export * from "./middlewares/auth.middleware";
-export * from "./utils/result";
-export * from "./constants/messages";
+
+// Constants
+export * from './constants/messages';
+
+// Utils
+export * from './utils/result';
+export * from './utils/index'; // uuid, ms helper
+
+// Validators
+export * from './validator/index';

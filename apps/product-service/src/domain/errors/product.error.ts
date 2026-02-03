@@ -1,4 +1,4 @@
-import { ErrorCodes, HTTP_STATUS, ResultError, ErrorMessages } from "@org/shared";
+import { ErrorCodes, HTTP_STATUS, ResultError, ErrorMessages } from "@org/shared/server";
 
 export const ProductError = {
     NotFound: {

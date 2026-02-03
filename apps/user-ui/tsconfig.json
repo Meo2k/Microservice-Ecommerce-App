@@ -25,9 +25,6 @@
     "paths": {
       "@/*": [
         "./src/*"
-      ],
-      "@org/shared": [
-        "../../libs/shared/src/browser.ts"
       ]
     },
     "outDir": "dist",

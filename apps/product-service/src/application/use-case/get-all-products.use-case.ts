@@ -1,4 +1,4 @@
-import { Result } from "@org/shared";
+import { Result } from "@org/shared/server";
 import { IProductRepository } from "../repositories/product.repository.interface";
 
 export class GetAllProductsUseCase {

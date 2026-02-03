@@ -1,5 +1,5 @@
 import express from 'express';
-import { createCheckOwnership, ENV, errorHandler } from '@org/shared';
+import { createCheckOwnership, ENV, errorHandler } from '@org/shared/server';
 import { createProductRoute } from './api/product.route';
 import { container } from './adapter/di/container';
 

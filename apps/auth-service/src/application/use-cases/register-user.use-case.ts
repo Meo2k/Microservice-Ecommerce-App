@@ -1,4 +1,4 @@
-import { Result, SuccessMessages, RegisterCommand } from "@org/shared";
+import { Result, SuccessMessages, RegisterCommand } from "@org/shared/server";
 import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { IEmailService, IOtpService } from "../services/external.js";
 import { UserError } from "../../domain/error.domain.js";

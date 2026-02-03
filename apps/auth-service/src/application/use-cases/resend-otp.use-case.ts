@@ -1,7 +1,7 @@
-import { Result, SuccessMessages } from "@org/shared";
+import { Result, SuccessMessages } from "@org/shared/server";
 import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { IEmailService, IOtpService } from "../services/external.js";
-import { ResendOtpCommand } from "@org/shared";
+import { ResendOtpCommand } from "@org/shared/server";
 import { UserError } from "../../domain/error.domain.js";
 
 /**
