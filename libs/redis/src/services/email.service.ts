@@ -1,7 +1,7 @@
-import { ENV, generateOTP, OTP_MESSAGE, sendEmail, ErrorCodes } from "@org/shared";
+import { ENV, generateOTP, OTP_MESSAGE, sendEmail } from "@org/shared/server";
+import { ErrorCodes, Result } from "@org/shared";
 import { IEmailService } from '../interfaces/email.interface.js';
 import { redis } from "../redis.js";
-import { Result } from "@org/shared";
 /**
  * Email Service Implementation using Redis
  */

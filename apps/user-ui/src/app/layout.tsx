@@ -1,8 +1,5 @@
 import './global.css';
-import {
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query'
+import { QueryProvider } from '@/components/providers/QueryProvider';
 
 
 export const metadata = {
@@ -12,8 +9,6 @@ export const metadata = {
     icon: '/logo.png',
   },
 }
-
-const queryClient = new QueryClient()
 
 export default function RootLayout({
   children,
@@ -26,9 +21,9 @@ export default function RootLayout({
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
       </head>
       <body>
-        <QueryClientProvider client={queryClient}>
+        <QueryProvider>
           {children}
-        </QueryClientProvider>
+        </QueryProvider>
       </body>
     </html>
   )

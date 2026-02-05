@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { Action, Resource, PermissionManager } from '../config/permissions.config';
-import { Result } from '../utils/result';
-import { ErrorCodes, HTTP_STATUS } from '../config/http.config';
+import { Action, Resource, PermissionManager } from '../config/permissions.config.js';
+import { Result } from '../utils/result.js';
+import { ErrorCodes, HTTP_STATUS } from '../config/http.config.js';
 
 
 export const checkPermission = (resource: Resource, action: Action, isSelf: boolean = false) => {

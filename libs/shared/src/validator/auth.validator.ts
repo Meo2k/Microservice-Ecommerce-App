@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { stringMsg } from "./string";
+import { stringMsg } from "./string.js";
 
 const emailSchema = z
     .string(stringMsg("Email"))

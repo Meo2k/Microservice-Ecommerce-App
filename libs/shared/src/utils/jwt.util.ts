@@ -1,4 +1,4 @@
-import { ENV } from '../config/env.config';
+import { ENV } from '../config/env.config.js';
 
 export class TokenProvider {
     private static readonly ACCESS_KEY = ENV.ACCESS_TOKEN_KEY as string;

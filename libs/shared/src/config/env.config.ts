@@ -1,4 +1,4 @@
-import { getEnv } from '../utils/get-env';
+import { getEnv } from '../utils/get-env.js';
 
 export const ENV = {
     NODE_ENV: getEnv("NX_NODE_ENV", "development"),

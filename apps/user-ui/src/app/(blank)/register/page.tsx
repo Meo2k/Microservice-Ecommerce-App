@@ -4,11 +4,11 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { FieldLabel } from '@/components/ui/field'
 import Step from '@/components/ui/step'
 import { RegisterInput, registerSchema } from '@org/shared'
-// TODO: Use useRegister from '@org/shared-fe' when implementing registration
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod';
+
 
 const RegisterPage = () => {
   const [activeStep, setActiveStep] = useState<number>(1)
@@ -28,9 +28,11 @@ const RegisterPage = () => {
     },
   });
 
+ 
+
   const onHandleSubmit = handleSubmit((data) => {
-    console.log(data);
-    handleStep(1);
+    console.log(data)
+    
   });
 
 
@@ -150,7 +152,10 @@ const RegisterPage = () => {
             <button onClick={(e) => {
               handleStep(-1)
             }} className=' w-[40%] font-semibold text-foreground/90 px-2 py-3 border-2 border-gray-200 hover:bg-gray-100 rounded-lg cursor-pointer'>Back</button>
-            <button onClick={onHandleSubmit}
+            <button onClick={() => {
+              onHandleSubmit()
+              handleStep(1)
+            }}
               className='w-[60%] px-2 py-3 font-semibold bg-blue-500
             text-white rounded-lg cursor-pointer hover:opacity-90'>
               Sign Up

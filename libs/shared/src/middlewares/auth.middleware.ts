@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { PUBLIC_ROUTES } from '../config/path.config';
-import { ENV } from '../config/env.config';
-import { SYSTEM_MESSAGE } from '../config/response-message.config';
-import { Result } from '../utils/result';
-import { ErrorCodes, HTTP_STATUS } from '../config/http.config';
+import { PUBLIC_ROUTES } from '../config/path.config.js';
+import { ENV } from '../config/env.config.js';
+import { SYSTEM_MESSAGE } from '../config/response-message.config.js';
+import { Result } from '../utils/result.js';
+import { ErrorCodes, HTTP_STATUS } from '../config/http.config.js';
 
 export const createAuthMiddleware = (prisma: any, redis: any) => {
     return async (req: Request, res: Response, next: NextFunction) => {

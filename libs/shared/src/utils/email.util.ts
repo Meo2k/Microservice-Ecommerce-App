@@ -1,4 +1,4 @@
-import { ENV } from '../config/env.config';
+import { ENV } from '../config/env.config.js';
 import path from "path";
 
 const renderEmailTemplate = async (templateName: string, data: Record<string, any>) => {

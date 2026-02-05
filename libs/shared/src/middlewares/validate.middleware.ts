@@ -1,8 +1,8 @@
-import { AnyZodObject, ZodError } from "zod";
+import { ZodError, type AnyZodObject } from "zod";
 import { Request, Response, NextFunction } from "express";
-import { Result } from '../utils/result';
-import { ErrorCodes, HTTP_STATUS } from '../config/http.config';
-import { ENV } from '../config/env.config';
+import { Result } from '../utils/result.js';
+import { ErrorCodes, HTTP_STATUS } from '../config/http.config.js';
+import { ENV } from '../config/env.config.js';
 
 export const validateRequest = (schema: AnyZodObject) => {
     return async (req: Request, res: Response, next: NextFunction): Promise<any> => {
