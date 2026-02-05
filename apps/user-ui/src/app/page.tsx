@@ -3,8 +3,8 @@
 
 export default function Index() {
   return (
-    <div>
-      <div>Hello world </div>
-    </div>
+      <div>
+        <div>Hello world </div>
+      </div>
   );
 };

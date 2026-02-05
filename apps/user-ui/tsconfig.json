@@ -53,6 +53,9 @@
   "references": [
     {
       "path": "../../libs/shared"
+    },
+    {
+      "path": "../../libs/shared-fe"
     }
   ]
 }

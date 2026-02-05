@@ -4,6 +4,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { FieldLabel } from '@/components/ui/field'
 import Step from '@/components/ui/step'
 import { RegisterInput, registerSchema } from '@org/shared'
+// TODO: Use useRegister from '@org/shared-fe' when implementing registration
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'

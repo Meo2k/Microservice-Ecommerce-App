@@ -53,6 +53,7 @@
     "packages/*",
     "apps/*",
     "libs/shared",
+    "libs/shared-fe",
     "libs/database",
     "libs/redis",
     "libs/database-nosql"

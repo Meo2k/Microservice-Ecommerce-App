@@ -41,6 +41,12 @@
       ],
       "@org/shared/*": [
         "libs/shared/src/*"
+      ],
+      "@org/shared-fe": [
+        "libs/shared-fe/src/index.ts"
+      ],
+      "@org/shared-fe/*": [
+        "libs/shared-fe/src/*"
       ]
     }
   }
