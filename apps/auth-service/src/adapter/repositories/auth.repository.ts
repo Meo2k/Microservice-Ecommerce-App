@@ -1,11 +1,15 @@
-import { prisma } from "@org/database";
-
+import { PrismaClient } from "@org/database";
 import { IAuthRepository } from "../../application/repositories/auth.repository.interface";
 import { UserEntity } from "../../domain/entities/user.entity";
 import { Result } from "@org/shared/server";
 
+// Local Singleton for Auth Service to avoid module loading issues
+const prisma = new PrismaClient();
 
 export class AuthRepository implements IAuthRepository {
+    private getPrisma() {
+        return prisma;
+    }
     private _toDomain(userModel: any): UserEntity {
         const roles = userModel.userRole
             ? userModel.userRole.map((ur: any) => ur.role.name)
@@ -27,6 +31,7 @@ export class AuthRepository implements IAuthRepository {
     }
 
     async findUserById(id: number): Promise<Result<UserEntity | null>> {
+        const prisma = this.getPrisma();
         const user = await prisma.user.findUnique({
             where: { id },
             include: {
@@ -39,6 +44,8 @@ export class AuthRepository implements IAuthRepository {
     }
 
     async findUserByEmail(email: string): Promise<Result<UserEntity | null>> {
+        const prisma = this.getPrisma();
+
         const user = await prisma.user.findUnique({
             where: { email },
             include: {
@@ -47,10 +54,12 @@ export class AuthRepository implements IAuthRepository {
                 }
             }
         });
+        console.log(">>>>>check : ", user);
         return user ? Result.ok(this._toDomain(user)) : Result.ok(null);
     }
 
     async findAllUser(): Promise<Result<UserEntity[]>> {
+        const prisma = this.getPrisma();
         const users = await prisma.user.findMany({
             include: {
                 userRole: {
@@ -62,6 +71,7 @@ export class AuthRepository implements IAuthRepository {
     }
 
     async createUser(userEntity: UserEntity): Promise<Result<UserEntity>> {
+        const prisma = this.getPrisma();
         const user = await prisma.user.create({
             data: {
                 username: userEntity.username,
@@ -87,6 +97,7 @@ export class AuthRepository implements IAuthRepository {
     }
 
     async save(user: UserEntity): Promise<void> {
+        const prisma = this.getPrisma();
         await prisma.user.update({
             where: { id: user.id },
             data: {

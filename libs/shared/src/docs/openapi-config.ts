@@ -23,6 +23,6 @@ export const generateOpenApiDocument = () => {
             version: '1.0.0',
             description: 'API Contract defined by Zod Schemas',
         },
-        servers: [{ url: '/api/v1' }],
+        servers: [{ url: '/' }],
     });
 };
