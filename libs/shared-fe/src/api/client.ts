@@ -13,14 +13,29 @@ export const apiClient: AxiosInstance = axios.create({
     withCredentials: true, 
 });
 
+let isRefreshing = false 
+let failQueue: any[] = []
+
+const processQueue = (error: any , token: string | null) => {
+    failQueue.forEach((p)=> {
+        if (error) p.reject(error)
+        else p.resolve(token)
+    })
+    failQueue = []
+}
+
 // Request interceptor - Add auth token
 apiClient.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
-        // Get token from localStorage or cookie
-        const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
+        try {
+            // Get token from localStorage or cookie
+            const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
 
-        if (token && config.headers) {
-            config.headers.Authorization = `Bearer ${token}`;
+            if (token && config.headers) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+        } catch (error) {
+            return Promise.reject(error)
         }
 
         return config;
@@ -42,6 +57,21 @@ apiClient.interceptors.response.use(
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
+            if (isRefreshing) {
+                return new Promise((resolve, reject) => {
+                    failQueue.push({ resolve, reject })
+                })
+                .then(token => {
+                    originalRequest.headers.Authorization = `Bearer ${token}`;
+                    return apiClient(originalRequest);
+                })
+                .catch(error => {
+                    return Promise.reject(error);
+                })
+            }
+
+            isRefreshing = true
+
             try {
                 // Try to refresh token
                 const refreshToken = typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : null;
@@ -59,12 +89,16 @@ apiClient.interceptors.response.use(
 
                     // Retry original request with new token
                     if (originalRequest.headers) {
+                        processQueue(null, accessToken);
+                        isRefreshing = false;
                         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
                     }
 
                     return apiClient(originalRequest);
                 }
             } catch (refreshError) {
+                isRefreshing = false;
+                processQueue(refreshError, null);
                 // Refresh failed - logout user
                 if (typeof window !== 'undefined') {
                     localStorage.removeItem('accessToken');
