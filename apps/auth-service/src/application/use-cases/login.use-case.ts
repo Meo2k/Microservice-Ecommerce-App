@@ -1,7 +1,7 @@
 import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { ITokenService, IPasswordService } from "../services/index.js";
-import { LoginCommand } from "../../api/auth.validator.js";
-import { Result } from "@org/shared";
+import { LoginCommand } from "@org/shared/server";
+import { Result } from "@org/shared/server";
 import { toResponse, UserResponse } from "../dtos/response.dto.js";
 import { UserError } from "../../domain/error.domain.js";
 
@@ -46,8 +46,8 @@ export class LoginUseCase {
         }
 
         // Generate tokens
-        const accessToken = this.tokenService.signAccess({ sub: user.id });
-        const refreshToken = this.tokenService.signRefresh({ sub: user.id });
+        const accessToken = await this.tokenService.signAccess({ sub: user.id });
+        const refreshToken = await this.tokenService.signRefresh({ sub: user.id });
 
         return Result.ok(new LoginResponse(toResponse(user), accessToken, refreshToken));
     }

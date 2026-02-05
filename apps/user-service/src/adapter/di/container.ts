@@ -1,4 +1,4 @@
-import { checkPermission } from "@org/shared";
+import { checkPermission } from "@org/shared/server";
 
 // Domain
 import { IUserRepository } from "../../application/repositories/user.repository.interface.js";

@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { PASS_OWNER_ROUTES } from "../config/path.config.js";
-import { SYSTEM_MESSAGE } from "../config/response-message.config.js";
-import { Result, ErrorCodes, HTTP_STATUS } from "../index.js";
+import { PASS_OWNER_ROUTES } from '../config/path.config.js';
+import { SYSTEM_MESSAGE } from '../config/response-message.config.js';
+import { Result } from '../utils/result.js';
+import { ErrorCodes, HTTP_STATUS } from '../config/http.config.js';
 
 export const createCheckOwnership = (prisma: any, redis: any) =>
     async (req: Request, res: Response, next: NextFunction) => {

@@ -1,6 +1,6 @@
 import { EmailService, OtpService } from "@org/redis";
 import { IEmailService, IOtpService } from "../../application/services/external.js";
-import { Result } from "@org/shared";
+import { Result } from "@org/shared/server";
 
 export class RedisEmailService implements IEmailService {
     private emailService: EmailService;

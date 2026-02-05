@@ -1,4 +1,4 @@
-import { Result } from "@org/shared";
+import { Result } from "@org/shared/server";
 import { ShopEntity } from "../../domain/entities/shop.entity";
 import { IShopRepository } from "../../application/repositories/user.repository";
 import { prisma, Shop as ShopModel } from "@org/database";

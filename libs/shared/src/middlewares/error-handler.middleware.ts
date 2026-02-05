@@ -1,6 +1,6 @@
 import { ErrorRequestHandler } from "express";
-import { ErrorCodes, HTTP_STATUS } from "../config/http.config.js";
-import { ENV } from "../config/env.config.js";
+import { ErrorCodes, HTTP_STATUS } from '../config/http.config.js';
+import { ENV } from '../config/env.config.js';
 
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     console.log(`Error occurred: ${req.path}`, err)

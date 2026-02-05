@@ -1,5 +1,5 @@
 import express from 'express';
-import { ENV, errorHandler } from '@org/shared';
+import { ENV, errorHandler } from '@org/shared/server';
 import { container } from './adapter/di/container.js';
 import { createUserRouter } from './api/user.route.js';
 

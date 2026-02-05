@@ -1,6 +1,6 @@
-import { Result } from "@org/shared";
+import { Result } from "@org/shared/server";
 import { IProductRepository } from "../repositories/product.repository.interface";
-import { DeleteProductCommand } from "../../api/product.validator";
+import { DeleteProductCommand } from "@org/shared/server";
 import { ProductError } from "../../domain/errors/product.error.js";
 
 export class DeleteProductUseCase {

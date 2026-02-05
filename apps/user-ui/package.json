@@ -1,0 +1,30 @@
+{
+  "name": "@org/user-ui",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "tags": [
+      "type:fe"
+    ],
+    "targets": {
+      "serve": {
+        "executor": "@nx/next:server",
+        "options": {
+          "buildTarget": "@org/user-ui:build",
+          "dev": true
+        }
+      },
+      "build": {
+        "executor": "@nx/next:build",
+        "outputs": [
+          "{options.outputPath}"
+        ],
+        "options": {
+          "outputPath": "dist/apps/user-ui"
+        }
+      }
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

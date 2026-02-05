@@ -4,10 +4,15 @@ import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import proxy from 'express-http-proxy';
 import morgan from 'morgan';
-import { ENV, errorHandler } from '@org/shared';
-import { createAuthMiddleware } from '@org/shared';
+import { ENV, errorHandler } from '@org/shared/server';
+import { createAuthMiddleware } from '@org/shared/server';
 import { prisma } from '@org/database';
 import { redis } from '@org/redis';
+
+// Swagger UI imports
+import swaggerUi from 'swagger-ui-express';
+import { generateOpenApiDocument, registerAllSchemas } from '@org/shared/server';
+
 
 
 const host = ENV.API_GATEWAY_HOST ?? 'localhost';
@@ -25,6 +30,18 @@ app.use(cors({
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(morgan("combined"));
+
+
+// --- Swagger Documentation Setup ---
+try {
+    registerAllSchemas(); // Register Zod schemas to registry
+    const openApiDoc = generateOpenApiDocument(); // Generate OpenAPI JSON
+    app.use('/docs', swaggerUi.serve, swaggerUi.setup(openApiDoc));
+    app.get('/docs-json', (req, res) => { res.json(openApiDoc); }); // Expose raw JSON for code generators
+    console.log(`📄 API Documentation available at http://${host}:${port}/docs`);
+} catch (error) {
+    console.error("Failed to generate API Docs:", error);
+}
 
 
 //middleware
@@ -46,9 +63,13 @@ app.use("/auth", proxy(`http://${ENV.AUTH_SERVICE_HOST}:${ENV.AUTH_SERVICE_PORT}
 app.use("/user", proxy(`http://${ENV.USER_SERVICE_HOST}:${ENV.USER_SERVICE_PORT}`))
 app.use("/product", proxy(`http://${ENV.PRODUCT_SERVICE_HOST}:${ENV.PRODUCT_SERVICE_PORT}`))
 
+
 app.get('/health', (req, res) => {
     res.send({ 'message': 'API Gateway is running' });
 });
+
+
+
 
 app.use(errorHandler)
 

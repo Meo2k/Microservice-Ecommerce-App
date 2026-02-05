@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "nx": {
+    "tags": [
+      "type:be"
+    ],
     "targets": {
       "build": {
         "executor": "@nx/esbuild:esbuild",
@@ -97,7 +100,5 @@
       }
     }
   },
-  "dependencies": {
-    "express": "^4.21.2"
-  }
+  "dependencies": {}
 }

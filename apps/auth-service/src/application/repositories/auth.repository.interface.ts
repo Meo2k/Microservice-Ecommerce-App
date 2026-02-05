@@ -1,5 +1,5 @@
 import { UserEntity } from "../../domain/entities/user.entity";
-import { Result } from "@org/shared";
+import { Result } from "@org/shared/server";
 
 
 export interface IAuthRepository {

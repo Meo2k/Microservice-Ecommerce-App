@@ -1,4 +1,4 @@
-import { ENV } from "@org/shared"
+import { ENV } from "@org/shared/server"
 import { Redis } from "@upstash/redis"
 
 export const redis = new Redis({

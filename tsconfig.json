@@ -29,6 +29,12 @@
     },
     {
       "path": "./apps/shop-service"
+    },
+    {
+      "path": "./apps/user-ui"
+    },
+    {
+      "path": "./libs/shared-fe"
     }
   ]
 }

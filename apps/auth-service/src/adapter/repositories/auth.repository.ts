@@ -2,7 +2,7 @@ import { prisma } from "@org/database";
 
 import { IAuthRepository } from "../../application/repositories/auth.repository.interface";
 import { UserEntity } from "../../domain/entities/user.entity";
-import { Result } from "@org/shared";
+import { Result } from "@org/shared/server";
 
 
 export class AuthRepository implements IAuthRepository {

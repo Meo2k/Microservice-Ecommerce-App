@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { Result, HTTP_STATUS, HttpStatusCodeType } from "@org/shared";
+import { Result, HTTP_STATUS, HttpStatusCodeType } from "@org/shared/server";
 import { CookieParseOptions } from "cookie-parser";
 
 export abstract class BaseController {

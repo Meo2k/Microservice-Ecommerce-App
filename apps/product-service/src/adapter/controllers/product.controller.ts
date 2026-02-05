@@ -5,7 +5,7 @@ import { UpdateProductUseCase } from "../../application/index";
 import { DeleteProductUseCase } from "../../application/index";
 import { Request, Response } from "express";
 import { BaseController } from "./base.controller.js";
-import { HTTP_STATUS } from "@org/shared";
+import { HTTP_STATUS } from "@org/shared/server";
 
 export class ProductController extends BaseController {
     constructor(

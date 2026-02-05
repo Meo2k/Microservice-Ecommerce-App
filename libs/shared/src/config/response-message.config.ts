@@ -1,15 +1,15 @@
 
-import { ENV } from "./env.config.js"
+import { ENV } from './env.config.js'
 
 export const SYSTEM_MESSAGE = {
     AUTH: {
         NOT_VERIFIED: "User is not verified",
-        LOCKED: "User is locked", 
-        NOT_FOUND: "User not found", 
-        UNAUTHORIZED: "Unauthorized", 
+        LOCKED: "User is locked",
+        NOT_FOUND: "User not found",
+        UNAUTHORIZED: "Unauthorized",
         TOKEN_INVALID: "Invalid token "
 
-    }, 
+    },
     SHOP: {
         UNAUTHORIZED: "Unauthorized to this shop",
         NOT_FOUND: "Shop not found"
@@ -51,12 +51,12 @@ export const AUTH_MESSAGE = {
     },
     REFRESH_TOKEN: {
         SUCCESS: "Refresh token generated successfully",
-    }, 
+    },
     CHANGE_PASSWORD: {
         SUCCESS: "Password changed successfully",
         OTP_INVALID: "Invalid OTP or have been expired. Please try again.",
         NOT_FOUND: "User not found"
-    }, 
+    },
 }
 
 export const USER_MESSAGE = {
@@ -74,45 +74,45 @@ export const USER_MESSAGE = {
     DELETE_USER: {
         SUCCESS: "User deleted successfully",
         NOT_FOUND: "User not found"
-    }, 
+    },
     UPDATE_ADDRESS: {
         SUCCESS: "Address updated successfully",
-        NOT_FOUND: "Address not found", 
+        NOT_FOUND: "Address not found",
         MAX_ADDRESS: "User can have maximum 5 addresses"
-    }, 
+    },
     GET_ADDRESS: {
         SUCCESS: "Address fetched successfully",
         NOT_FOUND: "Address not found"
-    }, 
+    },
     DELETE_ADDRESS: {
         SUCCESS: "Address deleted successfully",
         NOT_FOUND: "Address not found"
-    }, 
+    },
     CREATE_ADDRESS: {
         SUCCESS: "Address created successfully",
         NOT_FOUND: "Address not found"
-    }, 
+    },
 }
 
 export const PRODUCT_MESSAGE = {
     CREATE_PRODUCT: {
         SUCCESS: "Product created successfully",
-    }, 
+    },
     GET_ALL_PRODUCTS: {
         SUCCESS: "Products fetched successfully",
-    }, 
+    },
     GET_DETAILS_PRODUCT: {
         SUCCESS: "Product fetched successfully",
         NOT_FOUND: "Product not found"
-    }, 
+    },
     UPDATE_PRODUCT: {
         SUCCESS: "Product updated successfully",
         NOT_FOUND: "Product not found"
-    }, 
+    },
     DELETE_PRODUCT: {
-        SUCCESS: "Product deleted successfully", 
+        SUCCESS: "Product deleted successfully",
         NOT_FOUND: "Product not found"
-    }, 
+    },
     GET_ALL_PRODUCTS_BY_SHOP: {
         SUCCESS: "Products fetched successfully in the shop",
         NOT_FOUND: "Products not found in the shop "

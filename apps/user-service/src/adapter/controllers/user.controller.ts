@@ -9,7 +9,7 @@ import {
     DeleteUserAddressUseCase,
 } from "../../application/use-cases/index.js";
 import { BaseController } from "./base.controller.js";
-import { HTTP_STATUS } from "@org/shared";
+import { HTTP_STATUS } from "@org/shared/server";
 
 
 /**

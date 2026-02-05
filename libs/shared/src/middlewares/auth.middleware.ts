@@ -1,12 +1,13 @@
-import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
-import { PUBLIC_ROUTES } from "../config/path.config.js";
-import { ENV } from "../config/env.config.js";
-import { SYSTEM_MESSAGE } from "../config/response-message.config.js";
-import { Result, ErrorCodes, HTTP_STATUS } from "../index.js";
+import { PUBLIC_ROUTES } from '../config/path.config.js';
+import { ENV } from '../config/env.config.js';
+import { SYSTEM_MESSAGE } from '../config/response-message.config.js';
+import { Result } from '../utils/result.js';
+import { ErrorCodes, HTTP_STATUS } from '../config/http.config.js';
 
 export const createAuthMiddleware = (prisma: any, redis: any) => {
     return async (req: Request, res: Response, next: NextFunction) => {
+        const jwt = (await import("jsonwebtoken")).default;
         const token = req.headers.authorization?.split(" ")[1];
 
         const isPublic = PUBLIC_ROUTES.some((path) => req.path.startsWith(path));
@@ -101,8 +102,9 @@ export const createAuthMiddleware = (prisma: any, redis: any) => {
     }
 }
 
-export const authenticateRefreshToken = (req: Request, res: Response, next: NextFunction) => {
+export const authenticateRefreshToken = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        const jwt = (await import("jsonwebtoken")).default;
         const token = req.cookies["refresh_token"];
         const decoded = jwt.verify(token, ENV.REFRESH_TOKEN_KEY) as { sub: string };
         req.headers['x-user-id'] = String(decoded.sub)
@@ -118,4 +120,3 @@ export const authenticateRefreshToken = (req: Request, res: Response, next: Next
         return;
     }
 }
-

@@ -1,6 +1,7 @@
 import { redis } from "../redis.js";
 import { IOtpService } from "../interfaces/otp.interface.js";
-import { Result, ErrorCodes, OTP_MESSAGE, ENV } from "@org/shared";
+import { Result, ErrorCodes } from "@org/shared";
+import { OTP_MESSAGE, ENV } from "@org/shared/server";
 
 /**
  * OTP Service Implementation using Redis

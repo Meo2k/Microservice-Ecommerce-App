@@ -1,4 +1,4 @@
-import { checkPermission } from "@org/shared";
+import { checkPermission } from "@org/shared/server";
 
 import { IAuthRepository } from "../../application/repositories/auth.repository.interface.js";
 
