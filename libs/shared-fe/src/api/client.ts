@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
+import { API_ENDPOINTS } from './endpoints';
 
 // API client configuration
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || `http://${process.env.NX_API_GATEWAY_HOST}:${process.env.NX_API_GATEWAY_PORT}`;
@@ -10,14 +11,14 @@ export const apiClient: AxiosInstance = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
-    withCredentials: true, 
+    withCredentials: true,
 });
 
-let isRefreshing = false 
+let isRefreshing = false
 let failQueue: any[] = []
 
-const processQueue = (error: any , token: string | null) => {
-    failQueue.forEach((p)=> {
+const processQueue = (error: any, token: string | null) => {
+    failQueue.forEach((p) => {
         if (error) p.reject(error)
         else p.resolve(token)
     })
@@ -61,13 +62,13 @@ apiClient.interceptors.response.use(
                 return new Promise((resolve, reject) => {
                     failQueue.push({ resolve, reject })
                 })
-                .then(token => {
-                    originalRequest.headers.Authorization = `Bearer ${token}`;
-                    return apiClient(originalRequest);
-                })
-                .catch(error => {
-                    return Promise.reject(error);
-                })
+                    .then(token => {
+                        originalRequest.headers.Authorization = `Bearer ${token}`;
+                        return apiClient(originalRequest);
+                    })
+                    .catch(error => {
+                        return Promise.reject(error);
+                    })
             }
 
             isRefreshing = true
@@ -77,7 +78,7 @@ apiClient.interceptors.response.use(
                 const refreshToken = typeof window !== 'undefined' ? localStorage.getItem('refreshToken') : null;
 
                 if (refreshToken) {
-                    const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
+                    const response = await axios.post(`${API_BASE_URL}${API_ENDPOINTS.AUTH.REFRESH}`, {
                         refreshToken,
                     });
 

@@ -1,4 +1,5 @@
 import { apiClient } from './client';
+import { API_ENDPOINTS } from './endpoints';
 import type {
     Shop,
     CreateShopRequest,
@@ -14,7 +15,7 @@ export const shopApi = {
      * Get all shops
      */
     getShops: async (): Promise<ApiResponse<Shop[]>> => {
-        const response = await apiClient.get<ApiResponse<Shop[]>>('/shops');
+        const response = await apiClient.get<ApiResponse<Shop[]>>(API_ENDPOINTS.SHOP.LIST);
         return response.data;
     },
 
@@ -22,7 +23,7 @@ export const shopApi = {
      * Get shop by ID
      */
     getShopById: async (id: string): Promise<ApiResponse<Shop>> => {
-        const response = await apiClient.get<ApiResponse<Shop>>(`/shops/${id}`);
+        const response = await apiClient.get<ApiResponse<Shop>>(API_ENDPOINTS.SHOP.BY_ID(id));
         return response.data;
     },
 
@@ -30,7 +31,7 @@ export const shopApi = {
      * Get my shop (for seller)
      */
     getMyShop: async (): Promise<ApiResponse<Shop>> => {
-        const response = await apiClient.get<ApiResponse<Shop>>('/shops/me');
+        const response = await apiClient.get<ApiResponse<Shop>>(API_ENDPOINTS.SHOP.MY_SHOP);
         return response.data;
     },
 
@@ -38,7 +39,7 @@ export const shopApi = {
      * Create new shop
      */
     createShop: async (data: CreateShopRequest): Promise<ApiResponse<Shop>> => {
-        const response = await apiClient.post<ApiResponse<Shop>>('/shops', data);
+        const response = await apiClient.post<ApiResponse<Shop>>(API_ENDPOINTS.SHOP.LIST, data);
         return response.data;
     },
 
@@ -46,7 +47,7 @@ export const shopApi = {
      * Update shop
      */
     updateShop: async (id: string, data: UpdateShopRequest): Promise<ApiResponse<Shop>> => {
-        const response = await apiClient.put<ApiResponse<Shop>>(`/shops/${id}`, data);
+        const response = await apiClient.put<ApiResponse<Shop>>(API_ENDPOINTS.SHOP.BY_ID(id), data);
         return response.data;
     },
 
@@ -54,7 +55,7 @@ export const shopApi = {
      * Delete shop
      */
     deleteShop: async (id: string): Promise<ApiResponse> => {
-        const response = await apiClient.delete<ApiResponse>(`/shops/${id}`);
+        const response = await apiClient.delete<ApiResponse>(API_ENDPOINTS.SHOP.BY_ID(id));
         return response.data;
     },
 };

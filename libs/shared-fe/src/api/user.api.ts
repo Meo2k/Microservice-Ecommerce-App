@@ -1,4 +1,5 @@
 import { apiClient } from './client';
+import { API_ENDPOINTS } from './endpoints';
 import type {
     UserProfile,
     UpdateUserRequest,
@@ -14,7 +15,7 @@ export const userApi = {
      * Get user profile
      */
     getProfile: async (): Promise<ApiResponse<UserProfile>> => {
-        const response = await apiClient.get<ApiResponse<UserProfile>>('/user/profile');
+        const response = await apiClient.get<ApiResponse<UserProfile>>(API_ENDPOINTS.USER.PROFILE);
         return response.data;
     },
 
@@ -22,7 +23,7 @@ export const userApi = {
      * Update user profile
      */
     updateProfile: async (data: UpdateUserRequest): Promise<ApiResponse<UserProfile>> => {
-        const response = await apiClient.put<ApiResponse<UserProfile>>('/user/profile', data);
+        const response = await apiClient.put<ApiResponse<UserProfile>>(API_ENDPOINTS.USER.PROFILE, data);
         return response.data;
     },
 
@@ -30,7 +31,7 @@ export const userApi = {
      * Get user addresses
      */
     getAddresses: async (): Promise<ApiResponse<UserAddress[]>> => {
-        const response = await apiClient.get<ApiResponse<UserAddress[]>>('/user/addresses');
+        const response = await apiClient.get<ApiResponse<UserAddress[]>>(API_ENDPOINTS.USER.ADDRESSES);
         return response.data;
     },
 
@@ -38,7 +39,7 @@ export const userApi = {
      * Add new address
      */
     addAddress: async (data: Omit<UserAddress, 'id' | 'userId'>): Promise<ApiResponse<UserAddress>> => {
-        const response = await apiClient.post<ApiResponse<UserAddress>>('/user/addresses', data);
+        const response = await apiClient.post<ApiResponse<UserAddress>>(API_ENDPOINTS.USER.ADDRESSES, data);
         return response.data;
     },
 
@@ -46,7 +47,7 @@ export const userApi = {
      * Update address
      */
     updateAddress: async (id: string, data: Partial<UserAddress>): Promise<ApiResponse<UserAddress>> => {
-        const response = await apiClient.put<ApiResponse<UserAddress>>(`/user/addresses/${id}`, data);
+        const response = await apiClient.put<ApiResponse<UserAddress>>(API_ENDPOINTS.USER.ADDRESS_BY_ID(id), data);
         return response.data;
     },
 
@@ -54,7 +55,7 @@ export const userApi = {
      * Delete address
      */
     deleteAddress: async (id: string): Promise<ApiResponse> => {
-        const response = await apiClient.delete<ApiResponse>(`/user/addresses/${id}`);
+        const response = await apiClient.delete<ApiResponse>(API_ENDPOINTS.USER.ADDRESS_BY_ID(id));
         return response.data;
     },
 };

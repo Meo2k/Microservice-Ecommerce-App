@@ -1,4 +1,5 @@
 import { apiClient } from './client';
+import { API_ENDPOINTS } from './endpoints';
 import type {
     LoginRequest,
     LoginResponse,
@@ -20,7 +21,7 @@ export const authApi = {
      * Login user
      */
     login: async (data: LoginRequest): Promise<LoginResponse> => {
-        const response = await apiClient.post<LoginResponse>('/auth/login', data);
+        const response = await apiClient.post<LoginResponse>(API_ENDPOINTS.AUTH.LOGIN, data);
 
         // Save tokens to localStorage
         if (response.data.success && response.data.data.tokens) {
@@ -38,7 +39,7 @@ export const authApi = {
      * Register new user
      */
     register: async (data: RegisterRequest): Promise<RegisterResponse> => {
-        const response = await apiClient.post<RegisterResponse>('/auth/register', data);
+        const response = await apiClient.post<RegisterResponse>(API_ENDPOINTS.AUTH.REGISTER, data);
         return response.data;
     },
 
@@ -46,7 +47,7 @@ export const authApi = {
      * Verify OTP
      */
     verifyOtp: async (data: VerifyOtpRequest): Promise<VerifyOtpResponse> => {
-        const response = await apiClient.post<VerifyOtpResponse>('/auth/verify-otp', data);
+        const response = await apiClient.post<VerifyOtpResponse>(API_ENDPOINTS.AUTH.VERIFY_OTP, data);
 
         // Save tokens to localStorage
         if (response.data.success && response.data.data.tokens) {
@@ -64,7 +65,7 @@ export const authApi = {
      * Resend OTP
      */
     resendOtp: async (data: ResendOtpRequest): Promise<ApiResponse> => {
-        const response = await apiClient.post<ApiResponse>('/auth/resend-otp', data);
+        const response = await apiClient.post<ApiResponse>(API_ENDPOINTS.AUTH.RESEND_OTP, data);
         return response.data;
     },
 
@@ -72,7 +73,7 @@ export const authApi = {
      * Change password
      */
     changePassword: async (data: ChangePasswordRequest): Promise<ApiResponse> => {
-        const response = await apiClient.post<ApiResponse>('/auth/change-password', data);
+        const response = await apiClient.post<ApiResponse>(API_ENDPOINTS.AUTH.CHANGE_PASSWORD, data);
         return response.data;
     },
 
@@ -80,7 +81,7 @@ export const authApi = {
      * Register seller
      */
     registerSeller: async (data: RegisterSellerRequest): Promise<ApiResponse> => {
-        const response = await apiClient.post<ApiResponse>('/auth/register-seller', data);
+        const response = await apiClient.post<ApiResponse>(API_ENDPOINTS.AUTH.REGISTER_SELLER, data);
         return response.data;
     },
 
@@ -88,7 +89,7 @@ export const authApi = {
      * Logout user
      */
     logout: async (): Promise<ApiResponse> => {
-        const response = await apiClient.post<ApiResponse>('/auth/logout');
+        const response = await apiClient.post<ApiResponse>(API_ENDPOINTS.AUTH.LOGOUT);
 
         // Clear tokens from localStorage
         if (typeof window !== 'undefined') {
@@ -103,7 +104,7 @@ export const authApi = {
      * Get current user
      */
     getCurrentUser: async () => {
-        const response = await apiClient.get('/auth/me');
+        const response = await apiClient.get(API_ENDPOINTS.AUTH.ME);
         return response.data;
     },
 };
