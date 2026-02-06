@@ -1,9 +1,8 @@
-import { PrismaClient, Product } from "@org/database";
+import { prisma, Product } from "@org/database";
 import { IProductRepository } from "../../application/repositories/product.repository.interface";
 import { ProductEntity } from "../../domain/entities/product.entity";
 
-// Local Singleton for Product Service
-const prisma = new PrismaClient();
+
 
 interface IAttribute {
     k: string;

@@ -1,9 +1,7 @@
-import 'dotenv/config';
-import { PrismaClient } from'../src/prisma-client';
+
 import { hashPassword } from '../../shared/src/utils/password.util';
 import { ADMIN_PERM, SELLER_PERM } from '../../shared/src/config/permissions.config';
-
-const prisma = new PrismaClient();
+import { prisma } from '../src/index';
 
 const ADMIN_EMAIL = process.env.NX_ADMIN_EMAIL || "admin@org.com";
 const ADMIN_PASSWORD = process.env.NX_ADMIN_PASSWORD || "admin";
