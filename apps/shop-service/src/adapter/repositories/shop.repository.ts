@@ -6,7 +6,7 @@ import { prisma, Shop as ShopModel } from "@org/database";
 
 export class ShopRepository implements IShopRepository {
     constructor() { }
-    private _toDomain(shopModel: ShopModel): ShopEntity{
+    private _toDomain(shopModel: ShopModel): ShopEntity {
         return new ShopEntity(
             shopModel.id, shopModel.name, shopModel.description,
             shopModel.logo_url, shopModel.cover_url, shopModel.is_active,
@@ -14,13 +14,13 @@ export class ShopRepository implements IShopRepository {
         )
     }
 
-    async getShopById(id: string): Promise<Result<ShopEntity|null>> {
+    async getShopById(id: string): Promise<Result<ShopEntity | null>> {
         try {
             const shop = await prisma.shop.findUnique({
                 where: { id: +id }
             });
 
-            if (!shop){
+            if (!shop) {
                 return Result.ok(null)
             }
 

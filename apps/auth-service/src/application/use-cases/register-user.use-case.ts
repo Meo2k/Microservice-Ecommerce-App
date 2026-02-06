@@ -28,6 +28,7 @@ export class RegisterUserUseCase {
         if (!otpCheck.isSuccess) {
             return Result.fail(otpCheck.error);
         }
+        
 
         // Prepare user entity
         const hashedPassword = await this.passwordService.hashPassword(password);
@@ -39,6 +40,7 @@ export class RegisterUserUseCase {
         await this.authRepo.createUser(newUser);
 
         await this.emailService.sendOtpToEmail(email, "otp.template");
+        
 
         return Result.ok({ message: SuccessMessages.Auth.RegisterSuccess });
     }

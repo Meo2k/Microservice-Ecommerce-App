@@ -27,6 +27,9 @@
       "@org/database": [
         "libs/database/src/index.ts",
       ],
+      "@org/database/client": [
+        "libs/database/src/prisma-client.ts"
+      ],
       "@org/database-nosql": [
         "libs/database-nosql/src/index.ts"
       ],

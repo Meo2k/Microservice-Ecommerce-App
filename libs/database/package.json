@@ -1,7 +1,6 @@
 {
   "name": "@org/database",
   "version": "0.0.1",
-  "type": "module",
   "private": true,
   "main": "./src/index.js",
   "module": "./src/index.js",
@@ -13,6 +12,11 @@
       "types": "./src/index.d.ts",
       "import": "./src/index.js",
       "default": "./src/index.js"
+    },
+    "./client": {
+      "types": "./src/prisma-client.d.ts",
+      "import": "./src/prisma-client.js",
+      "default": "./src/prisma-client.js"
     }
   },
   "dependencies": {

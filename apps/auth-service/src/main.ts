@@ -1,4 +1,7 @@
 import * as dotenv from 'dotenv';
+// Load environment variables FIRST, before any other imports
+dotenv.config();
+
 import 'reflect-metadata';
 
 import express from 'express';
@@ -8,7 +11,6 @@ import { ENV, errorHandler } from '@org/shared/server';
 import { container } from './adapter/di/container.js';
 import { createAuthRouter } from './api/auth.route.js';
 
-dotenv.config();
 
 const host = ENV.AUTH_SERVICE_HOST;
 const port: any = ENV.AUTH_SERVICE_PORT;

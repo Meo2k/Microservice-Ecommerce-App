@@ -2,6 +2,8 @@ import { prisma, Product } from "@org/database";
 import { IProductRepository } from "../../application/repositories/product.repository.interface";
 import { ProductEntity } from "../../domain/entities/product.entity";
 
+
+
 interface IAttribute {
     k: string;
     v: string;
