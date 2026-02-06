@@ -64,6 +64,7 @@ app.use(createAuthMiddleware(prisma, redis));
 app.use("/auth", proxy(`http://${ENV.AUTH_SERVICE_HOST}:${ENV.AUTH_SERVICE_PORT}`))
 app.use("/user", proxy(`http://${ENV.USER_SERVICE_HOST}:${ENV.USER_SERVICE_PORT}`))
 app.use("/product", proxy(`http://${ENV.PRODUCT_SERVICE_HOST}:${ENV.PRODUCT_SERVICE_PORT}`))
+app.use("/shop", proxy(`http://${ENV.SHOP_SERVICE_HOST}:${ENV.SHOP_SERVICE_PORT}`))
 
 
 app.get('/health', (req, res) => {
