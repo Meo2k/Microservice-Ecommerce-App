@@ -59,4 +59,3 @@ console.log('🔍 [PrismaClient] Exported prisma type:', typeof prisma);
 
 if (process.env['NODE_ENV'] !== 'production') globalForPrisma.prisma = prisma;
 
-export * from '../generated/client/index.js';

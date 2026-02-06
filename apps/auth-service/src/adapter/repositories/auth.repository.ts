@@ -1,14 +1,12 @@
-import { PrismaClient } from "@org/database";
+import { getPrismaClient } from "@org/database";
 import { IAuthRepository } from "../../application/repositories/auth.repository.interface";
 import { UserEntity } from "../../domain/entities/user.entity";
 import { Result } from "@org/shared/server";
 
 // Local Singleton for Auth Service to avoid module loading issues
-const prisma = new PrismaClient();
-
 export class AuthRepository implements IAuthRepository {
     private getPrisma() {
-        return prisma;
+        return getPrismaClient();
     }
     private _toDomain(userModel: any): UserEntity {
         const roles = userModel.userRole
