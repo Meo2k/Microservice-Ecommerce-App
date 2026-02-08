@@ -4,7 +4,7 @@ import * as AuthValidator from '../validator/auth.validator.js';
 import * as UserValidator from '../validator/user.validator.js';
 import * as ProductValidator from '../validator/product.validator.js';
 
-import * as ShopValidator from '../validator/shop.validator.js';
+// import * as ShopValidator from '../validator/shop.validator.js';
 
 export const registerAllSchemas = () => {
     // --- AUTH SCHEMAS ---

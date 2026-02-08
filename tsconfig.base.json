@@ -42,8 +42,8 @@
       "@org/shared/server": [
         "libs/shared/src/server.ts"
       ],
-      "@org/shared/*": [
-        "libs/shared/src/*"
+      "@org/shared/browser": [
+        "libs/shared/src/browser.ts"
       ],
       "@org/shared-fe": [
         "libs/shared-fe/src/index.ts"

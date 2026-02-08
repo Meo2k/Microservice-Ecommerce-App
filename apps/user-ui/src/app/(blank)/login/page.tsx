@@ -11,7 +11,7 @@ import Google from '@/components/svg/google'
 import Facebook from '@/components/svg/facebook'
 import { useLogin } from '@org/shared-fe'
 import { useForm } from 'react-hook-form'
-import { LoginInput, loginSchema } from '@org/shared'
+import { LoginInput, loginSchema } from '@org/shared-fe'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
@@ -111,8 +111,8 @@ const LoginPage = () => {
                     {...register('password')}
                   />
                   {errors.password && <p className='text-red-500 text-sm'>{errors.password.message}</p>}
-                  <span onClick={handleShowPassword} 
-                  className="material-symbols-outlined cursor-pointer absolute right-3 top-3">
+                  <span onClick={handleShowPassword}
+                    className="material-symbols-outlined cursor-pointer absolute right-3 top-3">
                     {isShowPassword ? 'visibility' : 'visibility_off'}
                   </span>
                 </div>

@@ -3,7 +3,7 @@ import Logo from '@/components/svg/logo'
 import { Checkbox } from '@/components/ui/checkbox'
 import { FieldLabel } from '@/components/ui/field'
 import Step from '@/components/ui/step'
-import { RegisterInput, registerSchema } from '@org/shared'
+import { registerSchema, RegisterInput } from '@org/shared-fe'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -28,11 +28,12 @@ const RegisterPage = () => {
     },
   });
 
- 
+
 
   const onHandleSubmit = handleSubmit((data) => {
     console.log(data)
     
+
   });
 
 

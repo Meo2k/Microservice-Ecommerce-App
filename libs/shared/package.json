@@ -15,6 +15,11 @@
       "types": "./dist/src/server.d.ts",
       "import": "./dist/src/server.js",
       "default": "./dist/src/server.js"
+    },
+    "./browser": {
+      "types": "./dist/src/browser.d.ts",
+      "import": "./dist/src/browser.js",
+      "default": "./dist/src/browser.js"
     }
   },
   "dependencies": {
