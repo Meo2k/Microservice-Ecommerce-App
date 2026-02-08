@@ -15,10 +15,27 @@ module.exports = {
 	content: [
 		'./{src,pages,components,app}/**/*.{ts,tsx,js,jsx,html}',
 		'!./{src,pages,components,app}/**/*.{stories,spec}.{ts,tsx,js,jsx,html}',
+		'../../libs/shared-fe/**/*.{ts,tsx,js,jsx,html}',
+		'!../../libs/shared-fe/**/*.{stories,spec}.{ts,tsx,js,jsx,html}',
 		//     ...createGlobPatternsForDependencies(__dirname)
 	],
 	theme: {
 		extend: {
+			
+			keyframes: {
+				'loading-keys': {
+					'0%, 80%, 100%': {
+						opacity: '0.75',
+						boxShadow: '0 0 #076fe5',
+						height: '32px',
+					},
+					'40%': {
+						opacity: '1',
+						boxShadow: '0 -8px #076fe5',
+						height: '40px',
+					},
+				},
+			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',

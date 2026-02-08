@@ -1,5 +1,7 @@
+import { Slide, ToastContainer } from 'react-toastify';
 import './global.css';
 import { QueryProvider } from '@/components/providers/QueryProvider';
+import { LoadingProvider, Loading } from '@org/shared-fe';
 
 
 export const metadata = {
@@ -22,8 +24,18 @@ export default function RootLayout({
       </head>
       <body>
         <QueryProvider>
-          {children}
+          <LoadingProvider>
+            <main>
+              {children}
+            </main>
+            <Loading />
+          </LoadingProvider>
         </QueryProvider>
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          transition={Slide}
+        />
       </body>
     </html>
   )

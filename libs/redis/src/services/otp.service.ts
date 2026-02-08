@@ -1,7 +1,8 @@
 import { redis } from "../redis.js";
 import { IOtpService } from "../interfaces/otp.interface.js";
 import { Result, ErrorCodes } from "@org/shared";
-import { OTP_MESSAGE, ENV } from "@org/shared/server";
+import { ENV } from "@org/shared/server";
+import { ErrorMessages } from "@org/shared";
 
 /**
  * OTP Service Implementation using Redis
@@ -18,7 +19,7 @@ export class OtpService implements IOtpService {
         if (await redis.get(`otp_locked:${email}`)) {
             return Result.fail({
                 code: ErrorCodes.ERR_BAD_REQUEST,
-                message: OTP_MESSAGE.LOCKED,
+                message: ErrorMessages.Otp.OtpLocked,
             });
         }
         return Result.ok();
@@ -43,14 +44,14 @@ export class OtpService implements IOtpService {
             await redis.del(attemptsKey);
             return Result.fail({
                 code: ErrorCodes.ERR_BAD_REQUEST,
-                message: OTP_MESSAGE.LOCKED
+                message: ErrorMessages.Otp.OtpLocked
             });
         }
 
         const remainingAttempts = maxAttempts - currentAttempts;
         return Result.fail({
             code: ErrorCodes.ERR_BAD_REQUEST,
-            message: `${OTP_MESSAGE.INVALID}. Remaining attempts: ${remainingAttempts}`
+            message: `${ErrorMessages.Otp.OtpInvalid}. Remaining attempts: ${remainingAttempts}`
         });
     }
 

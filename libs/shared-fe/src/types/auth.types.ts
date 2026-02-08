@@ -43,11 +43,8 @@ export interface AuthTokens {
 }
 
 export interface LoginResponse {
-    success: boolean;
-    data: {
-        user: User;
-        tokens: AuthTokens;
-    };
+    accessToken: string; 
+    user: User; 
     message?: string;
 }
 

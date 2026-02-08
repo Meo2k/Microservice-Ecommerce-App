@@ -4,8 +4,8 @@ import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'ax
 import { API_ENDPOINTS } from './endpoints';
 
 // API client configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || `http://${process.env.NX_API_GATEWAY_HOST}:${process.env.NX_API_GATEWAY_PORT}`;
-console.log(">>>check api base : ", API_BASE_URL)
+const API_BASE_URL = `http://${process.env.NEXT_PUBLIC_API_GATEWAY_HOST}:${process.env.NEXT_PUBLIC_API_GATEWAY_PORT}`;
+
 // Create axios instance
 export const apiClient: AxiosInstance = axios.create({
     baseURL: API_BASE_URL,
@@ -112,7 +112,7 @@ apiClient.interceptors.response.use(
             }
         }
 
-        return Promise.reject(error);
+        return Promise.reject(error.response?.data);
     }
 );
 

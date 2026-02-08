@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { PASS_OWNER_ROUTES } from '../config/path.config.js';
-import { SYSTEM_MESSAGE } from '../config/response-message.config.js';
+import { ErrorMessages } from '../constants/messages.js';
 import { Result } from '../utils/result.js';
 import { ErrorCodes, HTTP_STATUS } from '../config/http.config.js';
 
@@ -18,7 +18,7 @@ export const createCheckOwnership = (prisma: any, redis: any) =>
             if (Number(cachedData) !== id) {
                 return res.status(HTTP_STATUS.FORBIDDEN).json(Result.fail<any>({
                     code: ErrorCodes.ERR_UNAUTHORIZED,
-                    message: SYSTEM_MESSAGE.SHOP.UNAUTHORIZED,
+                    message: ErrorMessages.Shop.UnauthorizedShopAccess,
                 }));
             }
             next();
@@ -34,13 +34,13 @@ export const createCheckOwnership = (prisma: any, redis: any) =>
         if (!shop) {
             return res.status(HTTP_STATUS.BAD_REQUEST).json(Result.fail<any>({
                 code: ErrorCodes.ERR_BAD_REQUEST,
-                message: SYSTEM_MESSAGE.SHOP.NOT_FOUND,
+                message: ErrorMessages.Shop.ShopNotFound,
             }));
         }
         if (shop.userId !== id) {
             return res.status(HTTP_STATUS.FORBIDDEN).json(Result.fail<any>({
                 code: ErrorCodes.ERR_UNAUTHORIZED,
-                message: SYSTEM_MESSAGE.SHOP.UNAUTHORIZED,
+                message: ErrorMessages.Shop.UnauthorizedShopAccess,
             }));
         }
 

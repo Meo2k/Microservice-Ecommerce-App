@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { PUBLIC_ROUTES } from '../config/path.config.js';
 import { ENV } from '../config/env.config.js';
-import { SYSTEM_MESSAGE } from '../config/response-message.config.js';
+import { ErrorMessages } from '../constants/messages.js';
 import { Result } from '../utils/result.js';
 import { ErrorCodes, HTTP_STATUS } from '../config/http.config.js';
 
@@ -16,7 +16,7 @@ export const createAuthMiddleware = (prisma: any, redis: any) => {
             if (isPublic) return next();
             res.status(HTTP_STATUS.UNAUTHORIZED).json(Result.fail<any>({
                 code: ErrorCodes.ERR_UNAUTHORIZED,
-                message: SYSTEM_MESSAGE.AUTH.UNAUTHORIZED,
+                message: ErrorMessages.Common.Unauthorized,
             }));
             return;
         }
@@ -52,7 +52,7 @@ export const createAuthMiddleware = (prisma: any, redis: any) => {
                 if (!dbUser) {
                     res.status(HTTP_STATUS.BAD_REQUEST).json(Result.fail<any>({
                         code: ErrorCodes.ERR_BAD_REQUEST,
-                        message: SYSTEM_MESSAGE.AUTH.NOT_FOUND,
+                        message: ErrorMessages.Common.NotFound,
                     }));
                     return;
                 }
@@ -74,14 +74,14 @@ export const createAuthMiddleware = (prisma: any, redis: any) => {
             if (!userData.is_verified) {
                 res.status(HTTP_STATUS.UNAUTHORIZED).json(Result.fail<any>({
                     code: ErrorCodes.ERR_UNAUTHORIZED,
-                    message: SYSTEM_MESSAGE.AUTH.NOT_VERIFIED,
+                    message: ErrorMessages.Auth.UserNotVerified,
                 }));
                 return;
             }
             if (userData.is_locked) {
                 res.status(HTTP_STATUS.UNAUTHORIZED).json(Result.fail<any>({
                     code: ErrorCodes.ERR_UNAUTHORIZED,
-                    message: SYSTEM_MESSAGE.AUTH.LOCKED,
+                    message: ErrorMessages.Auth.UserLocked,
                 }));
                 return;
             }
@@ -95,7 +95,7 @@ export const createAuthMiddleware = (prisma: any, redis: any) => {
             console.log("Error middleware : ", error)
             res.status(HTTP_STATUS.UNAUTHORIZED).json(Result.fail<any>({
                 code: ErrorCodes.ERR_UNAUTHORIZED,
-                message: SYSTEM_MESSAGE.AUTH.TOKEN_INVALID,
+                message: ErrorMessages.Common.Unauthorized,
             }));
             return;
         }
@@ -115,7 +115,7 @@ export const authenticateRefreshToken = async (req: Request, res: Response, next
         res.status(HTTP_STATUS.UNAUTHORIZED).json(Result.fail<any>({
             status: HTTP_STATUS.UNAUTHORIZED,
             code: ErrorCodes.ERR_UNAUTHORIZED,
-            message: SYSTEM_MESSAGE.AUTH.TOKEN_INVALID,
+            message: ErrorMessages.Auth.InvalidCredentials,
         }));
         return;
     }

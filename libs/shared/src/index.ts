@@ -3,7 +3,6 @@
 // Config
 export * from './config/http.config.js';
 export * from './config/permissions.config.js';
-export * from './config/response-message.config.js';
 
 // Constants
 export * from './constants/messages.js';

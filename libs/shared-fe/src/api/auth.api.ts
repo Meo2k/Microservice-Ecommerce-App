@@ -23,12 +23,9 @@ export const authApi = {
     login: async (data: LoginRequest): Promise<LoginResponse> => {
         const response = await apiClient.post<LoginResponse>(API_ENDPOINTS.AUTH.LOGIN, data);
 
-        // Save tokens to localStorage
-        if (response.data.success && response.data.data.tokens) {
-            const { accessToken, refreshToken } = response.data.data.tokens;
+        if (response.data.accessToken) {
             if (typeof window !== 'undefined') {
-                localStorage.setItem('accessToken', accessToken);
-                localStorage.setItem('refreshToken', refreshToken);
+                localStorage.setItem('accessToken', response.data.accessToken);
             }
         }
 
