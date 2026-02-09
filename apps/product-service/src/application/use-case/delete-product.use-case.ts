@@ -1,4 +1,4 @@
-import { Result } from "@org/shared/server";
+import { Result, SuccessMessages } from "@org/shared/server";
 import { IProductRepository } from "../repositories/product.repository.interface";
 import { DeleteProductCommand } from "@org/shared/server";
 import { ProductError } from "../../domain/errors/product.error.js";
@@ -16,6 +16,6 @@ export class DeleteProductUseCase {
 
         await this.productRepo.deleteProduct(productId);
 
-        return Result.ok({ message: "Product deleted successfully" });
+        return Result.success(SuccessMessages.Product.ProductDeleted);
     }
 }

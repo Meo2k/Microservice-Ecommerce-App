@@ -140,7 +140,7 @@ const LoginPage = () => {
                     <span className='bg-background px-3 text-muted-foreground/80'>Or continue with</span>
                   </div>
                 </div>
-                <div className='flex items-center gap-2'>
+                <div className='flex items-center gap-3 flex-col sm:flex-row'>
                   <Button variant='outline' className='w-full' size='lg'> <Google /> Login with Google</Button>
                   <Button variant='outline' className='w-full' size='lg'> <Facebook /> Login with Facebook</Button>
                 </div>

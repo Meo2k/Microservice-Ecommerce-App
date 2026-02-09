@@ -33,7 +33,9 @@ export default function RootLayout({
         </QueryProvider>
         <ToastContainer
           position="top-center"
-          autoClose={3000}
+          pauseOnHover={false}
+          pauseOnFocusLoss={false}
+          autoClose={2000}
           transition={Slide}
         />
       </body>

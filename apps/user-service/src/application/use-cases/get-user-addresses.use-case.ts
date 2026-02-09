@@ -1,4 +1,4 @@
-import { Result } from "@org/shared/server";
+import { Result, SuccessMessages } from "@org/shared/server";
 import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
 import { GetUserAddressesCommand } from "@org/shared/server";
 import { UserError } from "../../domain/errors/user.error.js";
@@ -9,7 +9,7 @@ import { UserError } from "../../domain/errors/user.error.js";
 export class GetUserAddressesUseCase {
     constructor(private readonly userRepository: IUserRepository) { }
 
-    async execute(command: GetUserAddressesCommand): Promise<Result<any[]>> {
+    async execute(command: GetUserAddressesCommand): Promise<Result<{ message: string; data: any[] }>> {
         const userId = command.params.userId;
 
         const user = await this.userRepository.findById(userId);
@@ -20,7 +20,7 @@ export class GetUserAddressesUseCase {
 
         const addresses = await this.userRepository.findAddressesByUserId(userId);
 
-        return Result.ok(addresses);
+        return Result.success(SuccessMessages.Address.AddressesFetched, addresses);
     }
 }
 

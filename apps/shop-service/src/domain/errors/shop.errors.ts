@@ -1,4 +1,4 @@
-import { ErrorCodes, HTTP_STATUS, ResultError } from "@org/shared/server";
+import { ErrorCodes, HTTP_STATUS, ResultError, ErrorMessages } from "@org/shared/server";
 
 export const ShopErrors = {
     MissingId: {
@@ -9,6 +9,6 @@ export const ShopErrors = {
     NotFound: {
         status: HTTP_STATUS.NOT_FOUND,
         code: ErrorCodes.ERR_NOT_FOUND,
-        message: "Shop không tồn tại"
+        message: ErrorMessages.Shop.ShopNotFound
     } as ResultError,
 };

@@ -1,7 +1,7 @@
 import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { ITokenService, IPasswordService } from "../services/index.js";
 import { LoginCommand } from "@org/shared/server";
-import { Result } from "@org/shared/server";
+import { Result, SuccessMessages } from "@org/shared/server";
 import { toResponse, UserResponse } from "../dtos/response.dto.js";
 import { UserError } from "../../domain/error.domain.js";
 
@@ -20,18 +20,18 @@ export class LoginUseCase {
         private readonly passwordService: IPasswordService
     ) { }
 
-    async execute(data: LoginCommand): Promise<Result<LoginResponse>> {
+    async execute(data: LoginCommand): Promise<Result<{ message: string; data: LoginResponse }>> {
         const { email, password } = data.body;
 
         // Find user by email
         const userResult = await this.authRepo.findUserByEmail(email);
 
         if (!userResult.value) {
-            return Result.fail(UserError.NotFound);
+            return Result.fail(UserError.InvalidCredentials);
         }
 
         const user = userResult.value!;
-       
+
         if (!user.canLogin()) {
             if (!user.isVerified) return Result.fail(UserError.UserNotVerified);
             if (user.isLocked) return Result.fail(UserError.UserLocked);
@@ -41,13 +41,13 @@ export class LoginUseCase {
         // Verify password
         const isPasswordValid = await this.passwordService.comparePassword(password, user.password);
         if (!isPasswordValid) {
-            return Result.fail(UserError.InvalidPassword);
+            return Result.fail(UserError.InvalidCredentials);
         }
 
         // Generate tokens
         const accessToken = await this.tokenService.signAccess({ sub: user.id });
         const refreshToken = await this.tokenService.signRefresh({ sub: user.id });
 
-        return Result.ok(new LoginResponse(toResponse(user), accessToken, refreshToken));
+        return Result.success(SuccessMessages.Auth.LoginSuccess, new LoginResponse(toResponse(user), accessToken, refreshToken));
     }
 }

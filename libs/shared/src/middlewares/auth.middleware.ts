@@ -12,8 +12,9 @@ export const createAuthMiddleware = (prisma: any, redis: any) => {
 
         const isPublic = PUBLIC_ROUTES.some((path) => req.path.startsWith(path));
 
+        if (isPublic) return next();
+
         if (!token) {
-            if (isPublic) return next();
             res.status(HTTP_STATUS.UNAUTHORIZED).json(Result.fail<any>({
                 code: ErrorCodes.ERR_UNAUTHORIZED,
                 message: ErrorMessages.Common.Unauthorized,
@@ -93,11 +94,10 @@ export const createAuthMiddleware = (prisma: any, redis: any) => {
             next();
         } catch (error) {
             console.log("Error middleware : ", error)
-            res.status(HTTP_STATUS.UNAUTHORIZED).json(Result.fail<any>({
+            return res.status(HTTP_STATUS.UNAUTHORIZED).json(Result.fail<any>({
                 code: ErrorCodes.ERR_UNAUTHORIZED,
                 message: ErrorMessages.Common.Unauthorized,
             }));
-            return;
         }
     }
 }

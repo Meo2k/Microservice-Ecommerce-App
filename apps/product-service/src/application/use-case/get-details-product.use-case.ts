@@ -1,4 +1,4 @@
-import { Result } from "@org/shared/server";
+import { Result, SuccessMessages } from "@org/shared/server";
 import { IProductRepository } from "../repositories/product.repository.interface";
 import { GetProductDetailsCommand } from "@org/shared/server";
 import { ProductError } from "../../domain/errors/product.error.js";
@@ -14,6 +14,6 @@ export class GetDetailsProductUseCase {
             return Result.fail(ProductError.NotFound);
         }
 
-        return Result.ok(product);
+        return Result.success(SuccessMessages.Product.ProductFetched, product);
     }
 }

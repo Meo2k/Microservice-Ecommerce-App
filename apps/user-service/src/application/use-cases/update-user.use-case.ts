@@ -1,4 +1,4 @@
-import { Result } from "@org/shared/server";
+import { Result, SuccessMessages } from "@org/shared/server";
 import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
 import { toUserResponseDto, UserResponseDto } from "../dtos/index.js";
 import { UpdateUserCommand } from "@org/shared/server";
@@ -11,7 +11,7 @@ import { UserError } from "../../domain/errors/user.error.js";
 export class UpdateUserUseCase {
     constructor(private readonly userRepository: IUserRepository) { }
 
-    async execute(command: UpdateUserCommand): Promise<Result<UserResponseDto>> {
+    async execute(command: UpdateUserCommand): Promise<Result<{ message: string; data: UserResponseDto }>> {
         const userId = command.params.userId;
         const { username, bio, avatar_url } = command.body;
 
@@ -27,6 +27,6 @@ export class UpdateUserUseCase {
         // Persist changes
         const updatedUser = await this.userRepository.save(user);
 
-        return Result.ok(toUserResponseDto(updatedUser));
+        return Result.success(SuccessMessages.User.UserUpdated, toUserResponseDto(updatedUser));
     }
 }
