@@ -15,7 +15,10 @@
   },
   "private": true,
   "devDependencies": {
+    "@eslint/js": "^9.8.0",
     "@nx/esbuild": "22.3.3",
+    "@nx/eslint": "22.3.3",
+    "@nx/eslint-plugin": "22.3.3",
     "@nx/js": "22.4.4",
     "@nx/next": "^22.4.4",
     "@nx/node": "^22.3.3",
@@ -43,13 +46,16 @@
     "@types/yamljs": "^0.2.34",
     "autoprefixer": "10.4.13",
     "esbuild": "^0.19.2",
+    "eslint": "^9.8.0",
+    "eslint-config-prettier": "^10.0.0",
     "nx": "22.3.3",
     "postcss": "8.4.38",
     "prettier": "^2.6.2",
     "prisma": "6.19",
     "tailwindcss": "3.4.3",
     "tslib": "^2.3.0",
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.2",
+    "typescript-eslint": "^8.40.0"
   },
   "workspaces": [
     "packages/*",
@@ -58,7 +64,8 @@
     "libs/shared-fe",
     "libs/database",
     "libs/redis",
-    "libs/database-nosql"
+    "libs/database-nosql",
+    "libs/message-broker"
   ],
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.3.4",
@@ -85,6 +92,7 @@
     "express-rate-limit": "^8.2.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
+    "kafkajs": "^2.2.4",
     "lucide-react": "^0.563.0",
     "morgan": "^1.10.1",
     "ms": "^2.1.3",

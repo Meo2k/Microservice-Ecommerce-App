@@ -48,4 +48,13 @@ export const ENV = {
     SHOP_SERVICE_PORT: getEnv("NX_SHOP_SERVICE_PORT", "6004"),
     SHOP_SERVICE_HOST: getEnv("NX_SHOP_SERVICE_HOST", "localhost"),
 
+    NOTIFICATION_SERVICE_PORT: getEnv("NX_NOTIFICATION_SERVICE_PORT", "6005"),
+
+    // Kafka Configuration (Confluent Cloud)
+    KAFKA_BROKERS: getEnv("NX_KAFKA_BROKERS", "localhost:9092"),
+    KAFKA_CLIENT_ID: getEnv("NX_KAFKA_CLIENT_ID", "ecommerce-app"),
+    KAFKA_USERNAME: getEnv("NX_KAFKA_USERNAME"),
+    KAFKA_PASSWORD: getEnv("NX_KAFKA_PASSWORD"),
+    KAFKA_GROUP_ID: getEnv("NX_KAFKA_GROUP_ID", "notification-service-group"),
+
 }

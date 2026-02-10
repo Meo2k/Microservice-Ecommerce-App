@@ -8,7 +8,8 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod';
-
+import { useRegister, useResendOtp } from '@org/shared-fe'
+import { toast } from 'react-toastify'
 
 const RegisterPage = () => {
   const [activeStep, setActiveStep] = useState<number>(1)
@@ -29,10 +30,33 @@ const RegisterPage = () => {
   });
 
 
+  // send otp mutation (only used for manual resend button)
+  const { mutate: sendOtpQuery } = useResendOtp({
+    onSuccess: (data: any) => {
+      toast.success(data?.message)
+    },
+    onError: (error: any) => {
+      toast.error(error?.message)
+    }
+  })
+
+  // register mutation
+  const { mutate: registerMutation } = useRegister({
+    onSuccess: (data: any) => {
+      toast.success("Registration successful! Check your email for OTP.");
+      setActiveStep(2);
+    },
+    onError: (error: any) => {
+      toast.error(error?.message)
+    }
+  })
+
+
 
   const onHandleSubmit = handleSubmit((data) => {
-    console.log(data)
-    
+    if (activeStep === 1) {
+      registerMutation(data)
+    }
 
   });
 
@@ -56,7 +80,6 @@ const RegisterPage = () => {
   }
 
   const handleStateForm = (stateForm: "buyer" | "vendor") => {
-    setActiveStep(1)
     setStateForm(stateForm)
     setArrayStep(stateForm === "buyer" ? registerStep : shopStep)
   }

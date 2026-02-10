@@ -32,11 +32,11 @@ const LoginPage = () => {
   })
   const router = useRouter()
   const { mutate: loginMutation, isPending } = useLogin({
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       toast.success(data.message)
       router.push('/')
     },
-    onError: (error) => {
+    onError: (error: any) => {
       toast.error(error?.message)
     }
   })

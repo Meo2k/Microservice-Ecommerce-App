@@ -1,0 +1,11 @@
+{
+    "name": "@org/message-broker",
+    "version": "0.0.1",
+    "main": "./src/index.ts",
+    "types": "./src/index.ts",
+    "nx": {
+        "tags": [
+            "type:lib"
+        ]
+    }
+}

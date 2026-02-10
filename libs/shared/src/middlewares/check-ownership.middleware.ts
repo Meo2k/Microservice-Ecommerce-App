@@ -10,7 +10,7 @@ export const createCheckOwnership = (prisma: any, redis: any) =>
         const isPass = PASS_OWNER_ROUTES.some((path: any) => req.path.startsWith(path));
         if (isPass) return next();
 
-        const shopId = Number(req.params.shopId);
+        const shopId = Number(req.params['shopId']);
         const id = Number(req.headers["x-user-id"]);
 
         let cachedData = await redis.get(`shop:${shopId}:owner`);

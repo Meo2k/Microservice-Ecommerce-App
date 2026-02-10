@@ -1,11 +1,8 @@
 {
-  "name": "@org/user-service",
+  "name": "@org/notification-service",
   "version": "0.0.1",
   "private": true,
   "nx": {
-    "tags": [
-      "type:be"
-    ],
     "targets": {
       "build": {
         "executor": "@nx/esbuild:esbuild",
@@ -15,25 +12,15 @@
         "defaultConfiguration": "production",
         "options": {
           "platform": "node",
-          "outputPath": "apps/user-service/dist",
+          "outputPath": "apps/notification-service/dist",
           "format": [
             "cjs"
           ],
           "bundle": true,
-          "main": "apps/user-service/src/main.ts",
-          "tsConfig": "apps/user-service/tsconfig.app.json",
+          "main": "apps/notification-service/src/main.ts",
+          "tsConfig": "apps/notification-service/tsconfig.app.json",
           "assets": [
-            "apps/user-service/src/assets",
-            {
-              "input": "libs/database/generated/client",
-              "glob": "**/*",
-              "output": "libs/database/generated/client"
-            },
-            {
-              "input": "libs/database-nosql/generated/prisma",
-              "glob": "**/*",
-              "output": "libs/database-nosql/generated/prisma"
-            }
+            "apps/notification-service/src/assets"
           ],
           "esbuildOptions": {
             "sourcemap": true,
@@ -61,8 +48,8 @@
         "cache": true,
         "executor": "@nx/js:prune-lockfile",
         "outputs": [
-          "{workspaceRoot}/apps/user-service/dist/package.json",
-          "{workspaceRoot}/apps/user-service/dist/package-lock.json"
+          "{workspaceRoot}/apps/notification-service/dist/package.json",
+          "{workspaceRoot}/apps/notification-service/dist/package-lock.json"
         ],
         "options": {
           "buildTarget": "build"
@@ -74,7 +61,7 @@
         ],
         "cache": true,
         "outputs": [
-          "{workspaceRoot}/apps/user-service/dist/workspace_modules"
+          "{workspaceRoot}/apps/notification-service/dist/workspace_modules"
         ],
         "executor": "@nx/js:copy-workspace-modules",
         "options": {
@@ -96,19 +83,22 @@
           "build"
         ],
         "options": {
-          "buildTarget": "@org/user-service:build",
+          "buildTarget": "@org/notification-service:build",
           "runBuildTargetDependencies": false
         },
         "configurations": {
           "development": {
-            "buildTarget": "@org/user-service:build:development"
+            "buildTarget": "@org/notification-service:build:development"
           },
           "production": {
-            "buildTarget": "@org/user-service:build:production"
+            "buildTarget": "@org/notification-service:build:production"
           }
         }
       }
-    }
+    },
+    "tags": [
+      "type:be"
+    ]
   },
   "dependencies": {
     "@org/shared": "*"

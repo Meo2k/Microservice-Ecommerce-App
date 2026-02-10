@@ -20,9 +20,6 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "es2022",
-    "customConditions": [
-      "@org/source"
-    ],
     "paths": {
       "@org/database": [
         "libs/database/src/index.ts",
@@ -36,11 +33,16 @@
       "@org/redis": [
         "libs/redis/src/index.ts"
       ],
+      "@org/message-broker": [
+        "libs/message-broker/src/index.ts"
+      ],
       "@org/shared": [
-        "libs/shared/src/index.ts"
+        "libs/shared/src/index.ts",
+        "libs/shared/dist/src/index.js"
       ],
       "@org/shared/server": [
-        "libs/shared/src/server.ts"
+        "libs/shared/src/server.ts",
+        "libs/shared/dist/src/server.js"
       ],
       "@org/shared-fe": [
         "libs/shared-fe/src/index.ts"

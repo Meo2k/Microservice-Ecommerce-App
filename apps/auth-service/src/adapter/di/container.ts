@@ -1,4 +1,6 @@
 import { checkPermission } from "@org/shared/server";
+import { ENV } from "@org/shared";
+import { KafkaClient } from "@org/message-broker";
 
 import { IAuthRepository } from "../../application/repositories/auth.repository.interface.js";
 
@@ -7,6 +9,7 @@ import {
     IPasswordService,
 } from "../../application/services/index.js";
 import { IEmailService, IOtpService } from "../../application/services/external.js";
+import { IAuthMessagePublisher } from "../../application/services/message-publisher.interface.js";
 import {
     RegisterUserUseCase,
     LoginUseCase,
@@ -21,6 +24,7 @@ import { AuthRepository } from "../repositories/auth.repository.js";
 import { TokenService } from "../services/token.service.js";
 import { PasswordService } from "../services/password.service.js";
 import { RedisEmailService, RedisOtpService } from "../services/redis.service.js";
+import { AuthMessagePublisher } from "../messaging/auth-message-publisher.service.js";
 import { AuthController } from "../controllers/auth.controller.js";
 
 
@@ -31,6 +35,8 @@ class DIContainer {
     private passwordService: IPasswordService;
     private emailService: IEmailService;
     private otpService: IOtpService;
+    private messagePublisher: IAuthMessagePublisher;
+    private kafkaClient: KafkaClient;
 
     private registerUserUseCase: RegisterUserUseCase;
     private loginUseCase: LoginUseCase;
@@ -52,9 +58,19 @@ class DIContainer {
         this.emailService = new RedisEmailService();
         this.otpService = new RedisOtpService();
 
+        // Initialize Kafka client (local Docker - no SSL/SASL)
+        this.kafkaClient = KafkaClient.getInstance({
+            brokers: ENV.KAFKA_BROKERS.split(','),
+            clientId: ENV.KAFKA_CLIENT_ID,
+            username: ENV.KAFKA_USERNAME,
+            password: ENV.KAFKA_PASSWORD,
+            ssl: false, // No SSL for local Docker Kafka
+        });
+        this.messagePublisher = new AuthMessagePublisher(this.kafkaClient);
+
         this.registerUserUseCase = new RegisterUserUseCase(
             this.authRepository,
-            this.emailService,
+            this.messagePublisher,
             this.otpService,
             this.passwordService
         );
