@@ -25,10 +25,14 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@org/shared-fe": [
+        "../../libs/shared-fe/src/index.ts"
+      ],
+      "@org/shared-fe/*": [
+        "../../libs/shared-fe/src/*"
       ]
     },
-    "outDir": "dist",
-    "rootDir": "src",
     "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
   },
   "include": [
@@ -51,9 +55,6 @@
     ".next"
   ],
   "references": [
-    {
-      "path": "../../libs/shared"
-    },
     {
       "path": "../../libs/shared-fe"
     }

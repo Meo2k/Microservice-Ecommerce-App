@@ -11,15 +11,15 @@ export const UserError = {
         code: ErrorCodes.ERR_BAD_REQUEST,
         message: ErrorMessages.Auth.UserAlreadyExists
     } as ResultError,
+    InvalidCredentials: {
+        status: HTTP_STATUS.BAD_REQUEST,
+        code: ErrorCodes.ERR_BAD_REQUEST,
+        message: ErrorMessages.Auth.InvalidCredentials
+    } as ResultError,
     InvalidPassword: {
         status: HTTP_STATUS.BAD_REQUEST,
         code: ErrorCodes.ERR_BAD_REQUEST,
-        message: ErrorMessages.Auth.InvalidPassword
-    } as ResultError,
-    InvalidEmail: {
-        status: HTTP_STATUS.BAD_REQUEST,
-        code: ErrorCodes.ERR_BAD_REQUEST,
-        message: ErrorMessages.Auth.InvalidEmail
+        message: "Invalid password"
     } as ResultError,
     InvalidOtp: {
         status: HTTP_STATUS.BAD_REQUEST,

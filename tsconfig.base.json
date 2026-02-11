@@ -20,30 +20,33 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "es2022",
-    "customConditions": [
-      "@org/source"
-    ],
     "paths": {
       "@org/database": [
-        "libs/database/src/index.ts",
+        "libs/database/dist/src/index.d.ts",
+        "libs/database/dist/src/index.js"
       ],
       "@org/database/client": [
-        "libs/database/src/prisma-client.ts"
+        "libs/database/dist/src/prisma-client.d.ts",
+        "libs/database/dist/src/prisma-client.js"
       ],
       "@org/database-nosql": [
         "libs/database-nosql/src/index.ts"
       ],
       "@org/redis": [
-        "libs/redis/src/index.ts"
+        "libs/redis/dist/index.d.ts",
+        "libs/redis/dist/index.js"
+      ],
+      "@org/message-broker": [
+        "libs/message-broker/dist/src/index.d.ts",
+        "libs/message-broker/dist/src/index.js"
       ],
       "@org/shared": [
-        "libs/shared/src/index.ts"
+        "libs/shared/dist/src/index.d.ts",
+        "libs/shared/dist/src/index.js"
       ],
       "@org/shared/server": [
-        "libs/shared/src/server.ts"
-      ],
-      "@org/shared/*": [
-        "libs/shared/src/*"
+        "libs/shared/dist/src/server.d.ts",
+        "libs/shared/dist/src/server.js"
       ],
       "@org/shared-fe": [
         "libs/shared-fe/src/index.ts"

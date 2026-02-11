@@ -1,4 +1,4 @@
-import { ENV, Result } from "@org/shared/server";
+import { ENV, Result, SuccessMessages } from "@org/shared/server";
 import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
 import { CreateUserAddressCommand } from "@org/shared/server";
 import { UserError, AddressError, CountryError, CityError } from "../../domain/errors/user.error.js";
@@ -9,7 +9,7 @@ import { UserError, AddressError, CountryError, CityError } from "../../domain/e
 export class CreateUserAddressUseCase {
     constructor(private readonly userRepository: IUserRepository) { }
 
-    async execute(command: CreateUserAddressCommand): Promise<Result<any>> {
+    async execute(command: CreateUserAddressCommand): Promise<Result<{ message: string; data: any }>> {
         const userId = command.params.userId;
         const data = command.body;
 
@@ -42,7 +42,7 @@ export class CreateUserAddressUseCase {
             district: data.district ?? ""
         });
 
-        return Result.ok(createdAddress);
+        return Result.success(SuccessMessages.Address.AddressCreated, createdAddress);
     }
 }
 

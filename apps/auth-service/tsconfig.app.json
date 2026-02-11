@@ -14,9 +14,6 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.ts",
-    "../../libs/shared/src/**/*.ts",
-    "../../libs/database/src/**/*.ts",
-    "../../libs/redis/src/**/*.ts",
     "../../@types/**/*.d.ts"
   ],
   "exclude": [],
@@ -26,6 +23,9 @@
     },
     {
       "path": "../../libs/database/tsconfig.lib.json"
+    },
+    {
+      "path": "../../libs/message-broker/tsconfig.lib.json"
     },
     {
       "path": "../../libs/shared/tsconfig.lib.json"

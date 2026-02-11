@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { Action, Resource, PermissionManager } from '../config/permissions.config.js';
 import { Result } from '../utils/result.js';
 import { ErrorCodes, HTTP_STATUS } from '../config/http.config.js';
+import { ErrorMessages } from "../constants/messages.js";
 
 
 export const checkPermission = (resource: Resource, action: Action, isSelf: boolean = false) => {
@@ -21,7 +22,7 @@ export const checkPermission = (resource: Resource, action: Action, isSelf: bool
             if (!PermissionManager.can(BigInt(perms), resource, action)) {
                 res.status(HTTP_STATUS.FORBIDDEN).json(Result.fail<any>({
                     code: ErrorCodes.ERR_UNAUTHORIZED,
-                    message: "Access denied",
+                    message: ErrorMessages.Common.Forbidden,
                 }));
                 return;
             }

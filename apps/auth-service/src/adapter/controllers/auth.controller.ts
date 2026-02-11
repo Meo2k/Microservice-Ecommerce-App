@@ -30,8 +30,7 @@ export class AuthController extends BaseController {
     };
 
     login = async (req: Request, res: Response) => {
-        const body = req.body;
-        const result = await this.loginUseCase.execute(body);
+        const result = await this.loginUseCase.execute(req);
 
         this.handleResultWithCookie(result, res, HTTP_STATUS.OK, "refresh_token");
     };
@@ -47,8 +46,7 @@ export class AuthController extends BaseController {
     };
 
     changePassword = async (req: Request, res: Response) => {
-        const body = req.body;
-        const result = await this.changePasswordUseCase.execute(body);
+        const result = await this.changePasswordUseCase.execute(req);
         this.handleResult(result, res, HTTP_STATUS.OK);
     };
 

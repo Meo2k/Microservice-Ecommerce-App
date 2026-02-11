@@ -3,7 +3,7 @@ export interface ResultError {
     readonly status?: number;
     readonly code: string;
     readonly message: string;
-    readonly details?: any; 
+    readonly details?: any;
 };
 
 export const ErrorNone: ResultError = {
@@ -45,6 +45,18 @@ export class Result<T> {
 
     public static ok<U>(value?: U): Result<U> {
         return new Result<U>(true, ErrorNone, value);
+    }
+
+    //With data
+    public static success<U>(message: string, data: U): Result<{ message: string; data: U }>;
+    // Without data (message only)
+    public static success(message: string): Result<{ message: string }>;
+    // Implementation
+    public static success<U>(message: string, data?: U): Result<{ message: string; data?: U }> {
+        if (data !== undefined) {
+            return new Result<{ message: string; data: U }>(true, ErrorNone, { message, data });
+        }
+        return new Result<{ message: string }>(true, ErrorNone, { message });
     }
 
     public static fail<U>(error: ResultError): Result<U> {

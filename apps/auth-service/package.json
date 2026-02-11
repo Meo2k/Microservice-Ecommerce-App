@@ -19,7 +19,7 @@
           "format": [
             "cjs"
           ],
-          "bundle": false,
+          "bundle": true,
           "main": "apps/auth-service/src/main.ts",
           "tsConfig": "apps/auth-service/tsconfig.app.json",
           "assets": [
@@ -35,6 +35,7 @@
               "output": "libs/database-nosql/generated/prisma"
             }
           ],
+          "thirdParty": false,
           "esbuildOptions": {
             "sourcemap": true,
             "outExtension": {
@@ -110,6 +111,8 @@
       }
     }
   },
-  "dependencies": {},
+  "dependencies": {
+    "@org/shared": "*"
+  },
   "devDependencies": {}
 }

@@ -1,5 +1,5 @@
 
-import { Result } from "@org/shared/server";
+import { Result, SuccessMessages } from "@org/shared/server";
 import { IAuthRepository } from "../repositories/auth.repository.interface.js";
 import { IOtpService } from "../services/external.js";
 import { UserError } from "../../domain/error.domain.js";
@@ -14,7 +14,7 @@ export class ChangePasswordUseCase {
     ) { }
 
 
-    async execute(data: ChangePasswordCommand): Promise<Result<UserResponse>> {
+    async execute(data: ChangePasswordCommand): Promise<Result<{ message: string; data: UserResponse }>> {
         const { code, email, password } = data.body;
 
         // Verify OTP
@@ -49,6 +49,6 @@ export class ChangePasswordUseCase {
         await this.authRepo.save(user);
         await this.otpService.resetOTP(email);
 
-        return Result.ok(toResponse(user));
+        return Result.success(SuccessMessages.Auth.PasswordChanged, toResponse(user));
     }
 }

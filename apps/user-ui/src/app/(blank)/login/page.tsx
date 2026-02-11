@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -9,33 +9,36 @@ import { FieldLabel } from '@/components/ui/field'
 import Logo from '@/components/svg/logo'
 import Google from '@/components/svg/google'
 import Facebook from '@/components/svg/facebook'
-import { useLogin } from '@org/shared-fe'
+import { useLoading, useLogin } from '@org/shared-fe'
 import { useForm } from 'react-hook-form'
-import { LoginInput, loginSchema } from '@org/shared'
+import { LoginInput, loginSchema } from '@org/shared-fe'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
+import { toast } from 'react-toastify'
 
 const LoginPage = () => {
   //state 
   const [isShowPassword, setIsShowPassword] = useState<boolean>(false)
 
   // hook
+  const { setIsLoading } = useLoading()
+
   const { register, handleSubmit, formState: { errors } } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
+    mode: 'onBlur',
     defaultValues: {
       email: '',
       password: ''
     }
   })
   const router = useRouter()
-  const { mutate: loginMutation } = useLogin({
-    onSuccess: (data) => {
+  const { mutate: loginMutation, isPending } = useLogin({
+    onSuccess: (data: any) => {
       toast.success(data.message)
       router.push('/')
     },
-    onError: (error) => {
-      toast.error(error.message)
+    onError: (error: any) => {
+      toast.error(error?.message)
     }
   })
 
@@ -44,9 +47,12 @@ const LoginPage = () => {
   }
 
   const onSubmit = handleSubmit((data) => {
-    console.log("<<<check login : ", data)
     loginMutation(data)
   })
+
+  useEffect(() => {
+    setIsLoading(isPending)
+  }, [isPending, setIsLoading])
 
 
   return (
@@ -111,8 +117,8 @@ const LoginPage = () => {
                     {...register('password')}
                   />
                   {errors.password && <p className='text-red-500 text-sm'>{errors.password.message}</p>}
-                  <span onClick={handleShowPassword} 
-                  className="material-symbols-outlined cursor-pointer absolute right-3 top-3">
+                  <span onClick={handleShowPassword}
+                    className="material-symbols-outlined cursor-pointer absolute right-3 top-3">
                     {isShowPassword ? 'visibility' : 'visibility_off'}
                   </span>
                 </div>
@@ -123,26 +129,30 @@ const LoginPage = () => {
                   Remember me for 30 days
                 </FieldLabel>
               </div>
-              <Button type='submit' className='w-full py-6 rounded-lg' size='lg'>Sign in to account</Button>
-              <div className='relative'>
-                <div className='absolute inset-0 flex items-center'>
-                  <span className='w-full border-t border-gray-300'></span>
-                </div>
-                <div className='relative flex justify-center text-xs my-14 uppercase font-bold'>
-                  <span className='bg-background px-3 text-muted-foreground/80'>Or continue with</span>
-                </div>
-              </div>
-              <div className='flex items-center gap-2'>
-                <Button variant='outline' className='w-full' size='lg'> <Google /> Login with Google</Button>
-                <Button variant='outline' className='w-full' size='lg'> <Facebook /> Login with Facebook</Button>
-              </div>
+
+              {/* Button  */}
               <div>
-                <div className='text-center mt-8 mx-auto text-muted-foreground/80 text-sm font-medium'>
-                  Don't have an account? &nbsp;
-                  <Link href="/register" className='text-blue-500 font-bold hover:underline'> Sign up for free</Link>
+                <Button type='submit' className='w-full py-6 rounded-lg' size='lg'>Sign in to account</Button>
+                <div className='relative'>
+                  <div className='absolute inset-0 flex items-center'>
+                    <span className='w-full border-t border-gray-300'></span>
+                  </div>
+                  <div className='relative flex justify-center text-xs my-14 uppercase font-bold'>
+                    <span className='bg-background px-3 text-muted-foreground/80'>Or continue with</span>
+                  </div>
                 </div>
-                <div className='text-center mx-auto text-xs text-muted-foreground font-medium mt-10'>
-                  © 2026 Marketplace Global Inc. All rights reserved
+                <div className='flex items-center gap-3 flex-col sm:flex-row'>
+                  <Button variant='outline' className='w-full' size='lg'> <Google /> Login with Google</Button>
+                  <Button variant='outline' className='w-full' size='lg'> <Facebook /> Login with Facebook</Button>
+                </div>
+                <div>
+                  <div className='text-center mt-8 mx-auto text-muted-foreground/80 text-sm font-medium'>
+                    Don't have an account? &nbsp;
+                    <Link href="/register" className='text-blue-500 font-bold hover:underline'> Sign up for free</Link>
+                  </div>
+                  <div className='text-center mx-auto text-xs text-muted-foreground font-medium mt-10'>
+                    © 2026 MiEmark Inc. All rights reserved
+                  </div>
                 </div>
               </div>
             </div>

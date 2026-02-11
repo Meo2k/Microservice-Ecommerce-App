@@ -1,4 +1,4 @@
-import { Result } from "@org/shared/server";
+import { Result, SuccessMessages } from "@org/shared/server";
 import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
 import { DeleteUserAddressCommand } from "@org/shared/server";
 import { UserError, AddressError } from "../../domain/errors/user.error.js";
@@ -9,7 +9,7 @@ import { UserError, AddressError } from "../../domain/errors/user.error.js";
 export class DeleteUserAddressUseCase {
     constructor(private readonly userRepository: IUserRepository) { }
 
-    async execute(command: DeleteUserAddressCommand): Promise<Result<any>> {
+    async execute(command: DeleteUserAddressCommand): Promise<Result<{ message: string; data: any }>> {
         const userId = command.params.userId;
         const addressId = command.params.addressId;
 
@@ -29,6 +29,6 @@ export class DeleteUserAddressUseCase {
 
         const deletedAddress = await this.userRepository.deleteAddress(addressId);
 
-        return Result.ok(deletedAddress);
+        return Result.success(SuccessMessages.Address.AddressDeleted, deletedAddress);
     }
 }

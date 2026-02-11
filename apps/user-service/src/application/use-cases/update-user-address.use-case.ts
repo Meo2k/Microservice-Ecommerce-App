@@ -1,4 +1,4 @@
-import { Result } from "@org/shared/server";
+import { Result, SuccessMessages } from "@org/shared/server";
 import { IUserRepository } from "../../application/repositories/user.repository.interface.js";
 import { UpdateUserAddressCommand } from "@org/shared/server";
 import { UserError, AddressError, CountryError, CityError } from "../../domain/errors/user.error.js";
@@ -9,7 +9,7 @@ import { UserError, AddressError, CountryError, CityError } from "../../domain/e
 export class UpdateUserAddressUseCase {
     constructor(private readonly userRepository: IUserRepository) { }
 
-    async execute(command: UpdateUserAddressCommand): Promise<Result<any>> {
+    async execute(command: UpdateUserAddressCommand): Promise<Result<{ message: string; data: any }>> {
         const userId = command.params.userId;
         const data = command.body;
 
@@ -51,7 +51,7 @@ export class UpdateUserAddressUseCase {
         // Note: updateAddress takes Partial<AddressEntity>, so passing address entity is compatible
         const updatedAddress = await this.userRepository.updateAddress(address.id, address);
 
-        return Result.ok(updatedAddress);
+        return Result.success(SuccessMessages.Address.AddressUpdated, updatedAddress);
     }
 }
 

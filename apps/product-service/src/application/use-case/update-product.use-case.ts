@@ -1,4 +1,4 @@
-import { Result } from "@org/shared/server";
+import { Result, SuccessMessages } from "@org/shared/server";
 import { IProductRepository } from "../repositories/product.repository.interface";
 import { UpdateProductCommand } from "@org/shared/server";
 import { ProductError } from "../../domain/errors/product.error.js";
@@ -6,7 +6,7 @@ import { ProductError } from "../../domain/errors/product.error.js";
 export class UpdateProductUseCase {
     constructor(private readonly productRepository: IProductRepository) { }
 
-    async execute(command: UpdateProductCommand): Promise<Result<any>> {
+    async execute(command: UpdateProductCommand): Promise<Result<{ message: string; data: any }>> {
         const productId = String(command.params.productId);
         const updateData = command.body;
 
@@ -33,6 +33,6 @@ export class UpdateProductUseCase {
 
         const updatedProduct = await this.productRepository.updateProduct(productId, productToSave);
 
-        return Result.ok(updatedProduct);
+        return Result.success(SuccessMessages.Product.ProductUpdated, updatedProduct);
     }
 }

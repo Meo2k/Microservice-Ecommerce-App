@@ -1,15 +1,16 @@
 import { Result, SuccessMessages, RegisterCommand } from "@org/shared/server";
 import { IAuthRepository } from "../repositories/auth.repository.interface.js";
-import { IEmailService, IOtpService } from "../services/external.js";
+import { IOtpService } from "../services/external.js";
 import { UserError } from "../../domain/error.domain.js";
 import { IPasswordService } from "../services/index.js";
 import { UserEntity } from "../../domain/entities/user.entity.js";
+import { IAuthMessagePublisher } from "../services/message-publisher.interface.js";
 
 
 export class RegisterUserUseCase {
     constructor(
         private readonly authRepo: IAuthRepository,
-        private readonly emailService: IEmailService,
+        private readonly messagePublisher: IAuthMessagePublisher,
         private readonly otpService: IOtpService,
         private readonly passwordService: IPasswordService
     ) { }
@@ -23,12 +24,12 @@ export class RegisterUserUseCase {
             return Result.fail(UserError.AlreadyExists);
         }
 
-        // Check OTP restrictions and send OTP
+        // Check OTP restrictions
         const otpCheck = await this.otpService.checkOtpRestrictions(email);
         if (!otpCheck.isSuccess) {
             return Result.fail(otpCheck.error);
         }
-        
+
 
         // Prepare user entity
         const hashedPassword = await this.passwordService.hashPassword(password);
@@ -39,8 +40,9 @@ export class RegisterUserUseCase {
         // Save user (Repository handles persistence)
         await this.authRepo.createUser(newUser);
 
-        await this.emailService.sendOtpToEmail(email, "otp.template");
-        
+        // Publish UserRegistered event to Kafka (asynchronous email sending)
+        await this.messagePublisher.publishUserRegistered(email, username || email);
+
 
         return Result.ok({ message: SuccessMessages.Auth.RegisterSuccess });
     }

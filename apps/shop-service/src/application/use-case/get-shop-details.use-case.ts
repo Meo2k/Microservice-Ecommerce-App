@@ -1,5 +1,5 @@
 
-import { Result, ResultError } from "@org/shared/server";
+import { Result, SuccessMessages } from "@org/shared/server";
 import { ShopErrors } from "../../domain/errors/shop.errors.js";
 import { IShopRepository } from "../../application/repositories/user.repository";
 import { ShopEntity } from "../../domain/entities/shop.entity.js";
@@ -30,13 +30,13 @@ export class GetShopDetailsUseCase {
         );
     }
 
-    async execute(command: GetShopDetailsCommand): Promise<Result<ShopResponse | ResultError>> {
+    async execute(command: GetShopDetailsCommand): Promise<Result<{ message: string; data: ShopResponse }>> {
         const shop = await this.shopRepository.getShopById(command.params.shopId);
 
         if (!shop) {
             return Result.fail(ShopErrors.NotFound);
         }
 
-        return Result.ok(this._toResponse(shop.value!));
+        return Result.success(SuccessMessages.Shop.ShopFetched, this._toResponse(shop.value!));
     }
 }

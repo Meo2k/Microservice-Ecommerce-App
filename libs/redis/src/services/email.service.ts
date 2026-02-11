@@ -1,7 +1,8 @@
-import { ENV, generateOTP, OTP_MESSAGE, sendEmail } from "@org/shared/server";
+import { ENV, generateOTP, sendEmail } from "@org/shared/server";
 import { ErrorCodes, Result } from "@org/shared";
 import { IEmailService } from '../interfaces/email.interface.js';
 import { redis } from "../redis.js";
+import { ErrorMessages } from "@org/shared";
 /**
  * Email Service Implementation using Redis
  */
@@ -16,7 +17,7 @@ export class EmailService implements IEmailService {
         if (await redis.get(`otp_cooldown:${to}`)) {
             return Result.fail({
                 code: ErrorCodes.ERR_BAD_REQUEST,
-                message: OTP_MESSAGE.COOLDOWN,
+                message: ErrorMessages.Otp.OtpCooldown,
             });
         }
 
@@ -26,7 +27,7 @@ export class EmailService implements IEmailService {
             "Xác thực Email của Bạn!",
             "Xác thực Email",
             templateName,
-            { otp, otpExpired: otpExpired / 60 }
+            { email: to, otp, otpExpired: otpExpired / 60 }
         );
 
         // Store OTP in Redis with expiration

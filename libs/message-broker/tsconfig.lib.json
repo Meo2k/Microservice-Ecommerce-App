@@ -1,0 +1,25 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "dist",
+        "declaration": true,
+        "emitDeclarationOnly": false,
+        "moduleResolution": "node",
+        "types": [
+            "node"
+        ]
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "jest.config.ts",
+        "src/**/*.spec.ts",
+        "src/**/*.test.ts"
+    ],
+    "references": [
+      {
+        "path": "../shared/tsconfig.lib.json"
+      }
+    ]
+}

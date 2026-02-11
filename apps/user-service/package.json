@@ -19,7 +19,7 @@
           "format": [
             "cjs"
           ],
-          "bundle": false,
+          "bundle": true,
           "main": "apps/user-service/src/main.ts",
           "tsConfig": "apps/user-service/tsconfig.app.json",
           "assets": [
@@ -110,5 +110,7 @@
       }
     }
   },
-  "dependencies": {}
+  "dependencies": {
+    "@org/shared": "*"
+  }
 }
