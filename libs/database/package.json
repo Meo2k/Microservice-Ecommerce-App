@@ -2,21 +2,21 @@
   "name": "@org/database",
   "version": "0.0.1",
   "private": true,
-  "main": "./src/index.js",
-  "module": "./src/index.js",
-  "types": "./src/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "@org/source": "./src/index.ts",
-      "types": "./src/index.d.ts",
-      "import": "./src/index.js",
-      "default": "./src/index.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./client": {
-      "types": "./src/prisma-client.d.ts",
-      "import": "./src/prisma-client.js",
-      "default": "./src/prisma-client.js"
+      "types": "./dist/prisma-client.d.ts",
+      "import": "./dist/prisma-client.js",
+      "default": "./dist/prisma-client.js"
     }
   },
   "dependencies": {

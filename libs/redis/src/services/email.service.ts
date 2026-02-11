@@ -27,7 +27,7 @@ export class EmailService implements IEmailService {
             "Xác thực Email của Bạn!",
             "Xác thực Email",
             templateName,
-            { otp, otpExpired: otpExpired / 60 }
+            { email: to, otp, otpExpired: otpExpired / 60 }
         );
 
         // Store OTP in Redis with expiration

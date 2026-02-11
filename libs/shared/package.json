@@ -1,27 +1,27 @@
 {
   "name": "@org/shared",
   "version": "0.0.1",
-  "main": "./src/index.js",
-  "module": "./src/index.js",
-  "types": "./src/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/index.d.ts",
-      "import": "./src/index.js",
-      "require": "./src/index.js",
-      "default": "./src/index.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./server": {
-      "types": "./src/server.d.ts",
-      "import": "./src/server.js",
-      "require": "./src/server.js",
-      "default": "./src/server.js"
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.js",
+      "require": "./dist/server.js",
+      "default": "./dist/server.js"
     },
     "./browser": {
-      "types": "./src/browser.d.ts",
-      "import": "./src/browser.js",
-      "require": "./src/browser.js",
-      "default": "./src/browser.js"
+      "types": "./dist/browser.d.ts",
+      "import": "./dist/browser.js",
+      "require": "./dist/browser.js",
+      "default": "./dist/browser.js"
     }
   },
   "dependencies": {

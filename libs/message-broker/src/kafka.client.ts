@@ -1,4 +1,4 @@
-import { Kafka, Producer, Consumer, Admin, logLevel } from 'kafkajs';
+import { Kafka, Producer, Consumer, Admin, logLevel, Partitioners } from 'kafkajs';
 
 export interface KafkaConfig {
     brokers: string[];
@@ -49,7 +49,8 @@ class KafkaClient {
     public async getProducer(): Promise<Producer> {
         if (!this.producer) {
             this.producer = this.kafka.producer({
-                allowAutoTopicCreation: false,
+                allowAutoTopicCreation: true,
+                createPartitioner: Partitioners.LegacyPartitioner,
                 transactionTimeout: 30000,
             });
             await this.producer.connect();

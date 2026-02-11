@@ -28,7 +28,7 @@ export const loginSchema = z.object({
 
 export const verifyOtpSchema = z.object({
     email: emailSchema,
-    otp: z.string().trim().min(4, "OTP must be at least 4 characters long").max(6, "OTP must be at most 6 characters long"),
+    otp: z.string().trim().min(6, "OTP must be at least 6 characters long").max(6, "OTP must be at most 6 characters long"),
 });
 
 export const resendOtpSchema = z.object({

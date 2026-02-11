@@ -56,7 +56,11 @@ export class OtpService implements IOtpService {
     }
 
     async resetOTP(email: string): Promise<void> {
-        await redis.del(`otp:${email}`);
-        await redis.del(`otp_attempts:${email}`);
+        const p = redis.pipeline();
+        p.del(`otp:${email}`);
+        p.del(`otp_locked:${email}`);
+        p.del(`otp_cooldown:${email}`);
+        p.del(`otp_attempts:${email}`);
+        await p.exec();
     }
 }

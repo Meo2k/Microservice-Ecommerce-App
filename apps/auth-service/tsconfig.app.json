@@ -14,10 +14,6 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.ts",
-    "../../libs/shared/src/**/*.ts",
-    "../../libs/database/src/**/*.ts",
-    "../../libs/redis/src/**/*.ts",
-    "../../libs/message-broker/src/**/*.ts",
     "../../@types/**/*.d.ts"
   ],
   "exclude": [],

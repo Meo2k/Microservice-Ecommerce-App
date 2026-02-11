@@ -25,6 +25,7 @@ const LoginPage = () => {
 
   const { register, handleSubmit, formState: { errors } } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
+    mode: 'onBlur',
     defaultValues: {
       email: '',
       password: ''
@@ -150,7 +151,7 @@ const LoginPage = () => {
                     <Link href="/register" className='text-blue-500 font-bold hover:underline'> Sign up for free</Link>
                   </div>
                   <div className='text-center mx-auto text-xs text-muted-foreground font-medium mt-10'>
-                    © 2026 Marketplace Global Inc. All rights reserved
+                    © 2026 MiEmark Inc. All rights reserved
                   </div>
                 </div>
               </div>
