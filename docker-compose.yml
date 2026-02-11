@@ -1,31 +1,45 @@
 services:
-  # PostgreSQL Database
-  postgres:
-    image: postgres:15-alpine
-    container_name: ecommerce-postgres
-    ports:
-      - "5433:5432"
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: ecommerce
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - ecommerce-network
+  # # PostgreSQL Database
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: ecommerce-postgres
+  #   ports:
+  #     - "5433:5432"
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #     POSTGRES_DB: ecommerce
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - ecommerce-network
 
-  # Redis Cache
-  redis:
-    image: redis:7-alpine
-    container_name: ecommerce-redis
-    ports:
-      - "6380:6379"
-    volumes:
-      - redis_data:/var/lib/redis
-    networks:
-      - ecommerce-network
+  # # Redis Cache
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: ecommerce-redis
+  #   ports:
+  #     - "6380:6379"
+  #   volumes:
+  #     - redis_data:/var/lib/redis
+  #   networks:
+  #     - ecommerce-network
 
-  # Zookeeper
+  # # MongoDB Database
+  # mongodb:
+  #   image: mongo:latest
+  #   container_name: ecommerce-mongodb
+  #   ports:
+  #     - "27017:27017"
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: admin
+  #     MONGO_INITDB_ROOT_PASSWORD: admin
+  #   volumes:
+  #     - mongodb_data:/data/db
+  #   networks:
+  #     - ecommerce-network
+
+  # Zookeeper (Kafka cần Zookeeper để chạy trong phiên bản 7.5.0 này)
   zookeeper:
     image: confluentinc/cp-zookeeper:7.5.0
     container_name: ecommerce-zookeeper
@@ -57,7 +71,7 @@ services:
     networks:
       - ecommerce-network
 
-  # Kafka UI
+  # Kafka UI (Giữ lại để bạn dễ quản lý Kafka qua web)
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: ecommerce-kafka-ui
@@ -73,8 +87,10 @@ services:
       - ecommerce-network
 
 volumes:
-  postgres_data:
-  redis_data:
+  # postgres_data:
+  # redis_data:
+  # mongodb_data:
+  kafka_data: # Nên thêm volume cho kafka nếu bạn muốn giữ dữ liệu tin nhắn
 
 networks:
   ecommerce-network:

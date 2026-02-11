@@ -20,6 +20,9 @@ export * from './middlewares/auth.middleware.js';
 export * from './middlewares/check-ownership.middleware.js';
 export * from './middlewares/check-permission.middleware.js';
 
+// Utils
+export * from './utils/time-out.util.js';
+
 // OpenAPI Docs
 export * from './docs/openapi-config.js';
 export * from './docs/schemas.registry.js';

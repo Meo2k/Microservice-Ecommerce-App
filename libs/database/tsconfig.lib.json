@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "rootDir": ".",
     "outDir": "dist",
     "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
     "emitDeclarationOnly": false,
@@ -10,8 +11,7 @@
     ]
   },
   "include": [
-    "src/**/*.ts",
-    "../../@types/**/*.d.ts",
+    "src/**/*.ts"
   ],
   "references": [
     {

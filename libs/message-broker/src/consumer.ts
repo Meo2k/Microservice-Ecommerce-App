@@ -1,6 +1,7 @@
 import { Consumer, EachMessagePayload } from 'kafkajs';
 import KafkaClient from './kafka.client.js';
 import { DomainEvent } from './events.js';
+import { withTimeout } from '@org/shared/server';
 
 export abstract class BaseConsumer<T extends DomainEvent> {
     protected consumer: Consumer;
@@ -33,7 +34,7 @@ export abstract class BaseConsumer<T extends DomainEvent> {
 
                         console.log(`📥 Received event from topic "${this.topic}":`, event.eventType);
 
-                        await this.handleMessage(event);
+                        await withTimeout(this.handleMessage(event), 5000);
 
                         console.log(`✅ Successfully processed event:`, event.eventType);
                     } catch (error) {
