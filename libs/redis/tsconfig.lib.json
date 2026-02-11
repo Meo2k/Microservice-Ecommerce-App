@@ -11,10 +11,10 @@
     ],
     "paths": {
       "@org/shared": [
-        "../../libs/shared/dist/index.d.ts"
+        "../../libs/shared/dist/src/index.d.ts"
       ],
       "@org/shared/server": [
-        "../../libs/shared/dist/server.d.ts"
+        "../../libs/shared/dist/src/server.d.ts"
       ]
     }
   },
