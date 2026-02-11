@@ -53,8 +53,8 @@ export const ENV = {
     // Kafka Configuration (Confluent Cloud)
     KAFKA_BROKERS: getEnv("NX_KAFKA_BROKERS", "localhost:9092"),
     KAFKA_CLIENT_ID: getEnv("NX_KAFKA_CLIENT_ID", "ecommerce-app"),
+    KAFKA_GROUP_ID: getEnv("NX_KAFKA_GROUP_ID", "notification-service-group"),
     KAFKA_USERNAME: getEnv("NX_KAFKA_USERNAME"),
     KAFKA_PASSWORD: getEnv("NX_KAFKA_PASSWORD"),
-    KAFKA_GROUP_ID: getEnv("NX_KAFKA_GROUP_ID", "notification-service-group"),
 
 }

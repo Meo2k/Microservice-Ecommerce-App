@@ -41,7 +41,7 @@ export class LoginUseCase {
         // Verify password
         const isPasswordValid = await this.passwordService.comparePassword(password, user.password);
         if (!isPasswordValid) {
-            return Result.fail(UserError.InvalidCredentials);
+            return Result.fail(UserError.InvalidPassword);
         }
 
         // Generate tokens
