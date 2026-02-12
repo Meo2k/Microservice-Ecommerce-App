@@ -1,7 +1,8 @@
-import { Result, SuccessMessages } from "@org/shared/server";
+import { Result, SuccessMessages, ResendOtpCommand, ErrorCodes, ErrorMessages, ENV } from "@org/shared/server";
 import { IAuthRepository } from "../repositories/auth.repository.interface.js";
-import { IEmailService, IOtpService } from "../services/external.js";
-import { ResendOtpCommand } from "@org/shared/server";
+import { IOtpRepository } from "../repositories/otp.repository.interface.js";
+import { IAuthMessagePublisher } from "../services/message-publisher.interface.js";
+import { Otp } from "../../domain/entities/otp.entity.js";
 import { UserError } from "../../domain/error.domain.js";
 
 /**
@@ -11,17 +12,28 @@ import { UserError } from "../../domain/error.domain.js";
 export class ResendOtpUseCase {
     constructor(
         private readonly authRepo: IAuthRepository,
-        private readonly emailService: IEmailService,
-        private readonly otpService: IOtpService
+        private readonly otpRepo: IOtpRepository,
+        private readonly messagePublisher: IAuthMessagePublisher
     ) { }
 
     async execute(data: ResendOtpCommand): Promise<Result<{ message: string }>> {
         const { email } = data.body;
 
-        // Check OTP restrictions
-        const otpCheck = await this.otpService.checkOtpRestrictions(email);
-        if (!otpCheck.isSuccess) {
-            return Result.fail(otpCheck.error);
+        const otpEntityExists = await this.otpRepo.findByEmail(email);
+        if (otpEntityExists && otpEntityExists.isLocked) {
+            return Result.fail({
+                code: ErrorCodes.ERR_BAD_REQUEST,
+                message: ErrorMessages.Otp.OtpLocked
+            });
+        }
+
+        // Check cooldown
+        const cooldown = await this.otpRepo.getCooldownSeconds(email);
+        if (cooldown > 0) {
+            return Result.fail({
+                code: ErrorCodes.ERR_BAD_REQUEST,
+                message: `Please wait ${cooldown} seconds before requesting a new OTP.`
+            });
         }
 
         // Find user
@@ -30,11 +42,16 @@ export class ResendOtpUseCase {
             return Result.fail(UserError.NotFound);
         }
 
-        // Send new OTP
-        const emailResult = await this.emailService.sendOtpToEmail(email, "otp.template");
-        if (!emailResult.isSuccess) {
-            return Result.fail(emailResult.error);
-        }
+        // Generate New OTP
+        const otpEntity = Otp.create(email);
+        await this.otpRepo.save(otpEntity);
+
+        // Set Cooldown
+        const cooldownSeconds = Number(ENV.OTP_COOLDOWN) || 60;
+        await this.otpRepo.setCooldown(email, cooldownSeconds);
+
+        // Publish Event
+        await this.messagePublisher.publishOtpRequested(email, otpEntity.code);
 
         return Result.ok({ message: SuccessMessages.Auth.OtpResent });
     }

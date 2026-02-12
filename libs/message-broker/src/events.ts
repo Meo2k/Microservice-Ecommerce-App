@@ -10,10 +10,17 @@ export interface UserRegisteredEvent extends BaseEvent {
     username: string;
 }
 
+export interface OtpRequestedEvent extends BaseEvent {
+    eventType: 'otp.requested';
+    email: string;
+    otp: string;
+}
+
 // Union type of all events
-export type DomainEvent = UserRegisteredEvent;
+export type DomainEvent = UserRegisteredEvent | OtpRequestedEvent;
 
 // Topic names
 export const Topics = {
     USER_REGISTERED: 'user.registered',
+    OTP_REQUESTED: 'otp.requested',
 } as const;

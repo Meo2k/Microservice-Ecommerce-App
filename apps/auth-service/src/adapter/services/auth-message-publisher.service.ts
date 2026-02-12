@@ -1,4 +1,4 @@
-import { MessagePublisher, Topics, UserRegisteredEvent, KafkaClient } from '@org/message-broker';
+import { MessagePublisher, Topics, OtpRequestedEvent, KafkaClient } from '@org/message-broker';
 import { IAuthMessagePublisher } from '../../application/services/message-publisher.interface.js';
 
 export class AuthMessagePublisher implements IAuthMessagePublisher {
@@ -12,14 +12,14 @@ export class AuthMessagePublisher implements IAuthMessagePublisher {
         return this.messagePublisher.publish(topic, event);
     }
 
-    async publishUserRegistered(email: string, username: string): Promise<void> {
-        const event: UserRegisteredEvent = {
-            eventType: 'user.registered',
+    async publishOtpRequested(email: string, otp: string): Promise<void> {
+        const event: OtpRequestedEvent = {
+            eventType: 'otp.requested',
             email,
-            username,
-            timestamp: new Date(),
+            otp,
+            timestamp: new Date()
         };
 
-        await this.messagePublisher.publish(Topics.USER_REGISTERED, event);
+        await this.messagePublisher.publish(Topics.OTP_REQUESTED, event);
     }
 }

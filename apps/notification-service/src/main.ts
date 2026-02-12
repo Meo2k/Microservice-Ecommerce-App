@@ -4,9 +4,8 @@ dotenv.config();
 
 import 'reflect-metadata';
 import { KafkaClient } from '@org/message-broker';
-import { EmailService } from '@org/redis';
 import { kafkaConfig } from './config/kafka.config.js';
-import { UserRegisteredConsumer } from './consumers/user-registered.consumer.js';
+import { OtpRequestedConsumer } from './consumers/otp-requested.consumer.js';
 
 async function bootstrap() {
     console.log('🚀 Starting Notification Service...');
@@ -15,14 +14,11 @@ async function bootstrap() {
         // Initialize Kafka Client
         const kafkaClient = KafkaClient.getInstance(kafkaConfig);
 
-        // Initialize Services
-        const emailService = new EmailService();
-
         // Initialize Consumers
-        const userRegisteredConsumer = new UserRegisteredConsumer(kafkaClient, emailService);
+        const otpRequestedConsumer = new OtpRequestedConsumer(kafkaClient);
 
         // Start Consumers
-        await userRegisteredConsumer.start();
+        await otpRequestedConsumer.start();
 
         console.log('✅ Notification Service started successfully');
 
@@ -30,7 +26,7 @@ async function bootstrap() {
         const shutdown = async () => {
             console.log('⚠️ Shutting down Notification Service...');
             try {
-                await userRegisteredConsumer.stop();
+                await otpRequestedConsumer.stop();
                 await kafkaClient.disconnect();
                 console.log('✅ Notification Service shutdown complete');
                 process.exit(0);

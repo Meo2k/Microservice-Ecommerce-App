@@ -1,7 +1,6 @@
-import { Result, SuccessMessages } from "@org/shared/server";
+import { Result, SuccessMessages, VerifyOtpCommand, ErrorCodes, ErrorMessages, ENV } from "@org/shared/server";
 import { IAuthRepository } from "../repositories/auth.repository.interface.js";
-import { IOtpService } from "../services/external.js";
-import { VerifyOtpCommand } from "@org/shared/server";
+import { IOtpRepository } from "../repositories/otp.repository.interface.js";
 import { UserError } from "../../domain/error.domain.js";
 
 /**
@@ -11,45 +10,42 @@ import { UserError } from "../../domain/error.domain.js";
 export class VerifyOtpUseCase {
     constructor(
         private readonly authRepo: IAuthRepository,
-        private readonly otpService: IOtpService
+        private readonly otpRepo: IOtpRepository
     ) { }
 
     async execute(data: VerifyOtpCommand): Promise<Result<{ message: string }>> {
         const { email, otp } = data.body;
+        const maxAttempts = Number(ENV.OTP_MAX_ATTEMPTS) || 5;
 
-        // Check OTP restrictions
-        const otpCheck = await this.otpService.checkOtpRestrictions(email);
-        if (!otpCheck.isSuccess) {
-            return Result.fail(otpCheck.error);
+        const otpEntity = await this.otpRepo.findByEmail(email);
+        if (!otpEntity) {
+            return Result.fail({
+                code: ErrorCodes.ERR_BAD_REQUEST,
+                message: ErrorMessages.Otp.OtpInvalid,
+            });
         }
 
-        // Find user
+        const generalCheck = otpEntity.validateGeneral();
+        if (!generalCheck.isSuccess) return generalCheck;
+
+        if (otpEntity.code !== otp) {
+            const newAttempts = await this.otpRepo.incrementAttempts(email);
+            otpEntity.syncAttempts(newAttempts, maxAttempts);
+            
+            await this.otpRepo.save(otpEntity);
+
+            return Result.fail(UserError.InvalidOtp);
+        }
+
         const userResult = await this.authRepo.findUserByEmail(email);
-        if (!userResult.isSuccess) {
-            return Result.fail(UserError.NotFound);
-        }
+        if (!userResult.isSuccess) return Result.fail(UserError.NotFound);
 
         const user = userResult.value!;
-
-        // Verify OTP
-        const storedData = await this.otpService.findOtpByEmail(email);
-        if (!storedData.otp) {
-            return Result.fail(UserError.InvalidOtp);
-        }
-
-        if (Number(otp) !== Number(storedData.otp)) {
-            const handleResult = await this.otpService.handleFailedAttempts(email);
-            // If handling attempts resulted in a failure (e.g. locked), return it
-            if (!handleResult.isSuccess) {
-                return Result.fail(handleResult.error);
-            }
-            return Result.fail(UserError.InvalidOtp);
-        }
-
-        // Update user verification status
         user.verify();
+        
         await this.authRepo.save(user);
-        await this.otpService.resetOTP(email);
+
+        await this.otpRepo.delete(email);
 
         return Result.ok({ message: SuccessMessages.Auth.OtpVerified });
     }

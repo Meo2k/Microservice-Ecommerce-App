@@ -3,12 +3,12 @@ import { ENV } from "@org/shared";
 import { KafkaClient } from "@org/message-broker";
 
 import { IAuthRepository } from "../../application/repositories/auth.repository.interface.js";
+import { IOtpRepository } from "../../application/repositories/otp.repository.interface.js";
 
 import {
     ITokenService,
     IPasswordService,
 } from "../../application/services/index.js";
-import { IEmailService, IOtpService } from "../../application/services/external.js";
 import { IAuthMessagePublisher } from "../../application/services/message-publisher.interface.js";
 import {
     RegisterUserUseCase,
@@ -21,20 +21,19 @@ import {
 } from "../../application/use-cases/index.js";
 
 import { AuthRepository } from "../repositories/auth.repository.js";
+import { RedisOtpRepository } from "../repositories/redis-otp.repository.js";
 import { TokenService } from "../services/token.service.js";
 import { PasswordService } from "../services/password.service.js";
-import { RedisEmailService, RedisOtpService } from "../services/redis.service.js";
-import { AuthMessagePublisher } from "../messaging/auth-message-publisher.service.js";
+import { AuthMessagePublisher } from "../services/auth-message-publisher.service.js";
 import { AuthController } from "../controllers/auth.controller.js";
 
 
 class DIContainer {
     private authRepository: IAuthRepository;
+    private otpRepository: IOtpRepository;
 
     private tokenService: ITokenService;
     private passwordService: IPasswordService;
-    private emailService: IEmailService;
-    private otpService: IOtpService;
     private messagePublisher: IAuthMessagePublisher;
     private kafkaClient: KafkaClient;
 
@@ -52,11 +51,10 @@ class DIContainer {
 
     constructor() {
         this.authRepository = new AuthRepository();
+        this.otpRepository = new RedisOtpRepository();
 
         this.tokenService = new TokenService();
         this.passwordService = new PasswordService();
-        this.emailService = new RedisEmailService();
-        this.otpService = new RedisOtpService();
 
         // Initialize Kafka client (local Docker - no SSL/SASL)
         this.kafkaClient = KafkaClient.getInstance({
@@ -70,8 +68,8 @@ class DIContainer {
 
         this.registerUserUseCase = new RegisterUserUseCase(
             this.authRepository,
+            this.otpRepository,
             this.messagePublisher,
-            this.otpService,
             this.passwordService
         );
 
@@ -83,18 +81,18 @@ class DIContainer {
 
         this.verifyOtpUseCase = new VerifyOtpUseCase(
             this.authRepository,
-            this.otpService
+            this.otpRepository
         );
 
         this.resendOtpUseCase = new ResendOtpUseCase(
             this.authRepository,
-            this.emailService,
-            this.otpService
+            this.otpRepository,
+            this.messagePublisher
         );
 
         this.changePasswordUseCase = new ChangePasswordUseCase(
             this.authRepository,
-            this.otpService,
+            this.otpRepository,
         );
 
         this.getMeUseCase = new GetMeUseCase(this.authRepository);

@@ -1,35 +1,29 @@
 {
-    "extends": "../../tsconfig.base.json",
-    "compilerOptions": {
-        "outDir": "dist",
-        "module": "nodenext",
-        "types": [
-            "node"
-        ],
-        "rootDir": "src",
-        "moduleResolution": "nodenext",
-        "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo"
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "module": "nodenext",
+    "types": [
+      "node"
+    ],
+    "rootDir": "src",
+    "moduleResolution": "nodenext",
+    "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo"
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "eslint.config.js",
+    "eslint.config.cjs",
+    "eslint.config.mjs"
+  ],
+  "references": [
+    {
+      "path": "../../libs/message-broker/tsconfig.lib.json"
     },
-    "include": [
-        "src/**/*.ts",
-        "../../libs/shared/src/**/*.ts",
-        "../../libs/message-broker/src/**/*.ts",
-        "../../libs/redis/src/**/*.ts"
-    ],
-    "exclude": [
-        "eslint.config.js",
-        "eslint.config.cjs",
-        "eslint.config.mjs"
-    ],
-    "references": [
-        {
-            "path": "../../libs/redis/tsconfig.lib.json"
-        },
-        {
-            "path": "../../libs/shared/tsconfig.lib.json"
-        },
-        {
-            "path": "../../libs/message-broker/tsconfig.lib.json"
-        }
-    ]
+    {
+      "path": "../../libs/shared/tsconfig.lib.json"
+    }
+  ]
 }

@@ -8,8 +8,7 @@
 export * from './redis.js';
 
 // Interfaces
-export * from './interfaces/email.interface.js';
-export * from './interfaces/otp.interface.js';
+// Interfaces
 export * from './interfaces/temporary.interface.js';
 
 // Services
